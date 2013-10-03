@@ -1,11 +1,13 @@
-require File.expand_path('../../lib/MailboxApi', __FILE__)
-require File.expand_path('../smtp', __FILE__)
+#$LOAD_PATH.unshift File.expand_path('../lib/clickity', __FILE__)
+require 'rubygems'
+require 'clickity'
+require 'smtp'
 
 
-mailboxId = '729375a7'
-password = '967740d6'
-apikey = 'f4c748f95bd739c'
-client = MailboxApi.new(mailboxId,apikey)
+mailboxId = 'yourmailbox'
+password = 'yourmailboxpassword'
+apikey = 'yourapikey'
+client = Clickity.new(mailboxId,apikey)
 
 
 # empty mailbox so we start in a clean state:

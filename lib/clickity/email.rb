@@ -1,6 +1,6 @@
-require "#{File.dirname(__FILE__)}/EmailAddress"
-require "#{File.dirname(__FILE__)}/EmailData"
-require "#{File.dirname(__FILE__)}/Attachment"
+require "#{File.dirname(__FILE__)}/email_address"
+require "#{File.dirname(__FILE__)}/email_data"
+require "#{File.dirname(__FILE__)}/attachment"
 
 class Email
   attr_accessor :id, :creationdate, :senderHost, :from, :to, :mailbox, :rawId, :html, :text, :headers, :subject, :priority, :attachments

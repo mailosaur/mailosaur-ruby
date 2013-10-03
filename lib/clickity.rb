@@ -3,9 +3,9 @@ require 'rest_client'
 require 'json'
 require 'rest_client'
 require 'securerandom'
-require File.expand_path('../../lib/model/Email', __FILE__)
+require "#{File.dirname(__FILE__)}/clickity/email"
 
-class MailboxApi
+class Clickity
   @MAILBOX
   @API_KEY
   @BASE_URI

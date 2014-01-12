@@ -1,4 +1,4 @@
-clickity-ruby
+mailosaur-ruby
 =============
 
-Clickity Ruby bindings  https://clickity.io
+Mailosaur Ruby bindings  https://mailosaur.com

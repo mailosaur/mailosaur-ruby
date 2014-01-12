@@ -3,9 +3,9 @@ require 'rest_client'
 require 'json'
 require 'rest_client'
 require 'securerandom'
-require "#{File.dirname(__FILE__)}/clickity/email"
+require "#{File.dirname(__FILE__)}/mailosaur/email"
 
-class Clickity
+class MailboxApi
   @MAILBOX
   @API_KEY
   @BASE_URI
@@ -70,7 +70,7 @@ class Clickity
   def getRawEmail(rawId)
     params = Hash.new
     params['key'] = @API_KEY
-    response = RestClient.get('https://api.clickity.io/v1/attachments/' + rawId, {:params => params})
+    response = RestClient.get(@BASE_URI + '/raw/' + rawId, {:params => params})
     return response.body
   end
 

@@ -1,14 +1,13 @@
-#$LOAD_PATH.unshift File.expand_path('../lib/clickity', __FILE__)
+#$LOAD_PATH.unshift File.expand_path('../lib/mailosaur', __FILE__)
 require 'rubygems'
-require 'clickity'
+require 'mailosaur'
 require 'smtp'
 
 
 mailboxId = 'yourmailbox'
 password = 'yourmailboxpassword'
 apikey = 'yourapikey'
-client = Clickity.new(mailboxId,apikey)
-
+client = MailboxApi.new(mailboxId,apikey)
 
 # empty mailbox so we start in a clean state:
 client.deleteAllEmail

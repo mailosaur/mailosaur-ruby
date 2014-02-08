@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
-  s.version     = '0.0.6'
+  s.version     = '0.0.7'
   s.date        = '2014-12-01'
   s.summary     = "Bindings for mailosaur.com"
   s.description = "Gem containing ruby bindings for the mailosaur.com mail testing api."

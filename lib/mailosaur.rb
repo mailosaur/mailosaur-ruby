@@ -30,10 +30,17 @@ class Mailosaur
     end
     searchCriteria['key'] = @API_KEY
     searchCriteria['mailbox'] = @MAILBOX
-    response = RestClient.get("#{@BASE_URI}/emails", {:params => searchCriteria})
-    data = JSON.parse(response.body)
-    emails = data.map { |em| Email.new(em) }
-    return emails
+    for i in 0..5
+      response = RestClient.get("#{@BASE_URI}/emails", {:params => searchCriteria})
+      data = JSON.parse(response.body)
+      emails = data.map { |em| Email.new(em) }
+      puts emails.nil?
+      if !emails.nil? && emails.length>0
+        return emails
+      end
+      puts 'sleeping' + i + ' seconds '
+      sleep(1*i)
+    end
   end
 
   # Retrieves all emails sent to the given recipient.

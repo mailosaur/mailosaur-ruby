@@ -7,7 +7,7 @@ class Email
 
   def initialize(hash)
     @id = hash['id']
-    @creationdate = hash['creationdate']
+    @creationdate = DateTime.iso8601(hash['creationdate'])
     @senderHost = hash['senderHost']
     @from= hash['from'].map { |f| EmailAddress.new(f) }
     @to= hash['to'].map { |t| EmailAddress.new(t) }

@@ -1,8 +1,8 @@
 require 'rake'
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
-  s.version     = '0.0.10'
-  s.date        = '2014-07-26'
+  s.version     = '0.0.12'
+  s.date        = '2015-01-19'
   s.summary     = 'Bindings for mailosaur.com'
   s.description = 'Gem containing ruby bindings for the mailosaur.com mail testing api.'
   s.authors     = ['Clickity Ltd']

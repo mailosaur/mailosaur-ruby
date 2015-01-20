@@ -14,7 +14,7 @@ For more info go to [mailosaur.com](https://mailosaur.com/)
 require 'mailosaur'
 require "test/unit"
 
-mailbox = MailboxApi.new(mailbox,apikey)
+mailbox = Mailosaur.new(mailbox,apikey)
 
 emails = mailbox.getEmailsByRecipient('anything.1eaaeef6@mailosaur.in')
 

@@ -3,6 +3,7 @@ require 'rest_client'
 require 'json'
 require 'rest_client'
 require 'securerandom'
+require 'date'
 require "#{File.dirname(__FILE__)}/mailosaur/email"
 
 # Main class to access Mailosaur.com api.

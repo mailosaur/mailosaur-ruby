@@ -1,8 +1,8 @@
 require 'rake'
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
-  s.version     = '0.0.12'
-  s.date        = '2015-01-19'
+  s.version     = '0.0.14'
+  s.date        = '2015-02-24'
   s.summary     = 'Bindings for mailosaur.com'
   s.description = 'Gem containing ruby bindings for the mailosaur.com mail testing api.'
   s.authors     = ['Clickity Ltd']
@@ -18,6 +18,5 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'mail', ['= 2.6.1']
   s.add_development_dependency 'rake', ['= 10.3.2']
-  s.test_files  = Dir['test/**/*']
 
 end

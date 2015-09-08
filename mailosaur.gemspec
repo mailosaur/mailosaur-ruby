@@ -1,7 +1,7 @@
 require 'rake'
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
-  s.version     = '0.0.15'
+  s.version     = '0.0.16'
   s.date        = '2015-02-24'
   s.summary     = 'Bindings for mailosaur.com'
   s.description = 'Gem containing ruby bindings for the mailosaur.com mail testing api.'
@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.files       = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']
-  s.add_dependency 'json', ['= 1.7.6']
-  s.add_dependency 'mime-types', ['= 1.25']
+  s.add_dependency 'json', ['>= 1.7.6']
+  s.add_dependency 'mime-types', ['>= 1.16']
   s.add_dependency 'rest-client', ['~> 1.7']
 
 

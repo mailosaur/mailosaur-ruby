@@ -26,7 +26,6 @@ class MailosaurTest < Minitest::Test
     assert_email(emails[0])
   end
 
-  # fails occasionally, even with timeout
   def test_get_emails_by_recipient
     emails = mailbox.get_emails_by_recipient(recipient_address_short)
     assert_email(emails[0])
@@ -34,13 +33,27 @@ class MailosaurTest < Minitest::Test
 
   def test_generate_email_address
     email = mailbox.generate_email_address
-    assert_includes(email, '@mailosaur.in')
+    assert_includes(email, ".#{mailbox_id}@mailosaur.in")
   end
 
   def test_no_emails_found
     params = "{\"recipient\"=>\"notA@email.com\", \"key\"=>\"#{api_key}\", \"mailbox\"=>\"#{mailbox_id}\"}"
     emails = mailbox.get_emails_by_recipient("notA@email.com")
+
     assert_equal(emails, message_string.no_emails_found(params))
+  end
+
+  def test_both_syntax
+    last_syntax   = mailbox.getEmailsByRecipient(recipient_address_short).first
+    update_syntax = mailbox.get_emails_by_recipient(recipient_address_short).first
+
+    assert_equal(last_syntax.to[0].address, update_syntax.to[0].address)
+    assert_equal(last_syntax.from[0].address, update_syntax.from[0].address)
+  end
+
+  def test_new_syntax_message
+    new_syntax_message = message_string.new_syntax('getEmailsByRecipient')
+    assert_output(new_syntax_message) { mailbox.getEmailsByRecipient('') }
   end
 
   def assert_email(email)
@@ -83,7 +96,6 @@ class MailosaurTest < Minitest::Test
     assert_equal('anyone <anyone@example.com>', email.headers['from'])
 
     assert_equal("anybody <#{recipient_address_short}>", email.headers['to'])
-    # binding.pry
     refute_nil(email.headers['date'])
     assert_equal('test subject', email.headers['subject'])
 

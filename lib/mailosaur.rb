@@ -42,7 +42,6 @@ class Mailosaur
 
   # Deletes all emails in a @mailbox.
   def delete_all_emails
-    binding.pry
     query_params = {'key' => @api_key, '@mailbox' => @mailbox }
     RestClient.post("#{@base_uri}/emails/deleteall", nil, {:params => query_params})
   end

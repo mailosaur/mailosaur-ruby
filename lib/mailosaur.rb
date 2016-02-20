@@ -49,7 +49,7 @@ class Mailosaur
   # Deletes the email with the given id.
   def delete_email(email_id)
     params = {'key' => @api_key}
-    RestClient.post("#{@base_uri}/email/#{email_id}/delete/", nil,{:params => params})
+    RestClient.post("#{@base_uri}/email/#{email_id}/delete/", nil, {:params => params})
   end
 
   # Retrieves the attachment with specified id.

@@ -21,7 +21,9 @@ emails = mailbox.get_emails_by_recipient('anything.1eaaeef6@mailosaur.in')
 
 *functions:*
 
-- get_emails('search_pattern') - Retrieves all emails which have the searchPattern text in their body or subject.
+- get_emails - Retrieves all emails
+
+- get_emails('search_text') - Retrieves all emails with ``` search_text ``` in their body or subject.
 
 - get_emails_by_recipient('recipient_email') -
 Retrieves all emails sent to the given recipient.

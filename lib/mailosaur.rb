@@ -6,6 +6,7 @@ class Mailosaur
   def initialize(mailbox, apiKey)
     @mailbox  = ENV['MAILOSAUR_MAILBOX'] || mailbox
     @api_key  = ENV['MAILOSAUR_APIKEY']  || apiKey
+    @timeout  = ENV['MAILOSAUR_TIMEOUT'] || 20
     @base_uri = 'https://mailosaur.com/v2'
     @message  = MessageGenerator.new
   end
@@ -109,7 +110,7 @@ class Mailosaur
   def send_get_emails_request(search_criteria)
     r = ''
     begin
-      Timeout::timeout(20) {
+      Timeout::timeout(@timeout) {
         until r.length > 2 && !r.nil?
           r = RestClient.get("#{@base_uri}/emails", {:params => search_criteria})
         end

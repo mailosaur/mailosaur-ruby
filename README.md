@@ -20,7 +20,7 @@ emails = mailbox.get_emails_by_recipient('anything.1eaaeef6@mailosaur.in')
 
 Optional: Timeout
 
-- Default timeout is set to 20, if you want to increase of decrease this, set the time in seconds to the `MAILOSAUR_TIMEOUT` variable.
+- Default timeout is set to 20, if you want to increase or decrease this, set the time in seconds to the `MAILOSAUR_TIMEOUT` variable.
 
 ``` export MAILOSAUR_TIMEOUT=60 ```
 

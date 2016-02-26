@@ -18,7 +18,7 @@ mailbox = Mailosaur.new(mailbox,apikey)
 
 emails = mailbox.getEmailsByRecipient('anything.1eaaeef6@mailosaur.in')
 
-assert_equal('something', emails[0].Subject, 'The subject should be something')
+assert_equal('something', emails[0].subject, 'The subject should be something')
 ```
 ##Api
 

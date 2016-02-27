@@ -7,47 +7,54 @@ For more info go to [mailosaur.com](https://mailosaur.com/)
 
 ## Installation
 
-  gem install mailosaur
+  ``` gem install mailosaur ```
 
 ## Usage
 ```ruby
 require 'mailosaur'
-require "test/unit"
 
 mailbox = Mailosaur.new(mailbox,apikey)
 
-emails = mailbox.getEmailsByRecipient('anything.1eaaeef6@mailosaur.in')
-
-assert_equal('something', emails[0].Subject, 'The subject should be something')
+emails = mailbox.get_emails_by_recipient('anything.1eaaeef6@mailosaur.in')
 ```
+
+Optional: Timeout
+
+- Default timeout is set to 20, if you want to increase or decrease this, set the time in seconds to the `MAILOSAUR_TIMEOUT` variable.
+
+``` export MAILOSAUR_TIMEOUT=60 ```
+
+
 ##Api
 
 *functions:*
 
-- **Email[] GetEmails(String searchPattern)** - Retrieves all emails which have the searchPattern text in their body or subject.
+- get_emails - Retrieves all emails
 
-- **Email[] GetEmailsByRecipient(String recipientEmail)** - 
+- get_emails('search_text') - Retrieves all emails with ``` search_text ``` in their body or subject.
+
+- get_emails_by_recipient('recipient_email') -
 Retrieves all emails sent to the given recipient.
 
-- **Email GetEmail(String emailId)** - 
+- get_email('email_id') -
 Retrieves the email with the given id.
 
-- **Void DeleteAllEmail()** - 
+- delete_all_emails -
 Deletes all emails in a mailbox.
 
-- **Void DeleteEmail(String emailId)** - 
+- delete_email('email_id') -
 Deletes the email with the given id.
 
-- **Byte[] GetAttachment(String attachmentId)** - 
+- get_attachment('attachment_id') -
 Retrieves the attachment with specified id.
 
-- **Byte[] GetRawEmail(String rawId)** - 
+- get_raw_email('raw_id') -
 Retrieves the complete raw EML file for the rawId given. RawId is a property on the email object.
 
-- **String GenerateEmailAddress()** - 
+- generate_email_address -
 Generates a random email address which can be used to send emails into the mailbox.
 
-*structures*
+*Email Object Structure*
 
 - **Email** - The core object returned by the Mailosaur API
   - **id** - The email identifier

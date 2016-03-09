@@ -3,10 +3,10 @@ require_relative 'helper.rb'
 class Mailosaur
   attr_reader :message
 
-  def initialize(mailbox, apiKey)
+  def initialize(mailbox, apiKey, timeout=20)
     @mailbox  = ENV['MAILOSAUR_MAILBOX'] || mailbox
     @api_key  = ENV['MAILOSAUR_APIKEY']  || apiKey
-    @timeout  = ENV['MAILOSAUR_TIMEOUT'].to_i || 20
+    @timeout  = timeout
     @base_uri = 'https://mailosaur.com/v2'
     @message  = MessageGenerator.new
   end

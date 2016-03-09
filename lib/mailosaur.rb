@@ -6,7 +6,7 @@ class Mailosaur
   def initialize(mailbox, apiKey)
     @mailbox  = ENV['MAILOSAUR_MAILBOX'] || mailbox
     @api_key  = ENV['MAILOSAUR_APIKEY']  || apiKey
-    @timeout  = ENV['MAILOSAUR_TIMEOUT'] || 20
+    @timeout  = ENV['MAILOSAUR_TIMEOUT'].to_i || 20
     @base_uri = 'https://mailosaur.com/v2'
     @message  = MessageGenerator.new
   end

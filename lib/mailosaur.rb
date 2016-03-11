@@ -3,10 +3,9 @@ require_relative 'helper.rb'
 class Mailosaur
   attr_reader :message
 
-  def initialize(mailbox, apiKey, timeout=20)
+  def initialize(mailbox, apiKey)
     @mailbox  = ENV['MAILOSAUR_MAILBOX'] || mailbox
     @api_key  = ENV['MAILOSAUR_APIKEY']  || apiKey
-    @timeout  = timeout
     @base_uri = 'https://mailosaur.com/v2'
     @message  = MessageGenerator.new
   end
@@ -19,7 +18,7 @@ class Mailosaur
     search_criteria['key']     = @api_key
     search_criteria['mailbox'] = @mailbox
     response = send_get_emails_request(search_criteria)
-    if response.length > 2
+    if !response.nil? && response.length > 2
       data   = JSON.parse(response.body)
       data.map { |em| Email.new(em) }
     else
@@ -108,16 +107,6 @@ class Mailosaur
   private
 
   def send_get_emails_request(search_criteria)
-    r = ''
-    begin
-      Timeout::timeout(@timeout) {
-        until r.length > 2 && !r.nil?
-          r = RestClient.get("#{@base_uri}/emails", {:params => search_criteria})
-        end
-        r
-      }
-    rescue Timeout::Error
-      ''
-    end
+    RestClient.get("#{@base_uri}/emails", {:params => search_criteria})
   end
 end

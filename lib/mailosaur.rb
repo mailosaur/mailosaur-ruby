@@ -3,9 +3,9 @@ require_relative 'helper.rb'
 class Mailosaur
   attr_reader :message
 
-  def initialize(mailbox = ENV['MAILOSAUR_MAILBOX'], apiKey = ENV['MAILOSAUR_APIKEY'])
-    @mailbox  = mailbox
-    @api_key  = apiKey
+  def initialize(mailbox = nil, apiKey = nil)
+    @mailbox  = ENV['MAILOSAUR_MAILBOX'] || mailbox
+    @api_key  = ENV['MAILOSAUR_APIKEY']  || apiKey
     @base_uri = 'https://mailosaur.com/v2'
     @message  = MessageGenerator.new
   end

@@ -67,7 +67,7 @@ class Mailosaur
   # Generates a random email address which can be used to send emails into the @mailbox.
   def generate_email_address
     uuid = SecureRandom.hex(3)
-    "%s.%s@mailosaur.in" % [uuid, @mailbox]
+    "%s.%s@%s" % [uuid, @mailbox, @smtp_host]
   end
 
   # old methods

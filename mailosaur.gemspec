@@ -1,13 +1,13 @@
 require 'rake'
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
-  s.version     = '1.0.1'
-  s.date        = '2016-04-05'
-  s.summary     = 'Bindings for mailosaur.com'
-  s.description = 'Gem containing ruby bindings for the mailosaur.com mail testing api.'
+  s.version     = '2.0.0'
+  s.date        = '2016-04-25'
+  s.summary     = 'Client library for Mailosaur'
+  s.description = 'Gem containing ruby client library for Mailosaur.'
   s.authors     = ['Clickity Ltd']
   s.email       = 'support@mailosaur.com'
-  s.homepage    = 'http://mailosaur.com'
+  s.homepage    = 'https://mailosaur.com'
   s.license     = 'MIT'
 
   s.files       = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']

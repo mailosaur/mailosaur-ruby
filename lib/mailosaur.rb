@@ -6,7 +6,8 @@ class Mailosaur
   def initialize(mailbox = nil, apiKey = nil)
     @mailbox  = ENV['MAILOSAUR_MAILBOX'] || mailbox
     @api_key  = ENV['MAILOSAUR_APIKEY']  || apiKey
-    @base_uri = 'https://mailosaur.com/v2'
+    @base_uri = 'https://mailosaur.com/api'
+    @smtp_host = 'mailosaur.in'
     @message  = MessageGenerator.new
   end
 
@@ -16,7 +17,6 @@ class Mailosaur
       search_criteria = {'search' => search_criteria}
     end
     search_criteria['key']     = @api_key
-    search_criteria['mailbox'] = @mailbox
     response = send_get_emails_request(search_criteria)
     if !response.nil? && response.length > 2
       data   = JSON.parse(response.body)
@@ -35,27 +35,27 @@ class Mailosaur
   # Retrieves the email with the given id.
   def get_email(email_id)
     params   = {'key' => @api_key}
-    response = RestClient.get("#{@base_uri}/email/#{email_id}", {:params => params})
+    response = RestClient.get("#{@base_uri}/emails/#{email_id}", {:params => params})
     data     = JSON.parse(response.body)
     Email.new(data)
   end
 
   # Deletes all emails in a @mailbox.
   def delete_all_emails
-    query_params = {'key' => @api_key, '@mailbox' => @mailbox }
-    RestClient.post("#{@base_uri}/emails/deleteall", nil, {:params => query_params})
+    query_params = {'key' => @api_key }
+    RestClient.post("#{@base_uri}/mailboxes/#{@mailbox}/empty", nil, {:params => query_params})
   end
 
   # Deletes the email with the given id.
   def delete_email(email_id)
     params = {'key' => @api_key}
-    RestClient.post("#{@base_uri}/email/#{email_id}/delete/", nil, {:params => params})
+    RestClient.post("#{@base_uri}/emails/#{email_id}/delete", nil, {:params => params})
   end
 
   # Retrieves the attachment with specified id.
   def get_attachment(attachment_id)
     params = {'key' => @api_key}
-    RestClient.get("#{@base_uri}/attachment/#{attachment_id}", {:params => params}).body
+    RestClient.get("#{@base_uri}/attachments/#{attachment_id}", {:params => params}).body
   end
 
   # Retrieves the complete raw EML file for the rawId given. RawId is a property on the email object.
@@ -107,6 +107,6 @@ class Mailosaur
   private
 
   def send_get_emails_request(search_criteria)
-    RestClient.get("#{@base_uri}/emails", {:params => search_criteria})
+    RestClient.get("#{@base_uri}/mailboxes/#{@mailbox}/emails", {:params => search_criteria})
   end
 end

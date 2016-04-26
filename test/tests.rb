@@ -3,11 +3,11 @@ require_relative 'test_helper'
 class MailosaurTest < Minitest::Test
   extend Minitest::Spec::DSL
 
-  let(:mailbox_id) {ENV['MAILBOX_ID']}
-  let(:api_key) {ENV['API_KEY']}
-  let(:base_url) {ENV['BASE_URL']}
-  let(:smtp_host) {ENV['SMTP_HOST']}
-  let(:mailbox) {Mailosaur.new(mailbox_id, api_key, base_url, smtp_host)}
+  let(:mailbox_id) { ENV['MAILOSAUR_MAILBOX_ID'] }
+  let(:api_key) { ENV['MAILOSAUR_API_KEY'] }
+  let(:base_url) { ENV['MAILOSAUR_BASE_URL'] }
+  let(:smtp_host) { ENV['MAILOSAUR_SMTP_HOST'] }
+  let(:mailbox) { Mailosaur.new(mailbox_id, api_key) }
   let(:recipient_address_short) { "#{SecureRandom.hex}.#{mailbox_id}@mailosaur.in" }
   let(:recipient_address_long) {"anybody<#{recipient_address_short}>"}
   let(:message_string) { MessageGenerator.new }

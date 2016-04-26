@@ -4,11 +4,11 @@ require_relative 'helper.rb'
 class Mailosaur
   attr_reader :message
 
-  def initialize(mailbox = nil, apiKey = nil, base_uri = nil, smtp_host = nil)
+  def initialize(mailbox = nil, apiKey = nil, base_url = nil, smtp_host = nil)
     @mailbox  = ENV['MAILOSAUR_MAILBOX'] || mailbox
     @api_key  = ENV['MAILOSAUR_APIKEY']  || apiKey
-    @base_uri = base_uri || 'https://mailosaur.com/api'
-    @smtp_host =  smtp_host || 'mailosaur.in'
+    @base_url = base_url || ENV['MAILOSAUR_BASE_URL'] || 'https://mailosaur.com/api'
+    @smtp_host =  smtp_host || ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.in'
     @message  = MessageGenerator.new
   end
 
@@ -36,7 +36,7 @@ class Mailosaur
   # Retrieves the email with the given id.
   def get_email(email_id)
     params   = {'key' => @api_key}
-    response = RestClient.get("#{@base_uri}/emails/#{email_id}", {:params => params})
+    response = RestClient.get("#{@base_url}/emails/#{email_id}", {:params => params})
     data     = JSON.parse(response.body)
     Email.new(data)
   end
@@ -44,25 +44,25 @@ class Mailosaur
   # Deletes all emails in a @mailbox.
   def delete_all_emails
     query_params = {'key' => @api_key }
-    RestClient.post("#{@base_uri}/mailboxes/#{@mailbox}/empty", nil, {:params => query_params})
+    RestClient.post("#{@base_url}/mailboxes/#{@mailbox}/empty", nil, {:params => query_params})
   end
 
   # Deletes the email with the given id.
   def delete_email(email_id)
     params = {'key' => @api_key}
-    RestClient.post("#{@base_uri}/emails/#{email_id}/delete", nil, {:params => params})
+    RestClient.post("#{@base_url}/emails/#{email_id}/delete", nil, {:params => params})
   end
 
   # Retrieves the attachment with specified id.
   def get_attachment(attachment_id)
     params = {'key' => @api_key}
-    RestClient.get("#{@base_uri}/attachments/#{attachment_id}", {:params => params}).body
+    RestClient.get("#{@base_url}/attachments/#{attachment_id}", {:params => params}).body
   end
 
   # Retrieves the complete raw EML file for the rawId given. RawId is a property on the email object.
   def get_raw_email(raw_id)
     params = {'key' => @api_key}
-    RestClient.get("#{@base_uri}/raw/#{raw_id}", {:params => params}).body
+    RestClient.get("#{@base_url}/raw/#{raw_id}", {:params => params}).body
   end
 
   # Generates a random email address which can be used to send emails into the @mailbox.
@@ -108,6 +108,6 @@ class Mailosaur
   private
 
   def send_get_emails_request(search_criteria)
-    RestClient.get("#{@base_uri}/mailboxes/#{@mailbox}/emails", {:params => search_criteria})
+    RestClient.get("#{@base_url}/mailboxes/#{@mailbox}/emails", {:params => search_criteria})
   end
 end

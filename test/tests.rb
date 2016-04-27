@@ -35,7 +35,7 @@ class MailosaurTest < Minitest::Test
 
   def test_generate_email_address
     email = mailbox.generate_email_address
-    assert_includes(email, ".#{mailbox_id}@mailosaur.in")
+    assert_includes(email, ".#{mailbox_id}@#{smtp_host}")
   end
 
   def test_no_emails_found

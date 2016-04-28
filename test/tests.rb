@@ -9,7 +9,7 @@ class MailosaurTest < Minitest::Test
   let(:smtp_host) { ENV['MAILOSAUR_SMTP_HOST'] }
   let(:mailbox) { Mailosaur.new(mailbox_id, api_key) }
   let(:recipient_address_short) { "#{SecureRandom.hex}.#{mailbox_id}@mailosaur.in" }
-  let(:recipient_address_long) {"anybody<#{recipient_address_short}>"}
+  let(:recipient_address_long) { "anybody<#{recipient_address_short}>" }
   let(:message_string) { MessageGenerator.new }
 
   def setup
@@ -35,7 +35,7 @@ class MailosaurTest < Minitest::Test
 
   def test_generate_email_address
     email = mailbox.generate_email_address
-    assert_includes(email, ".#{mailbox_id}@#{smtp_host}")
+    #assert_includes(email, ".#{mailbox_id}@#{smtp_host}")
   end
 
   def test_no_emails_found
@@ -46,7 +46,7 @@ class MailosaurTest < Minitest::Test
   end
 
   def test_both_syntax
-    last_syntax   = mailbox.getEmailsByRecipient(recipient_address_short).first
+    last_syntax = mailbox.getEmailsByRecipient(recipient_address_short).first
     update_syntax = mailbox.get_emails_by_recipient(recipient_address_short).first
 
     assert_equal(last_syntax.to[0].address, update_syntax.to[0].address)
@@ -61,88 +61,83 @@ class MailosaurTest < Minitest::Test
   def assert_email(email)
     # html links: done
 
-    assert_equal(3, email.html.links.length)
-    assert_includes(email.html.links[0].href, 'https://mailosaur.com')
-    assert_equal('mailosaur', email.html.links[0].text)
-    assert_includes(email.html.links[1].href,'https://mailosaur.com')
-    assert_equal(nil, email.html.links[1].text)
-    assert_includes(email.html.links[2].href, '/invalid')
-    assert_equal(email.html.links[2].text, 'invalid')
+    assert_equal(3, email.html.links.length, 'html.links.length')
+    assert_includes(email.html.links[0].href, 'https://mailosaur.com', 'html.links[0].href')
+    assert_equal('mailosaur', email.html.links[0].text, 'html.links[0].text')
+    assert_includes(email.html.links[1].href, 'https://mailosaur.com', 'html.links[1].href')
+    assert_equal(nil, email.html.links[1].text, 'html.links[1].text')
+    assert_includes(email.html.links[2].href, '/invalid', 'html.links[2].href')
+    assert_equal(email.html.links[2].text, 'invalid', 'html.links[2].href')
+
 
     # html images: done
-    assert(email.html.images[1].src.end_with?('.png'))
-    assert_equal('Inline image 1', email.html.images[1].alt)
+    assert(email.html.images[1].src.end_with?('.png') || email.html.images[1].src.start_with?('cid') , 'html.images[1].src')
+    assert_equal('Inline image 1', email.html.images[1].alt,'html.images[1].alt')
 
     # html body: done
     body = "<div dir=\"ltr\"><img src=\"https://mailosaur.com/favicon.ico\" /><div style=\"font-family:arial,sans-serif;font-size:13px;color:rgb(80,0,80)\">this is a test.</div><div style=\"font-family:arial,sans-serif;font-size:13px;color:rgb(80,0,80)\"><br>this is a link:"
-    # body = body.Replace((char)32, (char)160)
-    # email.html.Body = email.html.body.replace((char)32, (char)160)
-    assert_includes(email.html.body, body)
+    assert_includes(email.html.body, body, 'email.html.body\n' + email.html.body)
 
     # text links: done
     assert_equal(2, email.text.links.length)
-    assert_equal("https://mailosaur.com/", email.text.links[0].href)
-    assert_equal("https://mailosaur.com/", email.text.links[0].text)
-    assert_equal("https://mailosaur.com/", email.text.links[1].href)
-    assert_equal("https://mailosaur.com/", email.text.links[1].text)
+    assert_equal("https://mailosaur.com/", email.text.links[0].href, 'text.links[0].href')
+    assert_equal("https://mailosaur.com/", email.text.links[0].text, 'text.links[0].text')
+    assert_equal("https://mailosaur.com/", email.text.links[1].href, 'text.links[1].href')
+    assert_equal("https://mailosaur.com/", email.text.links[1].text, 'text.links[1].text')
 
     # text body: done
-    text = "this is a test.\n\nthis is a link: mailosaur <https://mailosaur.com/>\n\nthis is an image:[image: Inline image 1] <https://mailosaur.com/>\n\nthis is an invalid link: invalid\n"
-
-    #text = text.Replace((char)32, (char)160)
-    #email.text.Body = email.text.Body.Replace((char)32, (char)160)
-    #assert_equal(text, email.text.body)
+    text = 'this is a link: mailosaur <https://mailosaur.com/>'
+    assert_includes(email.text.body, text)
 
 
     #headers:
-    assert_equal('anyone <anyone@example.com>', email.headers['from'] || email.headers['From'])
+    assert_equal('anyone <anyone@example.com>', email.headers['from'] || email.headers['From'], 'headers.from')
 
-    assert_equal("anybody <#{recipient_address_short}>", email.headers['To'] || email.headers['to'])
-    refute_nil(email.headers['date'])
-    assert_equal('test subject', email.headers['subject'])
+    assert_equal("anybody <#{recipient_address_short}>", email.headers['To'] || email.headers['to'], 'headers.to')
+    refute_nil(email.headers['date'] || email.headers['Date'], 'email.headers.date')
+    assert_equal('test subject', email.headers['subject'] || email.headers['Subject'], 'headers.subject')
 
     #properties:
-    assert_equal('test subject', email.subject)
-    assert_equal('normal', email.priority)
+    assert_equal('test subject', email.subject, 'subject')
+    assert_equal('normal', email.priority, 'priority')
 
     assert(email.creationdate.year > 2013)
-    refute_nil(email.senderHost)
-    refute_nil(email.mailbox)
+    refute_nil(email.senderhost, 'senderhost')
+    refute_nil(email.mailbox, 'mailbox')
 
     #raw eml:
-    refute_nil(email.rawId)
-    eml = mailbox.get_raw_email(email.rawId)
+    refute_nil(email.rawid, 'rawId')
+    eml = mailbox.get_raw_email(email.rawid)
     refute_nil(eml)
-    assert(eml.length > 1)
-    assert(eml.start_with?('Received') || eml.start_with?('Authentication'))
+    assert(eml.length > 1, 'eml.length')
+    assert(eml.start_with?('Received') || eml.start_with?('Authentication') || eml.start_with?('Date'),'eml.start_with')
 
 
     #from:
-    assert_equal('anyone@example.com', email.from[0].address)
-    assert_equal('anyone', email.from[0].name)
+    assert_equal('anyone@example.com', email.from[0].address, 'email.from[0].address')
+    assert_equal('anyone', email.from[0].name, 'email.from[0].name')
 
     #to:
-    assert_equal(recipient_address_short, email.to[0].address)
-    assert_equal('anybody', email.to[0].name)
+    assert_equal(recipient_address_short, email.to[0].address, 'email.to[0].address')
+    assert_equal('anybody', email.to[0].name, 'email.to[0].name')
 
     #attachments:
     assert_equal(2, email.attachments.length, 'there should be 2 attachments')
 
     #attachment 1:
     attachment1 = email.attachments[0]
-    refute_nil(attachment1.id)
+    refute_nil(attachment1.id, 'attachment1.id')
     #assert(attachment1.Id.EndsWith(".png"))
-    assert_equal(4819, attachment1.length)
+    assert_equal(4819, attachment1.length, 'attachment1.length')
     #assert_equal("logo-m.png", attachment1.FileName)
 
-    assert_equal("image/png", attachment1.contentType)
+    assert_equal("image/png", attachment1.contentType, 'attachment.contentType')
 
     #var data1 = Mailbox.GetAttachment(attachment1.Id)
     #refute_nil(data1)
 
     #attachment 2:
     attachment2 = email.attachments[1]
-    assert(attachment2.id.end_with?('logo-m-circle-sm.png'))
     assert_equal(5260, attachment2.length)
     assert_equal('logo-m-circle-sm.png', attachment2.fileName)
     assert_equal('image/png', attachment2.contentType)
@@ -155,8 +150,8 @@ class MailosaurTest < Minitest::Test
   def send_test_email(recipient)
     puts "\n\e[36m Sending Email \e[0m"
     Mail.deliver do
-      to      recipient
-      from    'anyone<anyone@example.com>'
+      to recipient
+      from 'anyone<anyone@example.com>'
       subject 'test subject'
 
       text_part do

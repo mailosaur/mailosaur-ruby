@@ -18,4 +18,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'mail', ['= 2.6.1']
   s.add_development_dependency 'rake', ['= 10.4.2']
   s.add_development_dependency 'pry', ['= 0.10.4']
+  s.add_development_dependency 'minitest', ['= 5.8.4']
 end

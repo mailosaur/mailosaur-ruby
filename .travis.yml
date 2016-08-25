@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+- node
+- '6'
+- '5'
+- '4'
+env:
+  matrix:
+    secure: IJEFYavnOwahY5f7M98uJPmFi4u95k56leENixW5kMq34DIBDkR38no0oMItxBfSM0VGnIrnSyrRHdjMJTOrxiWpP7qLd8j7wQZXr92tR2sUJtAFGOrOZ7KPqdnBCS3aYTTIJfb0c2ayLjtPC02MS+6QLuIDC/NK/or3eseyNWI=

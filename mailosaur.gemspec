@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.date        = '2016-04-28'
   s.summary     = 'Client library for Mailosaur'
   s.description = 'Gem containing ruby client library for Mailosaur.'
-  s.authors     = ['Clickity Ltd']
+  s.authors     = ['Mailosaur Ltd']
   s.email       = 'support@mailosaur.com'
   s.homepage    = 'https://mailosaur.com'
   s.license     = 'MIT'
@@ -17,6 +17,6 @@ Gem::Specification.new do |s|
 
 
   s.add_development_dependency 'mail', ['= 2.6.1']
-  s.add_development_dependency 'rake', ['= 10.3.2']
+  s.add_development_dependency 'rake', ['= 10.4.2']
 
 end

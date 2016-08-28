@@ -8,7 +8,7 @@ class Mailosaur
     @mailbox  = ENV['MAILOSAUR_MAILBOX'] || mailbox
     @api_key  = ENV['MAILOSAUR_APIKEY']  || apiKey
     @base_url = base_url || ENV['MAILOSAUR_BASE_URL'] || 'https://mailosaur.com/api'
-    @smtp_host =  smtp_host || ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.in'
+    @smtp_host =  smtp_host || ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.io'
     @message  = MessageGenerator.new
   end
 

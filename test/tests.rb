@@ -8,7 +8,7 @@ class MailosaurTest < Minitest::Test
   let(:base_url) { ENV['MAILOSAUR_BASE_URL'] }
   let(:smtp_host) { ENV['MAILOSAUR_SMTP_HOST'] }
   let(:mailbox) { Mailosaur.new(mailbox_id, api_key) }
-  let(:recipient_address_short) { "#{SecureRandom.hex}.#{mailbox_id}@mailosaur.in" }
+  let(:recipient_address_short) { "#{SecureRandom.hex}.#{mailbox_id}@mailosaur.io" }
   let(:recipient_address_long) { "anybody<#{recipient_address_short}>" }
   let(:message_string) { MessageGenerator.new }
 

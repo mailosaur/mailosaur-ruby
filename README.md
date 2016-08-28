@@ -24,7 +24,7 @@ bundle install
 export MAILOSAUR_MAILBOX_ID=yourmailbox
 export MAILOSAUR_API_KEY=yourapikey
 
-rake test
+bundle exec rake
 ```
 
 ## Contacting us

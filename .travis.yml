@@ -1,9 +1,12 @@
 language: ruby
 rvm:
-  - 2.2
+- 2.2
 env:
   global:
-    - secure: IJEFYavnOwahY5f7M98uJPmFi4u95k56leENixW5kMq34DIBDkR38no0oMItxBfSM0VGnIrnSyrRHdjMJTOrxiWpP7qLd8j7wQZXr92tR2sUJtAFGOrOZ7KPqdnBCS3aYTTIJfb0c2ayLjtPC02MS+6QLuIDC/NK/or3eseyNWI=
+  - secure: IJEFYavnOwahY5f7M98uJPmFi4u95k56leENixW5kMq34DIBDkR38no0oMItxBfSM0VGnIrnSyrRHdjMJTOrxiWpP7qLd8j7wQZXr92tR2sUJtAFGOrOZ7KPqdnBCS3aYTTIJfb0c2ayLjtPC02MS+6QLuIDC/NK/or3eseyNWI=
   matrix:
-    - MAILOSAUR_BASE_URL=https://mailosaur.com/api/ MAILOSAUR_SMTP_HOST=mailosaur.io
-    - MAILOSAUR_BASE_URL=https://next.mailosaur.com/api/ MAILOSAUR_SMTP_HOST=ms-smtp.uk
+  - MAILOSAUR_BASE_URL=https://mailosaur.com/api/ MAILOSAUR_SMTP_HOST=mailosaur.io
+  - MAILOSAUR_BASE_URL=https://next.mailosaur.com/api/ MAILOSAUR_SMTP_HOST=ms-smtp.uk
+notifications:
+  slack:
+    secure: NZh/y/Sj0bvT2+5iDDJqfIEI3lGRL44Y55wAR94IcwnXOzMJ0fvaZrerSVKYpqX5N46KkDmIpdMTyRS5Cy8qS9Oe6omHZiEl7XtCIu1gpiM+l/FwH6rYbswymvxtHb/AEHwNZ0nZd4LSo6u7WXPk01nYrZ2gfEJSH8swE222Oig=

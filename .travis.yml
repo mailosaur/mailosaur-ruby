@@ -2,5 +2,8 @@ language: ruby
 rvm:
   - 2.2
 env:
+  global:
+    - secure: IJEFYavnOwahY5f7M98uJPmFi4u95k56leENixW5kMq34DIBDkR38no0oMItxBfSM0VGnIrnSyrRHdjMJTOrxiWpP7qLd8j7wQZXr92tR2sUJtAFGOrOZ7KPqdnBCS3aYTTIJfb0c2ayLjtPC02MS+6QLuIDC/NK/or3eseyNWI=
   matrix:
-    secure: IJEFYavnOwahY5f7M98uJPmFi4u95k56leENixW5kMq34DIBDkR38no0oMItxBfSM0VGnIrnSyrRHdjMJTOrxiWpP7qLd8j7wQZXr92tR2sUJtAFGOrOZ7KPqdnBCS3aYTTIJfb0c2ayLjtPC02MS+6QLuIDC/NK/or3eseyNWI=
+    - MAILOSAUR_BASE_URL=https://mailosaur.com/api/ MAILOSAUR_SMTP_HOST=mailosaur.io
+    - MAILOSAUR_BASE_URL=https://next.mailosaur.com/api/ MAILOSAUR_SMTP_HOST=ms-smtp.uk

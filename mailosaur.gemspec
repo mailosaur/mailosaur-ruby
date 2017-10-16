@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'mime-types', ['>= 1.16']
   s.add_dependency 'rest-client', ['>= 2.0.1']
 
-  s.add_development_dependency 'mail', ['= 2.6.1']
-  s.add_development_dependency 'rake', ['= 10.4.2']
-  s.add_development_dependency 'pry', ['= 0.10.4']
-  s.add_development_dependency 'minitest', ['= 5.8.4']
+  s.add_development_dependency 'mail', ['>= 2.6.1']
+  s.add_development_dependency 'rake', ['>= 10.4.2']
+  s.add_development_dependency 'pry', ['>= 0.10.4']
+  s.add_development_dependency 'minitest', ['>= 5.8.4']
 end

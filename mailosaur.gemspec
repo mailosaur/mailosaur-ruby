@@ -1,8 +1,8 @@
 require 'rake'
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
-  s.version     = '3.0.0'
-  s.date        = '2016-04-28'
+  s.version     = '3.0.1'
+  s.date        = '2017-10-16'
   s.summary     = 'Client library for Mailosaur'
   s.description = 'Gem containing ruby client library for Mailosaur.'
   s.authors     = ['Mailosaur Ltd']
@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.files       = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']
   s.add_dependency 'json', ['>= 1.7.6']
   s.add_dependency 'mime-types', ['>= 1.16']
-  s.add_dependency 'rest-client', ['~> 1.7']
+  s.add_dependency 'rest-client', ['>= 2.0.1']
 
   s.add_development_dependency 'mail', ['= 2.6.1']
   s.add_development_dependency 'rake', ['= 10.4.2']

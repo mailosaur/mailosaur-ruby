@@ -1,4 +1,3 @@
-require 'rake'
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
   s.version     = '3.0.1'

@@ -3,7 +3,7 @@ rvm:
 - 2.2
 env:
   global:
-  - secure: IJEFYavnOwahY5f7M98uJPmFi4u95k56leENixW5kMq34DIBDkR38no0oMItxBfSM0VGnIrnSyrRHdjMJTOrxiWpP7qLd8j7wQZXr92tR2sUJtAFGOrOZ7KPqdnBCS3aYTTIJfb0c2ayLjtPC02MS+6QLuIDC/NK/or3eseyNWI=
+  - secure: "Ds8aBqDwqeL6jkvbdJACHgtZX2Rocss19jwhc0q1VpJnpBBPvhYZpCaGa4AoR+TL93tKUbm4zBODJoLdFbj0qEeA2poXKBgftkkv2GUf5XIovZmBk/mQVIgiDD0GTkJkhismQV4irC2VRU20nQvwFyqxYgJTnnpEX/By2X65fM0="
   matrix:
   - MAILOSAUR_BASE_URL=https://mailosaur.com/api/ MAILOSAUR_SMTP_HOST=mailosaur.io
   - MAILOSAUR_BASE_URL=https://next.mailosaur.com/api/ MAILOSAUR_SMTP_HOST=ms-smtp.uk

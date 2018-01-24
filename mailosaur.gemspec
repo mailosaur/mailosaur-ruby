@@ -1,8 +1,8 @@
 require 'rake'
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
-  s.version     = '3.0.0'
-  s.date        = '2016-04-28'
+  s.version     = '3.0.1'
+  s.date        = '2018-01-24'
   s.summary     = 'Client library for Mailosaur'
   s.description = 'Gem containing ruby client library for Mailosaur.'
   s.authors     = ['Mailosaur Ltd']

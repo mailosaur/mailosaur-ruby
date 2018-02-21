@@ -16,14 +16,15 @@ module Mailosaur
   # which are understood
   # by off-the-shelf HTTP clients.
   #
-  # [Official client libraries](#) available for most popular languages.
+  # [Official client libraries](/docs/client-libraries/) available for most
+  # popular languages.
   #
   # # Authentication
   #
   # Authenticate your account when using the API by including your API key in
   # the request.
-  # You can manage your API keys in the Mailosaur UI. Your API key carrys many
-  # privileges,
+  # You can [manage your API keys](/app/account/api-access/) in the Mailosaur
+  # UI. Your API key carrys many privileges,
   # so be sure to keep it secret! Do not share your API key in
   # publicly-accessible areas such
   # GitHub, client-side code, and so on.
@@ -101,10 +102,10 @@ module Mailosaur
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
-    # @return [Array] operation results.
+    # @return [ServerListResult] operation results.
     #
-    def list(custom_headers = nil)
-      response = list_async(custom_headers).value!
+    def list(custom_headers:nil)
+      response = list_async(custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
@@ -119,8 +120,8 @@ module Mailosaur
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def list_with_http_info(custom_headers = nil)
-      list_async(custom_headers).value!
+    def list_with_http_info(custom_headers:nil)
+      list_async(custom_headers:custom_headers).value!
     end
 
     #
@@ -134,10 +135,11 @@ module Mailosaur
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def list_async(custom_headers = nil)
+    def list_async(custom_headers:nil)
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/servers'
 
       request_url = @base_url || @client.base_url
@@ -163,23 +165,7 @@ module Mailosaur
         if status_code == 200
           begin
             parsed_response = response_content.to_s.empty? ? nil : JSON.load(response_content)
-            result_mapper = {
-              client_side_validation: true,
-              required: false,
-              serialized_name: 'parsed_response',
-              type: {
-                name: 'Sequence',
-                element: {
-                    client_side_validation: true,
-                    required: false,
-                    serialized_name: 'ServerElementType',
-                    type: {
-                      name: 'Composite',
-                      class_name: 'Server'
-                    }
-                }
-              }
-            }
+            result_mapper = Mailosaur::Models::ServerListResult.mapper()
             result.body = @client.deserialize(result_mapper, parsed_response)
           rescue Exception => e
             fail MsRest::DeserializationError.new('Error occurred in deserializing the response', e.message, e.backtrace, result)
@@ -203,8 +189,8 @@ module Mailosaur
     #
     # @return [Server] operation results.
     #
-    def create(server_create_options, custom_headers = nil)
-      response = create_async(server_create_options, custom_headers).value!
+    def create(server_create_options, custom_headers:nil)
+      response = create_async(server_create_options, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
@@ -219,8 +205,8 @@ module Mailosaur
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def create_with_http_info(server_create_options, custom_headers = nil)
-      create_async(server_create_options, custom_headers).value!
+    def create_with_http_info(server_create_options, custom_headers:nil)
+      create_async(server_create_options, custom_headers:custom_headers).value!
     end
 
     #
@@ -234,12 +220,11 @@ module Mailosaur
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def create_async(server_create_options, custom_headers = nil)
+    def create_async(server_create_options, custom_headers:nil)
       fail ArgumentError, 'server_create_options is nil' if server_create_options.nil?
 
 
       request_headers = {}
-
       request_headers['Content-Type'] = 'application/json; charset=utf-8'
 
       # Serialize Request
@@ -298,8 +283,8 @@ module Mailosaur
     #
     # @return [Server] operation results.
     #
-    def get(id, custom_headers = nil)
-      response = get_async(id, custom_headers).value!
+    def get(id, custom_headers:nil)
+      response = get_async(id, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
@@ -315,8 +300,8 @@ module Mailosaur
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def get_with_http_info(id, custom_headers = nil)
-      get_async(id, custom_headers).value!
+    def get_with_http_info(id, custom_headers:nil)
+      get_async(id, custom_headers:custom_headers).value!
     end
 
     #
@@ -331,11 +316,12 @@ module Mailosaur
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def get_async(id, custom_headers = nil)
+    def get_async(id, custom_headers:nil)
       fail ArgumentError, 'id is nil' if id.nil?
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/servers/{id}'
 
       request_url = @base_url || @client.base_url
@@ -387,8 +373,8 @@ module Mailosaur
     #
     # @return [Server] operation results.
     #
-    def update(id, server, custom_headers = nil)
-      response = update_async(id, server, custom_headers).value!
+    def update(id, server, custom_headers:nil)
+      response = update_async(id, server, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
@@ -404,8 +390,8 @@ module Mailosaur
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def update_with_http_info(id, server, custom_headers = nil)
-      update_async(id, server, custom_headers).value!
+    def update_with_http_info(id, server, custom_headers:nil)
+      update_async(id, server, custom_headers:custom_headers).value!
     end
 
     #
@@ -420,13 +406,12 @@ module Mailosaur
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def update_async(id, server, custom_headers = nil)
+    def update_async(id, server, custom_headers:nil)
       fail ArgumentError, 'id is nil' if id.nil?
       fail ArgumentError, 'server is nil' if server.nil?
 
 
       request_headers = {}
-
       request_headers['Content-Type'] = 'application/json; charset=utf-8'
 
       # Serialize Request
@@ -478,15 +463,15 @@ module Mailosaur
     # Delete a server
     #
     # Permanently deletes a server. This operation cannot be undone. Also deletes
-    # all emails and associated attachments within the server.
+    # all messages and associated attachments within the server.
     #
     # @param id [String] The identifier of the server to be deleted.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     #
-    def delete(id, custom_headers = nil)
-      response = delete_async(id, custom_headers).value!
+    def delete(id, custom_headers:nil)
+      response = delete_async(id, custom_headers:custom_headers).value!
       nil
     end
 
@@ -494,7 +479,7 @@ module Mailosaur
     # Delete a server
     #
     # Permanently deletes a server. This operation cannot be undone. Also deletes
-    # all emails and associated attachments within the server.
+    # all messages and associated attachments within the server.
     #
     # @param id [String] The identifier of the server to be deleted.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
@@ -502,15 +487,15 @@ module Mailosaur
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def delete_with_http_info(id, custom_headers = nil)
-      delete_async(id, custom_headers).value!
+    def delete_with_http_info(id, custom_headers:nil)
+      delete_async(id, custom_headers:custom_headers).value!
     end
 
     #
     # Delete a server
     #
     # Permanently deletes a server. This operation cannot be undone. Also deletes
-    # all emails and associated attachments within the server.
+    # all messages and associated attachments within the server.
     #
     # @param id [String] The identifier of the server to be deleted.
     # @param [Hash{String => String}] A hash of custom headers that will be added
@@ -518,11 +503,12 @@ module Mailosaur
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def delete_async(id, custom_headers = nil)
+    def delete_async(id, custom_headers:nil)
       fail ArgumentError, 'id is nil' if id.nil?
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/servers/{id}'
 
       request_url = @base_url || @client.base_url

@@ -16,14 +16,15 @@ module Mailosaur
   # which are understood
   # by off-the-shelf HTTP clients.
   #
-  # [Official client libraries](#) available for most popular languages.
+  # [Official client libraries](/docs/client-libraries/) available for most
+  # popular languages.
   #
   # # Authentication
   #
   # Authenticate your account when using the API by including your API key in
   # the request.
-  # You can manage your API keys in the Mailosaur UI. Your API key carrys many
-  # privileges,
+  # You can [manage your API keys](/app/account/api-access/) in the Mailosaur
+  # UI. Your API key carrys many privileges,
   # so be sure to keep it secret! Do not share your API key in
   # publicly-accessible areas such
   # GitHub, client-side code, and so on.
@@ -93,25 +94,25 @@ module Mailosaur
     attr_reader :client
 
     #
-    # Perform a spam check
+    # Perform a spam test
     #
-    # Perform a spam analysis on the specified email
+    # Perform spam testing on the specified email
     #
     # @param email The identifier of the email to be analyzed.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
-    # @return [SpamCheckResult] operation results.
+    # @return [SpamAnalysisResult] operation results.
     #
-    def spam(email, custom_headers = nil)
-      response = spam_async(email, custom_headers).value!
+    def spam(email, custom_headers:nil)
+      response = spam_async(email, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
     #
-    # Perform a spam check
+    # Perform a spam test
     #
-    # Perform a spam analysis on the specified email
+    # Perform spam testing on the specified email
     #
     # @param email The identifier of the email to be analyzed.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
@@ -119,14 +120,14 @@ module Mailosaur
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def spam_with_http_info(email, custom_headers = nil)
-      spam_async(email, custom_headers).value!
+    def spam_with_http_info(email, custom_headers:nil)
+      spam_async(email, custom_headers:custom_headers).value!
     end
 
     #
-    # Perform a spam check
+    # Perform a spam test
     #
-    # Perform a spam analysis on the specified email
+    # Perform spam testing on the specified email
     #
     # @param email The identifier of the email to be analyzed.
     # @param [Hash{String => String}] A hash of custom headers that will be added
@@ -134,11 +135,12 @@ module Mailosaur
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def spam_async(email, custom_headers = nil)
+    def spam_async(email, custom_headers:nil)
       fail ArgumentError, 'email is nil' if email.nil?
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/analysis/spam/{email}'
 
       request_url = @base_url || @client.base_url
@@ -165,7 +167,7 @@ module Mailosaur
         if status_code == 200
           begin
             parsed_response = response_content.to_s.empty? ? nil : JSON.load(response_content)
-            result_mapper = Mailosaur::Models::SpamCheckResult.mapper()
+            result_mapper = Mailosaur::Models::SpamAnalysisResult.mapper()
             result.body = @client.deserialize(result_mapper, parsed_response)
           rescue Exception => e
             fail MsRest::DeserializationError.new('Error occurred in deserializing the response', e.message, e.backtrace, result)

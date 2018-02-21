@@ -10,13 +10,13 @@ module Mailosaur
     #
     #
     class MessageAddress
-      # @return [String]
+      # @return [String] Display name, if one is specified.
       attr_accessor :name
 
-      # @return [String]
+      # @return [String] Email address (applicable to email messages).
       attr_accessor :email
 
-      # @return [String]
+      # @return [String] Phone number (applicable to SMS messages).
       attr_accessor :phone
 
 

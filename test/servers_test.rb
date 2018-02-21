@@ -17,8 +17,8 @@ module Mailosaur
 
         context "list" do
             should "return a list of servers" do
-              servers = @client.servers.list()
-              assert_true(servers.length > 1)
+              result = @client.servers.list()
+              assert_true(result.items.length > 1)
             end
         end
 
@@ -41,7 +41,7 @@ module Mailosaur
             assert_equal(server_name, created_server.name)
             assert_not_nil(created_server.password)
             assert_instance_of(Array, created_server.users)
-            assert_instance_of(Fixnum, created_server.emails)
+            assert_instance_of(Fixnum, created_server.messages)
             assert_instance_of(Array, created_server.forwarding_rules)
   
             # Retrieve a server and confirm it has expected content
@@ -50,7 +50,7 @@ module Mailosaur
             assert_equal(created_server.name, retrieved_server.name)
             assert_not_nil(retrieved_server.password)
             assert_instance_of(Array, retrieved_server.users)
-            assert_instance_of(Fixnum, retrieved_server.emails)
+            assert_instance_of(Fixnum, retrieved_server.messages)
             assert_instance_of(Array, retrieved_server.forwarding_rules)
   
             # Update a server and confirm it has changed
@@ -60,7 +60,7 @@ module Mailosaur
             assert_equal(retrieved_server.name, updated_server.name)
             assert_equal(retrieved_server.password, updated_server.password)
             assert_equal(retrieved_server.users, updated_server.users)
-            assert_equal(retrieved_server.emails, updated_server.emails)
+            assert_equal(retrieved_server.messages, updated_server.messages)
             assert_equal(retrieved_server.forwarding_rules, updated_server.forwarding_rules)
   
             @client.servers.delete(retrieved_server.id)

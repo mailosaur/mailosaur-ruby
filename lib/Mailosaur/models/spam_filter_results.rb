@@ -9,32 +9,23 @@ module Mailosaur
     # Model object.
     #
     #
-    class SpamCheckResult
+    class SpamFilterResults
       # @return [Array<SpamAssassinRule>]
       attr_accessor :spam_assassin
 
-      # @return
-      attr_accessor :email_id
-
-      # @return
-      attr_accessor :account_id
-
-      # @return [Float]
-      attr_accessor :score
-
 
       #
-      # Mapper for SpamCheckResult class as Ruby Hash.
+      # Mapper for SpamFilterResults class as Ruby Hash.
       # This will be used for serialization/deserialization.
       #
       def self.mapper()
         {
           client_side_validation: true,
           required: false,
-          serialized_name: 'SpamCheckResult',
+          serialized_name: 'SpamFilterResults',
           type: {
             name: 'Composite',
-            class_name: 'SpamCheckResult',
+            class_name: 'SpamFilterResults',
             model_properties: {
               spam_assassin: {
                 client_side_validation: true,
@@ -51,30 +42,6 @@ module Mailosaur
                         class_name: 'SpamAssassinRule'
                       }
                   }
-                }
-              },
-              email_id: {
-                client_side_validation: true,
-                required: false,
-                serialized_name: 'emailId',
-                type: {
-                  name: 'String'
-                }
-              },
-              account_id: {
-                client_side_validation: true,
-                required: false,
-                serialized_name: 'accountId',
-                type: {
-                  name: 'String'
-                }
-              },
-              score: {
-                client_side_validation: true,
-                required: false,
-                serialized_name: 'score',
-                type: {
-                  name: 'Double'
                 }
               }
             }

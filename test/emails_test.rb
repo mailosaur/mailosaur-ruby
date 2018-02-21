@@ -129,7 +129,7 @@ module Mailosaur
                 result = @@client.analysis.spam(target_id)
                 assert_equal(target_id, result.email_id)
                 
-                result.spam_assassin.each do |rule|
+                result.spam_filter_results.each do |rule|
                     assert_instance_of(Float, rule.score)
                     assert_not_nil(rule.rule)
                     assert_not_nil(rule.description)
@@ -222,14 +222,14 @@ module Mailosaur
       
               file1 = email.attachments[0]
               assert_not_nil(file1.id)
-            #   assert_not_nil(file1.url)
+              assert_not_nil(file1.url)
               assert_equal(82138, file1.length)
               assert_equal("cat.png", file1.file_name)
               assert_equal("image/png", file1.content_type)
       
               file2 = email.attachments[1]
               assert_not_nil(file2.id)
-            #   assert_not_nil(file2.url)
+              assert_not_nil(file2.url)
               assert_equal(212080, file2.length)
               assert_equal("dog.png", file2.file_name)
               assert_equal("image/png", file2.content_type)

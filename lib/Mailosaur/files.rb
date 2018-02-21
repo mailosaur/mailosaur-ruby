@@ -16,14 +16,15 @@ module Mailosaur
   # which are understood
   # by off-the-shelf HTTP clients.
   #
-  # [Official client libraries](#) available for most popular languages.
+  # [Official client libraries](/docs/client-libraries/) available for most
+  # popular languages.
   #
   # # Authentication
   #
   # Authenticate your account when using the API by including your API key in
   # the request.
-  # You can manage your API keys in the Mailosaur UI. Your API key carrys many
-  # privileges,
+  # You can [manage your API keys](/app/account/api-access/) in the Mailosaur
+  # UI. Your API key carrys many privileges,
   # so be sure to keep it secret! Do not share your API key in
   # publicly-accessible areas such
   # GitHub, client-side code, and so on.
@@ -95,53 +96,54 @@ module Mailosaur
     #
     # Download an attachment
     #
-    # Returns a list of your emails. The emails are returned sorted by received
-    # date, with the most recently-received emails appearing first.
+    # Downloads a single attachment. Simply supply the unique identifier for the
+    # required attachment.
     #
-    # @param id The identifier of the file to be retrieved.
+    # @param id The identifier of the attachment to be downloaded.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [NOT_IMPLEMENTED] operation results.
     #
-    def get_attachment(id, custom_headers = nil)
-      response = get_attachment_async(id, custom_headers).value!
+    def get_attachment(id, custom_headers:nil)
+      response = get_attachment_async(id, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
     #
     # Download an attachment
     #
-    # Returns a list of your emails. The emails are returned sorted by received
-    # date, with the most recently-received emails appearing first.
+    # Downloads a single attachment. Simply supply the unique identifier for the
+    # required attachment.
     #
-    # @param id The identifier of the file to be retrieved.
+    # @param id The identifier of the attachment to be downloaded.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def get_attachment_with_http_info(id, custom_headers = nil)
-      get_attachment_async(id, custom_headers).value!
+    def get_attachment_with_http_info(id, custom_headers:nil)
+      get_attachment_async(id, custom_headers:custom_headers).value!
     end
 
     #
     # Download an attachment
     #
-    # Returns a list of your emails. The emails are returned sorted by received
-    # date, with the most recently-received emails appearing first.
+    # Downloads a single attachment. Simply supply the unique identifier for the
+    # required attachment.
     #
-    # @param id The identifier of the file to be retrieved.
+    # @param id The identifier of the attachment to be downloaded.
     # @param [Hash{String => String}] A hash of custom headers that will be added
     # to the HTTP request.
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def get_attachment_async(id, custom_headers = nil)
+    def get_attachment_async(id, custom_headers:nil)
       fail ArgumentError, 'id is nil' if id.nil?
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/files/attachments/{id}'
 
       request_url = @base_url || @client.base_url
@@ -189,55 +191,56 @@ module Mailosaur
     end
 
     #
-    # Download raw
+    # Download EML
     #
-    # Returns a list of your emails. The emails are returned sorted by received
-    # date, with the most recently-received emails appearing first.
+    # Downloads an EML file representing the specified email. Simply supply the
+    # unique identifier for the required email.
     #
-    # @param id The identifier of the file to be retrieved.
+    # @param id The identifier of the email to be downloaded.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [NOT_IMPLEMENTED] operation results.
     #
-    def get_email(id, custom_headers = nil)
-      response = get_email_async(id, custom_headers).value!
+    def get_email(id, custom_headers:nil)
+      response = get_email_async(id, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
     #
-    # Download raw
+    # Download EML
     #
-    # Returns a list of your emails. The emails are returned sorted by received
-    # date, with the most recently-received emails appearing first.
+    # Downloads an EML file representing the specified email. Simply supply the
+    # unique identifier for the required email.
     #
-    # @param id The identifier of the file to be retrieved.
+    # @param id The identifier of the email to be downloaded.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def get_email_with_http_info(id, custom_headers = nil)
-      get_email_async(id, custom_headers).value!
+    def get_email_with_http_info(id, custom_headers:nil)
+      get_email_async(id, custom_headers:custom_headers).value!
     end
 
     #
-    # Download raw
+    # Download EML
     #
-    # Returns a list of your emails. The emails are returned sorted by received
-    # date, with the most recently-received emails appearing first.
+    # Downloads an EML file representing the specified email. Simply supply the
+    # unique identifier for the required email.
     #
-    # @param id The identifier of the file to be retrieved.
+    # @param id The identifier of the email to be downloaded.
     # @param [Hash{String => String}] A hash of custom headers that will be added
     # to the HTTP request.
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def get_email_async(id, custom_headers = nil)
+    def get_email_async(id, custom_headers:nil)
       fail ArgumentError, 'id is nil' if id.nil?
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/files/email/{id}'
 
       request_url = @base_url || @client.base_url

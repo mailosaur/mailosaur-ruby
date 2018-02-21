@@ -10,22 +10,24 @@ module Mailosaur
     #
     #
     class Server
-      # @return [String] Unique identifier for the server.
+      # @return [String] Unique identifier for the server. Used as username for
+      # SMTP/POP3 authentication.
       attr_accessor :id
 
-      # @return [String] The password used for SMTP authentication.
+      # @return [String] SMTP/POP3 password.
       attr_accessor :password
 
       # @return [String] A name used to identify the server.
       attr_accessor :name
 
-      # @return
+      # @return Users (excluding administrators) who have access to the server.
       attr_accessor :users
 
-      # @return [Integer] The current count of emails held within the server.
-      attr_accessor :emails
+      # @return [Integer] The number of messages currently in the server.
+      attr_accessor :messages
 
-      # @return [Array<ForwardingRule>]
+      # @return [Array<ForwardingRule>] The rules used to manage email
+      # forwarding for this server.
       attr_accessor :forwarding_rules
 
 
@@ -82,10 +84,10 @@ module Mailosaur
                   }
                 }
               },
-              emails: {
+              messages: {
                 client_side_validation: true,
                 required: false,
-                serialized_name: 'emails',
+                serialized_name: 'messages',
                 type: {
                   name: 'Number'
                 }

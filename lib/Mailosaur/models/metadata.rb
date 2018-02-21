@@ -6,11 +6,10 @@
 module Mailosaur
   module Models
     #
-    # Model object.
-    #
+    # Advanced use case content related to the message.
     #
     class Metadata
-      # @return [Array<MessageHeader>]
+      # @return [Array<MessageHeader>] Email headers.
       attr_accessor :headers
 
 

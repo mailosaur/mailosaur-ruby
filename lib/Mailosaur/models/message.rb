@@ -10,44 +10,47 @@ module Mailosaur
     #
     #
     class Message
-      # @return
+      # @return Unique identifier for the message.
       attr_accessor :id
 
-      # @return [String]
-      attr_accessor :server
-
-      # @return [Array<MessageAddress>]
-      attr_accessor :rcpt
-
-      # @return [Array<MessageAddress>]
+      # @return [Array<MessageAddress>] The sender of the message.
       attr_accessor :from
 
-      # @return [Array<MessageAddress>]
+      # @return [Array<MessageAddress>] The message’s recipient.
       attr_accessor :to
 
-      # @return [Array<MessageAddress>]
+      # @return [Array<MessageAddress>] Carbon-copied recipients for email
+      # messages.
       attr_accessor :cc
 
-      # @return [Array<MessageAddress>]
+      # @return [Array<MessageAddress>] Blind carbon-copied recipients for
+      # email messages.
       attr_accessor :bcc
 
-      # @return [DateTime]
+      # @return [DateTime] The datetime that this message was received by
+      # Mailosaur.
       attr_accessor :received
 
-      # @return [String]
+      # @return [String] The message’s subject.
       attr_accessor :subject
 
-      # @return [MessageContent]
+      # @return [MessageContent] Message content that was sent in HTML format.
       attr_accessor :html
 
-      # @return [MessageContent]
+      # @return [MessageContent] Message content that was sent in plain text
+      # format.
       attr_accessor :text
 
-      # @return [Array<Attachment>]
+      # @return [Array<Attachment>] An array of attachment metadata for any
+      # attached files.
       attr_accessor :attachments
 
       # @return [Metadata]
       attr_accessor :metadata
+
+      # @return [String] Identifier for the server in which the message is
+      # located.
+      attr_accessor :server
 
 
       #
@@ -69,31 +72,6 @@ module Mailosaur
                 serialized_name: 'id',
                 type: {
                   name: 'String'
-                }
-              },
-              server: {
-                client_side_validation: true,
-                required: false,
-                serialized_name: 'server',
-                type: {
-                  name: 'String'
-                }
-              },
-              rcpt: {
-                client_side_validation: true,
-                required: false,
-                serialized_name: 'rcpt',
-                type: {
-                  name: 'Sequence',
-                  element: {
-                      client_side_validation: true,
-                      required: false,
-                      serialized_name: 'MessageAddressElementType',
-                      type: {
-                        name: 'Composite',
-                        class_name: 'MessageAddress'
-                      }
-                  }
                 }
               },
               from: {
@@ -222,6 +200,14 @@ module Mailosaur
                 type: {
                   name: 'Composite',
                   class_name: 'Metadata'
+                }
+              },
+              server: {
+                client_side_validation: true,
+                required: false,
+                serialized_name: 'server',
+                type: {
+                  name: 'String'
                 }
               }
             }

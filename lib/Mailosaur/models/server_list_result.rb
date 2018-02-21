@@ -6,27 +6,27 @@
 module Mailosaur
   module Models
     #
-    # The result of a message listing request.
+    # The result of a server listing request.
     #
-    class MessageListResult
-      # @return [Array<MessageSummary>] The individual summaries of each
-      # message forming the result. Summaries are returned sorted by received
-      # date, with the most recently-received messages appearing first.
+    class ServerListResult
+      # @return [Array<Server>] The individual servers forming the result.
+      # Servers are returned sorted by creation date, with the most
+      # recently-created server appearing first.
       attr_accessor :items
 
 
       #
-      # Mapper for MessageListResult class as Ruby Hash.
+      # Mapper for ServerListResult class as Ruby Hash.
       # This will be used for serialization/deserialization.
       #
       def self.mapper()
         {
           client_side_validation: true,
           required: false,
-          serialized_name: 'MessageListResult',
+          serialized_name: 'ServerListResult',
           type: {
             name: 'Composite',
-            class_name: 'MessageListResult',
+            class_name: 'ServerListResult',
             model_properties: {
               items: {
                 client_side_validation: true,
@@ -37,10 +37,10 @@ module Mailosaur
                   element: {
                       client_side_validation: true,
                       required: false,
-                      serialized_name: 'MessageSummaryElementType',
+                      serialized_name: 'ServerElementType',
                       type: {
                         name: 'Composite',
-                        class_name: 'MessageSummary'
+                        class_name: 'Server'
                       }
                   }
                 }

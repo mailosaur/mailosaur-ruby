@@ -9,41 +9,42 @@ module Mailosaur
     # Model object.
     #
     #
-    class MessageHeader
-      # @return [String] Header key.
-      attr_accessor :field
+    class SpamAnalysisResult
+      # @return [SpamFilterResults]
+      attr_accessor :spam_filter_results
 
-      # @return [String] Header value.
-      attr_accessor :value
+      # @return [Float]
+      attr_accessor :score
 
 
       #
-      # Mapper for MessageHeader class as Ruby Hash.
+      # Mapper for SpamAnalysisResult class as Ruby Hash.
       # This will be used for serialization/deserialization.
       #
       def self.mapper()
         {
           client_side_validation: true,
           required: false,
-          serialized_name: 'MessageHeader',
+          serialized_name: 'SpamAnalysisResult',
           type: {
             name: 'Composite',
-            class_name: 'MessageHeader',
+            class_name: 'SpamAnalysisResult',
             model_properties: {
-              field: {
+              spam_filter_results: {
                 client_side_validation: true,
                 required: false,
-                serialized_name: 'field',
+                serialized_name: 'spamFilterResults',
                 type: {
-                  name: 'String'
+                  name: 'Composite',
+                  class_name: 'SpamFilterResults'
                 }
               },
-              value: {
+              score: {
                 client_side_validation: true,
                 required: false,
-                serialized_name: 'value',
+                serialized_name: 'score',
                 type: {
-                  name: 'String'
+                  name: 'Double'
                 }
               }
             }

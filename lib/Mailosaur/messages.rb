@@ -16,14 +16,15 @@ module Mailosaur
   # which are understood
   # by off-the-shelf HTTP clients.
   #
-  # [Official client libraries](#) available for most popular languages.
+  # [Official client libraries](/docs/client-libraries/) available for most
+  # popular languages.
   #
   # # Authentication
   #
   # Authenticate your account when using the API by including your API key in
   # the request.
-  # You can manage your API keys in the Mailosaur UI. Your API key carrys many
-  # privileges,
+  # You can [manage your API keys](/app/account/api-access/) in the Mailosaur
+  # UI. Your API key carrys many privileges,
   # so be sure to keep it secret! Do not share your API key in
   # publicly-accessible areas such
   # GitHub, client-side code, and so on.
@@ -93,55 +94,56 @@ module Mailosaur
     attr_reader :client
 
     #
-    # Retrieve an message
+    # Retrieve a message
     #
-    # Retrieves the detail for a single message. Simply supply the unique
+    # Retrieves the detail for a single email message. Simply supply the unique
     # identifier for the required message.
     #
-    # @param id The identifier of the message to be retrieved.
+    # @param id The identifier of the email message to be retrieved.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [Message] operation results.
     #
-    def get(id, custom_headers = nil)
-      response = get_async(id, custom_headers).value!
+    def get(id, custom_headers:nil)
+      response = get_async(id, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
     #
-    # Retrieve an message
+    # Retrieve a message
     #
-    # Retrieves the detail for a single message. Simply supply the unique
+    # Retrieves the detail for a single email message. Simply supply the unique
     # identifier for the required message.
     #
-    # @param id The identifier of the message to be retrieved.
+    # @param id The identifier of the email message to be retrieved.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def get_with_http_info(id, custom_headers = nil)
-      get_async(id, custom_headers).value!
+    def get_with_http_info(id, custom_headers:nil)
+      get_async(id, custom_headers:custom_headers).value!
     end
 
     #
-    # Retrieve an message
+    # Retrieve a message
     #
-    # Retrieves the detail for a single message. Simply supply the unique
+    # Retrieves the detail for a single email message. Simply supply the unique
     # identifier for the required message.
     #
-    # @param id The identifier of the message to be retrieved.
+    # @param id The identifier of the email message to be retrieved.
     # @param [Hash{String => String}] A hash of custom headers that will be added
     # to the HTTP request.
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def get_async(id, custom_headers = nil)
+    def get_async(id, custom_headers:nil)
       fail ArgumentError, 'id is nil' if id.nil?
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/messages/{id}'
 
       request_url = @base_url || @client.base_url
@@ -182,9 +184,9 @@ module Mailosaur
     end
 
     #
-    # Delete an message
+    # Delete a message
     #
-    # Permanently deletes an message. This operation cannot be undone. Also deletes
+    # Permanently deletes a message. This operation cannot be undone. Also deletes
     # any attachments related to the message.
     #
     # @param id The identifier of the message to be deleted.
@@ -192,15 +194,15 @@ module Mailosaur
     # will be added to the HTTP request.
     #
     #
-    def delete(id, custom_headers = nil)
-      response = delete_async(id, custom_headers).value!
+    def delete(id, custom_headers:nil)
+      response = delete_async(id, custom_headers:custom_headers).value!
       nil
     end
 
     #
-    # Delete an message
+    # Delete a message
     #
-    # Permanently deletes an message. This operation cannot be undone. Also deletes
+    # Permanently deletes a message. This operation cannot be undone. Also deletes
     # any attachments related to the message.
     #
     # @param id The identifier of the message to be deleted.
@@ -209,14 +211,14 @@ module Mailosaur
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def delete_with_http_info(id, custom_headers = nil)
-      delete_async(id, custom_headers).value!
+    def delete_with_http_info(id, custom_headers:nil)
+      delete_async(id, custom_headers:custom_headers).value!
     end
 
     #
-    # Delete an message
+    # Delete a message
     #
-    # Permanently deletes an message. This operation cannot be undone. Also deletes
+    # Permanently deletes a message. This operation cannot be undone. Also deletes
     # any attachments related to the message.
     #
     # @param id The identifier of the message to be deleted.
@@ -225,11 +227,12 @@ module Mailosaur
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def delete_async(id, custom_headers = nil)
+    def delete_async(id, custom_headers:nil)
       fail ArgumentError, 'id is nil' if id.nil?
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/messages/{id}'
 
       request_url = @base_url || @client.base_url
@@ -262,65 +265,69 @@ module Mailosaur
     #
     # List all messages
     #
-    # Returns a list of your messages. The messages are returned sorted by received
-    # date, with the most recently-received messages appearing first.
+    # Returns a list of your messages in summary form. The summaries are returned
+    # sorted by received date, with the most recently-received messages appearing
+    # first.
     #
     # @param server [String] The identifier of the server hosting the messages.
-    # @param page [Integer] Used in conjunction with `itemsperpage` to support
+    # @param page [Integer] Used in conjunction with `itemsPerPage` to support
     # pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
-    # returned. Can be set between 1 and 1000 items, the default is 50.
+    # returned per page. Can be set between 1 and 1000 items, the default is 50.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [MessageListResult] operation results.
     #
-    def list(server, page = nil, items_per_page = nil, custom_headers = nil)
-      response = list_async(server, page, items_per_page, custom_headers).value!
+    def list(server, page:nil, items_per_page:nil, custom_headers:nil)
+      response = list_async(server, page:page, items_per_page:items_per_page, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
     #
     # List all messages
     #
-    # Returns a list of your messages. The messages are returned sorted by received
-    # date, with the most recently-received messages appearing first.
+    # Returns a list of your messages in summary form. The summaries are returned
+    # sorted by received date, with the most recently-received messages appearing
+    # first.
     #
     # @param server [String] The identifier of the server hosting the messages.
-    # @param page [Integer] Used in conjunction with `itemsperpage` to support
+    # @param page [Integer] Used in conjunction with `itemsPerPage` to support
     # pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
-    # returned. Can be set between 1 and 1000 items, the default is 50.
+    # returned per page. Can be set between 1 and 1000 items, the default is 50.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def list_with_http_info(server, page = nil, items_per_page = nil, custom_headers = nil)
-      list_async(server, page, items_per_page, custom_headers).value!
+    def list_with_http_info(server, page:nil, items_per_page:nil, custom_headers:nil)
+      list_async(server, page:page, items_per_page:items_per_page, custom_headers:custom_headers).value!
     end
 
     #
     # List all messages
     #
-    # Returns a list of your messages. The messages are returned sorted by received
-    # date, with the most recently-received messages appearing first.
+    # Returns a list of your messages in summary form. The summaries are returned
+    # sorted by received date, with the most recently-received messages appearing
+    # first.
     #
     # @param server [String] The identifier of the server hosting the messages.
-    # @param page [Integer] Used in conjunction with `itemsperpage` to support
+    # @param page [Integer] Used in conjunction with `itemsPerPage` to support
     # pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
-    # returned. Can be set between 1 and 1000 items, the default is 50.
+    # returned per page. Can be set between 1 and 1000 items, the default is 50.
     # @param [Hash{String => String}] A hash of custom headers that will be added
     # to the HTTP request.
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def list_async(server, page = nil, items_per_page = nil, custom_headers = nil)
+    def list_async(server, page:nil, items_per_page:nil, custom_headers:nil)
       fail ArgumentError, 'server is nil' if server.nil?
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/messages'
 
       request_url = @base_url || @client.base_url
@@ -371,8 +378,8 @@ module Mailosaur
     # will be added to the HTTP request.
     #
     #
-    def delete_all(server, custom_headers = nil)
-      response = delete_all_async(server, custom_headers).value!
+    def delete_all(server, custom_headers:nil)
+      response = delete_all_async(server, custom_headers:custom_headers).value!
       nil
     end
 
@@ -388,8 +395,8 @@ module Mailosaur
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def delete_all_with_http_info(server, custom_headers = nil)
-      delete_all_async(server, custom_headers).value!
+    def delete_all_with_http_info(server, custom_headers:nil)
+      delete_all_async(server, custom_headers:custom_headers).value!
     end
 
     #
@@ -404,11 +411,12 @@ module Mailosaur
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def delete_all_async(server, custom_headers = nil)
+    def delete_all_async(server, custom_headers:nil)
       fail ArgumentError, 'server is nil' if server.nil?
 
 
       request_headers = {}
+      request_headers['Content-Type'] = 'application/json; charset=utf-8'
       path_template = 'api/messages'
 
       request_url = @base_url || @client.base_url
@@ -441,76 +449,75 @@ module Mailosaur
     #
     # Search for messages
     #
-    # Returns a list of messages matching the specified search criteria. The
-    # messages are returned sorted by received date, with the most
+    # Returns a list of messages matching the specified search criteria, in summary
+    # form. The messages are returned sorted by received date, with the most
     # recently-received messages appearing first.
     #
     # @param server [String] The identifier of the server hosting the messages.
     # @param criteria [SearchCriteria] The search criteria to match results
     # against.
-    # @param page [Integer] Used in conjunction with `itemsperpage` to support
+    # @param page [Integer] Used in conjunction with `itemsPerPage` to support
     # pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
-    # returned. Can be set between 1 and 1000 items, the default is 50.
+    # returned per page. Can be set between 1 and 1000 items, the default is 50.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [MessageListResult] operation results.
     #
-    def search(server, criteria, page = nil, items_per_page = nil, custom_headers = nil)
-      response = search_async(server, criteria, page, items_per_page, custom_headers).value!
+    def search(server, criteria, page:nil, items_per_page:nil, custom_headers:nil)
+      response = search_async(server, criteria, page:page, items_per_page:items_per_page, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
     #
     # Search for messages
     #
-    # Returns a list of messages matching the specified search criteria. The
-    # messages are returned sorted by received date, with the most
+    # Returns a list of messages matching the specified search criteria, in summary
+    # form. The messages are returned sorted by received date, with the most
     # recently-received messages appearing first.
     #
     # @param server [String] The identifier of the server hosting the messages.
     # @param criteria [SearchCriteria] The search criteria to match results
     # against.
-    # @param page [Integer] Used in conjunction with `itemsperpage` to support
+    # @param page [Integer] Used in conjunction with `itemsPerPage` to support
     # pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
-    # returned. Can be set between 1 and 1000 items, the default is 50.
+    # returned per page. Can be set between 1 and 1000 items, the default is 50.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def search_with_http_info(server, criteria, page = nil, items_per_page = nil, custom_headers = nil)
-      search_async(server, criteria, page, items_per_page, custom_headers).value!
+    def search_with_http_info(server, criteria, page:nil, items_per_page:nil, custom_headers:nil)
+      search_async(server, criteria, page:page, items_per_page:items_per_page, custom_headers:custom_headers).value!
     end
 
     #
     # Search for messages
     #
-    # Returns a list of messages matching the specified search criteria. The
-    # messages are returned sorted by received date, with the most
+    # Returns a list of messages matching the specified search criteria, in summary
+    # form. The messages are returned sorted by received date, with the most
     # recently-received messages appearing first.
     #
     # @param server [String] The identifier of the server hosting the messages.
     # @param criteria [SearchCriteria] The search criteria to match results
     # against.
-    # @param page [Integer] Used in conjunction with `itemsperpage` to support
+    # @param page [Integer] Used in conjunction with `itemsPerPage` to support
     # pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
-    # returned. Can be set between 1 and 1000 items, the default is 50.
+    # returned per page. Can be set between 1 and 1000 items, the default is 50.
     # @param [Hash{String => String}] A hash of custom headers that will be added
     # to the HTTP request.
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def search_async(server, criteria, page = nil, items_per_page = nil, custom_headers = nil)
+    def search_async(server, criteria, page:nil, items_per_page:nil, custom_headers:nil)
       fail ArgumentError, 'server is nil' if server.nil?
       fail ArgumentError, 'criteria is nil' if criteria.nil?
 
 
       request_headers = {}
-
       request_headers['Content-Type'] = 'application/json; charset=utf-8'
 
       # Serialize Request
@@ -561,8 +568,8 @@ module Mailosaur
     #
     # Wait for a specific message
     #
-    # Returns as soon as an message matching the specified search criteria is
-    # found.
+    # Returns as soon as a message matching the specified search criteria is found.
+    # This is the most efficient method of looking up a message.
     #
     # @param server [String] The identifier of the server hosting the message.
     # @param criteria [SearchCriteria] The search criteria to use in order to find
@@ -572,16 +579,16 @@ module Mailosaur
     #
     # @return [Message] operation results.
     #
-    def wait_for(server, criteria, custom_headers = nil)
-      response = wait_for_async(server, criteria, custom_headers).value!
+    def wait_for(server, criteria, custom_headers:nil)
+      response = wait_for_async(server, criteria, custom_headers:custom_headers).value!
       response.body unless response.nil?
     end
 
     #
     # Wait for a specific message
     #
-    # Returns as soon as an message matching the specified search criteria is
-    # found.
+    # Returns as soon as a message matching the specified search criteria is found.
+    # This is the most efficient method of looking up a message.
     #
     # @param server [String] The identifier of the server hosting the message.
     # @param criteria [SearchCriteria] The search criteria to use in order to find
@@ -591,15 +598,15 @@ module Mailosaur
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def wait_for_with_http_info(server, criteria, custom_headers = nil)
-      wait_for_async(server, criteria, custom_headers).value!
+    def wait_for_with_http_info(server, criteria, custom_headers:nil)
+      wait_for_async(server, criteria, custom_headers:custom_headers).value!
     end
 
     #
     # Wait for a specific message
     #
-    # Returns as soon as an message matching the specified search criteria is
-    # found.
+    # Returns as soon as a message matching the specified search criteria is found.
+    # This is the most efficient method of looking up a message.
     #
     # @param server [String] The identifier of the server hosting the message.
     # @param criteria [SearchCriteria] The search criteria to use in order to find
@@ -609,13 +616,12 @@ module Mailosaur
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def wait_for_async(server, criteria, custom_headers = nil)
+    def wait_for_async(server, criteria, custom_headers:nil)
       fail ArgumentError, 'server is nil' if server.nil?
       fail ArgumentError, 'criteria is nil' if criteria.nil?
 
 
       request_headers = {}
-
       request_headers['Content-Type'] = 'application/json; charset=utf-8'
 
       # Serialize Request
@@ -640,7 +646,7 @@ module Mailosaur
         http_response = result.response
         status_code = http_response.status
         response_content = http_response.body
-        unless status_code == 200
+        unless status_code == 200 || status_code == 204
           error_model = JSON.load(response_content)
           mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + status_code.to_s + '\'', error_model)
           raise mailosaur_error

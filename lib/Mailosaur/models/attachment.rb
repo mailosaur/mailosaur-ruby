@@ -25,6 +25,9 @@ module Mailosaur
       # @return [Integer]
       attr_accessor :length
 
+      # @return [String]
+      attr_accessor :url
+
 
       #
       # Mapper for Attachment class as Ruby Hash.
@@ -77,6 +80,14 @@ module Mailosaur
                 serialized_name: 'length',
                 type: {
                   name: 'Number'
+                }
+              },
+              url: {
+                client_side_validation: true,
+                required: false,
+                serialized_name: 'url',
+                type: {
+                  name: 'String'
                 }
               }
             }

@@ -10,11 +10,11 @@ module Mailosaur
     #
     #
     class ForwardingRule
-      # @return [Enum] Possible values include: 'From', 'To', 'Subject'
+      # @return [Enum] Possible values include: 'from', 'to', 'subject'
       attr_accessor :field
 
-      # @return [Enum] Possible values include: 'EndsWith', 'StartsWith',
-      # 'Contains'
+      # @return [Enum] Possible values include: 'endsWith', 'startsWith',
+      # 'contains'
       attr_accessor :operator
 
       # @return [String]

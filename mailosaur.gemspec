@@ -1,8 +1,8 @@
 require 'rake'
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
-  s.version     = '3.0.1'
-  s.date        = '2018-01-24'
+  s.version     = '5.0.0'
+  s.date        = '2018-01-28'
   s.summary     = 'Client library for Mailosaur'
   s.description = 'Gem containing ruby client library for Mailosaur.'
   s.authors     = ['Mailosaur Ltd']
@@ -11,12 +11,13 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.files       = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']
-  s.add_dependency 'json', ['>= 1.7.6']
-  s.add_dependency 'mime-types', ['>= 1.16']
-  s.add_dependency 'rest-client', ['~> 1.7']
+  s.add_dependency 'json', '~> 2.1.0'
+  s.add_dependency 'ms_rest', '= 0.7.2'
+  s.add_dependency 'faraday', '~> 0.14.0'
+  s.add_dependency 'faraday-cookie_jar', '~> 0.0.6'
 
-  s.add_development_dependency 'mail', ['= 2.6.1']
-  s.add_development_dependency 'rake', ['= 10.4.2']
-  s.add_development_dependency 'pry', ['= 0.10.4']
-  s.add_development_dependency 'minitest', ['= 5.8.4']
+  s.add_development_dependency 'rake', '>= 10.5.0'
+  s.add_development_dependency 'mail', '~> 2.6.1'
+  s.add_development_dependency 'shoulda-context', '~> 1.2.2'
+  s.add_development_dependency 'test-unit', '~> 3.2.7'
 end

@@ -1,5 +1,6 @@
 *.gem
 *.rbc
+*.icloud
 .bundle
 .config
 coverage
@@ -19,3 +20,4 @@ doc/
 
 .DS_Store
 /.idea/
+Gemfile.lock

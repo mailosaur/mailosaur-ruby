@@ -3,9 +3,17 @@ rvm:
 - 2.2
 env:
   global:
-  - secure: "Ds8aBqDwqeL6jkvbdJACHgtZX2Rocss19jwhc0q1VpJnpBBPvhYZpCaGa4AoR+TL93tKUbm4zBODJoLdFbj0qEeA2poXKBgftkkv2GUf5XIovZmBk/mQVIgiDD0GTkJkhismQV4irC2VRU20nQvwFyqxYgJTnnpEX/By2X65fM0="
+  - secure: XUf+qgilHIh1KaI9sANRiSA3SlrhE1BfIclbgkPOoo9rjX/2uSPAX0h/uSo29GaV8FEcGw3SwPZdvSVGDYY/SdJQUkadurF0ER/RmI5nL4ewKo72UQ6pEqgXWAgcg022v+e+6Ea7Q4pF61KtzhVtJJX4x87NzVO6794T7B9ufaA=
   matrix:
-  - MAILOSAUR_BASE_URL=https://mailosaur.com/api/ MAILOSAUR_SMTP_HOST=mailosaur.io
-  - MAILOSAUR_BASE_URL=https://next.mailosaur.com/api/ MAILOSAUR_SMTP_HOST=ms-smtp.uk
+  - MAILOSAUR_BASE_URL=https://mailosaur.com/ MAILOSAUR_SMTP_HOST=mailosaur.io
+  - MAILOSAUR_BASE_URL=https://next.mailosaur.com/ MAILOSAUR_SMTP_HOST=ms-smtp.uk
 notifications:
   slack: mailosaur:CsJ9RruwjqHPKr1Iugk8GDtX
+deploy:
+  provider: rubygems
+  gemspec: mailosaur.gemspec
+  api_key:
+    secure: EERj4T/wuDqxJMK7+IrbgKHtJd9tJLlEZyhWGDKZ7hGA6Y3sIbP26ElwW53elcP6AT5wLAGkyeSJjPNBm9kNUsqrQL2vnNHDboNguUUc2u4wy++ywbUmIJo5AdUs7pzWKRw++0u1R1QP9cptudiomgUrTNAr+8l7EloYDdcNdls=
+  on:
+    tags: true
+    all_branches: true

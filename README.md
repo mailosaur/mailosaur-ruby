@@ -50,7 +50,7 @@ ruby:
     override-client-name: MailosaurBaseClient
     namespace: Mailosaur
     package-name: Mailosaur
-    package-version: 5.0.0
+    package-version: 5.0.2
 ```
 
 ## Running tests

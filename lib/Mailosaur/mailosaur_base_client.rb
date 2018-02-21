@@ -113,7 +113,7 @@ module Mailosaur
     #
     def add_telemetry
         sdk_information = 'Mailosaur'
-        sdk_information = "#{sdk_information}/5.0.0"
+        sdk_information = "#{sdk_information}/5.0.2"
         add_user_agent_information(sdk_information)
     end
   end

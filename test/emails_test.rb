@@ -129,7 +129,7 @@ module Mailosaur
                 result = @@client.analysis.spam(target_id)
                 assert_equal(target_id, result.email_id)
                 
-                result.spam_filter_results.each do |rule|
+                result.spam_filter_results.spam_assassin.each do |rule|
                     assert_instance_of(Float, rule.score)
                     assert_not_nil(rule.rule)
                     assert_not_nil(rule.description)

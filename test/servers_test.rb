@@ -80,7 +80,7 @@ module Mailosaur
             end
 
             assert_equal("Operation returned an invalid status code '400'", ex.message)
-            assert_equal("UnknownError", ex.type)
+            assert_equal("ValidationError", ex.type)
             assert_equal(1, ex.messages.length)
             assert_not_nil(ex.messages["name"])
         end

@@ -11,9 +11,9 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.files       = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']
-  s.add_dependency 'json', '~> 2.1.0'
+  s.add_dependency 'json', '<= 3.0', '>= 1.7.5'
   s.add_dependency 'ms_rest', '= 0.7.2'
-  s.add_dependency 'faraday', '~> 0.14.0'
+  s.add_dependency 'faraday', '<= 1.0', '>= 0.9.0'
   s.add_dependency 'faraday-cookie_jar', '~> 0.0.6'
 
   s.add_development_dependency 'rake', '>= 10.5.0'

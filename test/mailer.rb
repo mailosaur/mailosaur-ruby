@@ -17,9 +17,6 @@ class Mailer
         (1..quantity).each do |i|
             send_email(client, server)
         end
-
-        # Wait to ensure email has arrived
-        sleep 2
     end
 
     def self.send_email(client, server, send_to_address=nil)

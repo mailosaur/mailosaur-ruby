@@ -67,6 +67,33 @@ module Mailosaur
             end
         end
 
+        context "wait_for" do
+            should "return a match once found (with send delay)" do
+                host = ENV['MAILOSAUR_SMTP_HOST'] || "mailosaur.io"
+                test_email_address = "wait_for_test_late_send.%s@%s" % [@@server, host]
+
+                Thread.new do
+                    sleep 5
+                    Mailer.send_email(@@client, @@server, test_email_address)
+                  end
+
+                criteria = Mailosaur::Models::SearchCriteria.new()
+                criteria.sent_to = test_email_address                
+                email = @@client.messages.wait_for(@@server, criteria)
+                validate_email(email)
+            end
+        end        
+
+        context "wait_for" do
+            should "timeout if the message is not found" do
+                assert_raise(Mailosaur::MailosaurError) do
+                    criteria = Mailosaur::Models::SearchCriteria.new()
+                    criteria.sent_to = "non_existing@email_address.com"
+                    email = @@client.messages.wait_for(@@server, criteria, custom_headers:nil, timeout:5)
+                end
+            end
+        end
+
         context "search" do
             should "throw an error if no criteria" do
                 assert_raise(Mailosaur::MailosaurError) do

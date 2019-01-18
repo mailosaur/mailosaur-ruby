@@ -568,7 +568,7 @@ module Mailosaur
     #
     # Wait for a specific message
     #
-    # Returns as soon as a message matching the specified search criteria is found.
+    # Returns as soon as a message matching the specified search criteria is found or timeout has elapsed.
     # This is the most efficient method of looking up a message.
     #
     # @param server [String] The identifier of the server hosting the message.
@@ -576,18 +576,19 @@ module Mailosaur
     # a match.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
+    # @param timeout [Integer] Timeout in seconds (15s default).
     #
     # @return [Message] operation results.
     #
-    def wait_for(server, criteria, custom_headers:nil)
-      response = wait_for_async(server, criteria, custom_headers:custom_headers).value!
+    def wait_for(server, criteria, custom_headers:nil, timeout:15)
+      response = wait_for_async(server, criteria, custom_headers:custom_headers, timeout:timeout).value!
       response.body unless response.nil?
     end
 
     #
     # Wait for a specific message
     #
-    # Returns as soon as a message matching the specified search criteria is found.
+    # Returns as soon as a message matching the specified search criteria is found or timeout has elapsed.
     # This is the most efficient method of looking up a message.
     #
     # @param server [String] The identifier of the server hosting the message.
@@ -595,17 +596,18 @@ module Mailosaur
     # a match.
     # @param custom_headers [Hash{String => String}] A hash of custom headers that
     # will be added to the HTTP request.
+    # @param timeout [Integer] Timeout in seconds (15s default).    
     #
     # @return [MsRest::HttpOperationResponse] HTTP response information.
     #
-    def wait_for_with_http_info(server, criteria, custom_headers:nil)
-      wait_for_async(server, criteria, custom_headers:custom_headers).value!
+    def wait_for_with_http_info(server, criteria, custom_headers:nil, timeout:15)
+      wait_for_async(server, criteria, custom_headers:custom_headers, timeout:timeout).value!
     end
 
     #
     # Wait for a specific message
     #
-    # Returns as soon as a message matching the specified search criteria is found.
+    # Returns as soon as a message matching the specified search criteria is found or timeout has elapsed.
     # This is the most efficient method of looking up a message.
     #
     # @param server [String] The identifier of the server hosting the message.
@@ -613,60 +615,27 @@ module Mailosaur
     # a match.
     # @param [Hash{String => String}] A hash of custom headers that will be added
     # to the HTTP request.
+    # @param timeout [Integer] Timeout in seconds (15s default).    
     #
     # @return [Concurrent::Promise] Promise object which holds the HTTP response.
     #
-    def wait_for_async(server, criteria, custom_headers:nil)
+    def wait_for_async(server, criteria, custom_headers:nil, timeout:15)
       fail ArgumentError, 'server is nil' if server.nil?
       fail ArgumentError, 'criteria is nil' if criteria.nil?
 
+      timeout_datetime = DateTime.now + Rational(timeout, 86400)
 
-      request_headers = {}
-      request_headers['Content-Type'] = 'application/json; charset=utf-8'
-
-      # Serialize Request
-      request_mapper = Mailosaur::Models::SearchCriteria.mapper()
-      request_content = @client.serialize(request_mapper,  criteria)
-      request_content = request_content != nil ? JSON.generate(request_content, quirks_mode: true) : nil
-
-      path_template = 'api/messages/await'
-
-      request_url = @base_url || @client.base_url
-
-      options = {
-          middlewares: [[MsRest::RetryPolicyMiddleware, times: 3, retry: 0.02], [:cookie_jar]],
-          query_params: {'server' => server},
-          body: request_content,
-          headers: request_headers.merge(custom_headers || {}),
-          base_url: request_url
-      }
-      promise = @client.make_request_async(:post, path_template, options)
-
-      promise = promise.then do |result|
-        http_response = result.response
-        status_code = http_response.status
-        response_content = http_response.body
-        unless status_code == 200 || status_code == 204
-          error_model = JSON.load(response_content)
-          mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + status_code.to_s + '\'', error_model)
-          raise mailosaur_error
+      while timeout_datetime > DateTime.now
+        messages = search(server, criteria, page:0, items_per_page:1, custom_headers:custom_headers)
+        if messages.items.length > 0
+          return get_async(messages.items[0].id, custom_headers:custom_headers)
         end
 
-        # Deserialize Response
-        if status_code == 200
-          begin
-            parsed_response = response_content.to_s.empty? ? nil : JSON.load(response_content)
-            result_mapper = Mailosaur::Models::Message.mapper()
-            result.body = @client.deserialize(result_mapper, parsed_response)
-          rescue Exception => e
-            fail MsRest::DeserializationError.new('Error occurred in deserializing the response', e.message, e.backtrace, result)
-          end
-        end
-
-        result
+        sleep(2)
       end
 
-      promise.execute
+      mailosaur_error = Mailosaur::MailosaurError.new('wait_for timeout elapsed', nil)
+      raise mailosaur_error
     end
 
   end

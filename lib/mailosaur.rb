@@ -4,11 +4,7 @@ require 'base64'
 require 'erb'
 require 'securerandom'
 require 'time'
-require 'timeliness'
 require 'faraday'
-require 'faraday-cookie_jar'
-require 'concurrent'
-require 'ms_rest'
 require 'Mailosaur/module_definition'
 
 module Mailosaur
@@ -16,7 +12,6 @@ module Mailosaur
   autoload :Files,                                              'Mailosaur/files.rb'
   autoload :Messages,                                           'Mailosaur/messages.rb'
   autoload :Servers,                                            'Mailosaur/servers.rb'
-  autoload :MailosaurBaseClient,                                'Mailosaur/mailosaur_base_client.rb'
   autoload :MailosaurError,                                     'Mailosaur/mailosaur_error.rb'
 
   module Models
@@ -38,20 +33,41 @@ module Mailosaur
     autoload :ServerListResult,                                   'Mailosaur/models/server_list_result.rb'
     autoload :SpamFilterResults,                                  'Mailosaur/models/spam_filter_results.rb'
     autoload :ServerCreateOptions,                                'Mailosaur/models/server_create_options.rb'
+autoload :BaseModel,                                              'Mailosaur/models/base_model.rb'
   end
 
-  class MailosaurClient < MailosaurBaseClient
-    def initialize(api_key, base_url = 'https://mailosaur.com/')
-      credentials = MsRest::BasicAuthenticationCredentials.new(api_key, '')
-      super(credentials, base_url, nil)
-    end
-  end
+  class MailosaurClient
+    # @return [Analysis] analysis
+    attr_reader :analysis
 
-  # Monkey patch generate_email_address method
-  class Servers
-    def generate_email_address(server)
-      host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.io'
-      '%s.%s@%s' % [SecureRandom.hex(3), server, host]
+    # @return [Files] files
+    attr_reader :files
+
+    # @return [Messages] messages
+    attr_reader :messages
+
+    # @return [Servers] servers
+    attr_reader :servers
+
+    #
+    # Creates initializes a new instance of the MailosaurClient class.
+    # @param api_key [String] your Mailosaur API key.
+    # @param base_url [String] the base URI of the service.
+    #
+    def initialize(api_key, base_url)
+      conn = Faraday.new(base_url || 'https://mailosaur.com/', {
+        :headers => {
+          :content_type => 'application/json; charset=utf-8',
+          :user_agent => 'mailosaur-ruby/5.0.2'
+        }
+      })
+
+      conn.basic_auth(api_key, '')
+
+      @analysis = Analysis.new(conn)
+      @files = Files.new(conn)
+      @messages = Messages.new(conn)
+      @servers = Servers.new(conn)
     end
   end
 end

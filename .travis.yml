@@ -23,7 +23,8 @@ deploy:
   skip_cleanup: true
   provider: script
   script: 'gem build mailosaur.gemspec && 
-    echo "---\n:rubygems_api_key: $DEPLOY_KEY" > ~/.gem/credentials &&
+    echo "---\n:rubygems_api_key: $DEPLOY_KEY" > ~/.gem/credentials && 
+    chmod 0600 ~/.gem/credentials && 
     gem push mailosaur-$version.gem'
   on:
     branch: master

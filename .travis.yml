@@ -15,7 +15,7 @@ before_deploy:
     sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/Mailosaur/version.rb &&
     sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ mailosaur.gemspec
 after_deploy:
-  - git status &&
+  - git checkout master &&
     git commit -am "New version released" &&
     git push origin master
 deploy:

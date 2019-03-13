@@ -9,11 +9,21 @@ env:
   - MAILOSAUR_BASE_URL=https://next.mailosaur.com/ MAILOSAUR_SMTP_HOST=ms-smtp.uk MAILOSAUR_SMTP_PORT=2525
 notifications:
   slack: mailosaur:CsJ9RruwjqHPKr1Iugk8GDtX
+before_deploy:
+  - version=`git describe --abbrev=0 --tags`
+  - sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/mailosaur.rb
+  - sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/Mailosaur/version.rb
+  - sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ mailosaur.gemspec
+after_deploy:
+  - git push origin master
 deploy:
+  skip_cleanup: true
   provider: rubygems
   gemspec: mailosaur.gemspec
+  on:
+    branch: master
+    ruby: 2.2
+    condition: $MAILOSAUR_BASE_URL = https://mailosaur.com/
+    tags: true
   api_key:
     secure: EERj4T/wuDqxJMK7+IrbgKHtJd9tJLlEZyhWGDKZ7hGA6Y3sIbP26ElwW53elcP6AT5wLAGkyeSJjPNBm9kNUsqrQL2vnNHDboNguUUc2u4wy++ywbUmIJo5AdUs7pzWKRw++0u1R1QP9cptudiomgUrTNAr+8l7EloYDdcNdls=
-  on:
-    tags: true
-    all_branches: true

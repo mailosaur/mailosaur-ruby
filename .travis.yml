@@ -10,14 +10,14 @@ env:
 notifications:
   slack: mailosaur:CsJ9RruwjqHPKr1Iugk8GDtX
 before_deploy:
-  - version=`git describe --abbrev=0 --tags` &&
-    sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/mailosaur.rb &&
-    sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/Mailosaur/version.rb &&
-    sed -i s/=\ \'\[0-9]\.\[0-9]\.\[0-9]/=\ \'$version/ mailosaur.gemspec
+- version=`git describe --abbrev=0 --tags` && 
+  sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/lib/mailosaur.rb && 
+  sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/Mailosaur/version.rb &&
+  sed -i s/=\ \'\[0-9]\.\[0-9]\.\[0-9]/=\ \'$version/ mailosaur.gemspec
 after_deploy:
-  - git checkout master &&
-    git commit -am "New version released" &&
-    git push origin master
+- git checkout master &&
+  git commit -am "New version released" &&
+  git push origin master
 deploy:
   skip_cleanup: true
   provider: rubygems
@@ -25,7 +25,7 @@ deploy:
   on:
     branch: master
     ruby: 2.2
-    condition: $MAILOSAUR_BASE_URL = https://mailosaur.com/
+    condition: "$MAILOSAUR_BASE_URL = https://mailosaur.com/"
     tags: true
   api_key:
-    secure: EERj4T/wuDqxJMK7+IrbgKHtJd9tJLlEZyhWGDKZ7hGA6Y3sIbP26ElwW53elcP6AT5wLAGkyeSJjPNBm9kNUsqrQL2vnNHDboNguUUc2u4wy++ywbUmIJo5AdUs7pzWKRw++0u1R1QP9cptudiomgUrTNAr+8l7EloYDdcNdls=
+    secure: BimUKEZABC1TD/RENscNYvkunWufYvzY66udLlxMExageP2EEiD9Ch7QiNth/15JF3X0poZ4hcy/gBS9n5/3imJTEYgYWtDY3laIfYI7U8qhdCDv+AYHaESma0hJCYK0qQtSS/RCVM1c+3uuWKQ85ChAIQOreGaS5xl7ki16mhk=

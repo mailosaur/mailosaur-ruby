@@ -3,7 +3,8 @@ rvm:
 - 2.2
 env:
   global:
-  - secure: XUf+qgilHIh1KaI9sANRiSA3SlrhE1BfIclbgkPOoo9rjX/2uSPAX0h/uSo29GaV8FEcGw3SwPZdvSVGDYY/SdJQUkadurF0ER/RmI5nL4ewKo72UQ6pEqgXWAgcg022v+e+6Ea7Q4pF61KtzhVtJJX4x87NzVO6794T7B9ufaA=
+  - secure: "XUf+qgilHIh1KaI9sANRiSA3SlrhE1BfIclbgkPOoo9rjX/2uSPAX0h/uSo29GaV8FEcGw3SwPZdvSVGDYY/SdJQUkadurF0ER/RmI5nL4ewKo72UQ6pEqgXWAgcg022v+e+6Ea7Q4pF61KtzhVtJJX4x87NzVO6794T7B9ufaA="
+  - secure: "dfIFIGtHFd/ePEhs1UHXeJJHJQBNZvTn4W2fPQhE7JmFd18vgSWagRmv8XvHs/orVACRYb2AXHB68AIL0VBFZlOu0OnY2jxJsTL3ubzsIJyPOJkwEVrQP81qVah6VqQjGDVMO6+GSXoE23n7mqd7knY5+OfVftioLL3WHDJfXpY="
   matrix:
   - MAILOSAUR_BASE_URL=https://mailosaur.com/ MAILOSAUR_SMTP_HOST=mailosaur.io MAILOSAUR_SMTP_PORT=2525
   - MAILOSAUR_BASE_URL=https://next.mailosaur.com/ MAILOSAUR_SMTP_HOST=ms-smtp.uk MAILOSAUR_SMTP_PORT=2525
@@ -20,12 +21,11 @@ after_deploy:
   git push origin master
 deploy:
   skip_cleanup: true
-  provider: rubygems
-  gemspec: mailosaur.gemspec
+  provider: script
+  script: gem build mailosaur.gemspec &&
+    gem push `find ./*.gem` -k $DEPLOY_KEY
   on:
     branch: master
     ruby: 2.2
     condition: "$MAILOSAUR_BASE_URL = https://mailosaur.com/"
     tags: true
-  api_key:
-    secure: BimUKEZABC1TD/RENscNYvkunWufYvzY66udLlxMExageP2EEiD9Ch7QiNth/15JF3X0poZ4hcy/gBS9n5/3imJTEYgYWtDY3laIfYI7U8qhdCDv+AYHaESma0hJCYK0qQtSS/RCVM1c+3uuWKQ85ChAIQOreGaS5xl7ki16mhk=

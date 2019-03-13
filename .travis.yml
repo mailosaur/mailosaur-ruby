@@ -3,17 +3,31 @@ rvm:
 - 2.2
 env:
   global:
-  - secure: XUf+qgilHIh1KaI9sANRiSA3SlrhE1BfIclbgkPOoo9rjX/2uSPAX0h/uSo29GaV8FEcGw3SwPZdvSVGDYY/SdJQUkadurF0ER/RmI5nL4ewKo72UQ6pEqgXWAgcg022v+e+6Ea7Q4pF61KtzhVtJJX4x87NzVO6794T7B9ufaA=
+  - secure: "XUf+qgilHIh1KaI9sANRiSA3SlrhE1BfIclbgkPOoo9rjX/2uSPAX0h/uSo29GaV8FEcGw3SwPZdvSVGDYY/SdJQUkadurF0ER/RmI5nL4ewKo72UQ6pEqgXWAgcg022v+e+6Ea7Q4pF61KtzhVtJJX4x87NzVO6794T7B9ufaA="
+  - secure: "dyl4x0usbhIDaeh7GhZyFMOmYZHqufORFmUhDrRLEBx9TtMIsrcg8rnWDJpJR2VQAQ+5w3O7ybZZ1GJooZOc5GEMjjI+jxmc5qvsxTc+7kjDzqgpTE9dEmn6Lks0oIXD06syRi/g20elT/a282FGAyumnAf88gLFx75Bf8yzIgk="
   matrix:
   - MAILOSAUR_BASE_URL=https://mailosaur.com/ MAILOSAUR_SMTP_HOST=mailosaur.io MAILOSAUR_SMTP_PORT=2525
   - MAILOSAUR_BASE_URL=https://next.mailosaur.com/ MAILOSAUR_SMTP_HOST=ms-smtp.uk MAILOSAUR_SMTP_PORT=2525
 notifications:
   slack: mailosaur:CsJ9RruwjqHPKr1Iugk8GDtX
+before_deploy:
+- version=`git describe --abbrev=0 --tags` && 
+  sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/mailosaur.rb && 
+  sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/Mailosaur/version.rb &&
+  sed -i s/=\ \'\[0-9]\.\[0-9]\.\[0-9]/=\ \'$version/ mailosaur.gemspec
+after_deploy:
+- git checkout master &&
+  git commit -am "New version released" &&
+  git push origin master
 deploy:
-  provider: rubygems
-  gemspec: mailosaur.gemspec
-  api_key:
-    secure: EERj4T/wuDqxJMK7+IrbgKHtJd9tJLlEZyhWGDKZ7hGA6Y3sIbP26ElwW53elcP6AT5wLAGkyeSJjPNBm9kNUsqrQL2vnNHDboNguUUc2u4wy++ywbUmIJo5AdUs7pzWKRw++0u1R1QP9cptudiomgUrTNAr+8l7EloYDdcNdls=
+  skip_cleanup: true
+  provider: script
+  script: 'gem build mailosaur.gemspec && 
+    echo "---\n:rubygems_api_key: $DEPLOY_KEY" > ~/.gem/credentials && 
+    chmod 0600 ~/.gem/credentials && 
+    gem push mailosaur-$version.gem'
   on:
+    branch: master
+    ruby: 2.2
+    condition: "$MAILOSAUR_BASE_URL = https://mailosaur.com/"
     tags: true
-    all_branches: true

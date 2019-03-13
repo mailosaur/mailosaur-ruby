@@ -33,7 +33,7 @@ module Mailosaur
     autoload :ServerListResult,                                   'Mailosaur/models/server_list_result.rb'
     autoload :SpamFilterResults,                                  'Mailosaur/models/spam_filter_results.rb'
     autoload :ServerCreateOptions,                                'Mailosaur/models/server_create_options.rb'
-autoload :BaseModel,                                              'Mailosaur/models/base_model.rb'
+    autoload :BaseModel,                                          'Mailosaur/models/base_model.rb'
   end
 
   class MailosaurClient
@@ -58,7 +58,7 @@ autoload :BaseModel,                                              'Mailosaur/mod
       conn = Faraday.new(base_url || 'https://mailosaur.com/', {
         :headers => {
           :content_type => 'application/json; charset=utf-8',
-          :user_agent => 'mailosaur-ruby/5.0.2'
+          :user_agent => 'mailosaur-ruby/5.0.0'
         }
       })
 

@@ -23,7 +23,7 @@ deploy:
   skip_cleanup: true
   provider: script
   script: gem build mailosaur.gemspec &&
-    gem push `find *.gem` -k $DEPLOY_KEY
+    gem push mailosaur-$version.gem -k $DEPLOY_KEY
   on:
     branch: master
     ruby: 2.2

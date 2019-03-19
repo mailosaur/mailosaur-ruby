@@ -8,9 +8,7 @@ module Mailosaur
             api_key = ENV['MAILOSAUR_API_KEY']
             base_url = ENV['MAILOSAUR_BASE_URL']
             
-            if api_key.nil?
-                raise ArgumentError.new("Missing necessary environment variables - refer to README.md")
-            end
+            raise ArgumentError.new("Missing necessary environment variables - refer to README.md") if api_key.nil?
 
             @client = MailosaurClient.new(api_key, base_url)
         end
@@ -41,7 +39,7 @@ module Mailosaur
             assert_equal(server_name, created_server.name)
             assert_not_nil(created_server.password)
             assert_instance_of(Array, created_server.users)
-            assert_instance_of(Fixnum, created_server.messages)
+            assert_instance_of(Integer, created_server.messages)
             assert_instance_of(Array, created_server.forwarding_rules)
   
             # Retrieve a server and confirm it has expected content
@@ -50,7 +48,7 @@ module Mailosaur
             assert_equal(created_server.name, retrieved_server.name)
             assert_not_nil(retrieved_server.password)
             assert_instance_of(Array, retrieved_server.users)
-            assert_instance_of(Fixnum, retrieved_server.messages)
+            assert_instance_of(Integer, retrieved_server.messages)
             assert_instance_of(Array, retrieved_server.forwarding_rules)
   
             # Update a server and confirm it has changed

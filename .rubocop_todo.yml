@@ -6,14 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: TreatCommentsAsGroupSeparators, Include.
-# Include: **/*.gemspec
-Gemspec/OrderedDependencies:
-  Exclude:
-    - 'mailosaur.gemspec'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, IndentationWidth.
@@ -27,17 +19,6 @@ Layout/AccessModifierIndentation:
 Layout/CommentIndentation:
   Exclude:
     - 'test/emails_test.rb'
-
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines, beginning_only, ending_only
-Layout/EmptyLinesAroundClassBody:
-  Exclude:
-    - 'lib/Mailosaur/analysis.rb'
-    - 'lib/Mailosaur/files.rb'
-    - 'lib/Mailosaur/messages.rb'
-    - 'lib/Mailosaur/servers.rb'
 
 # Offense count: 3
 # Cop supports --auto-correct.
@@ -70,12 +51,6 @@ Layout/IndentationWidth:
     - 'test/mailer.rb'
     - 'test/servers_test.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Layout/SpaceAfterColon:
-  Exclude:
-    - 'lib/Mailosaur/messages.rb'
-
 # Offense count: 34
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleInsidePipes.
@@ -90,14 +65,6 @@ Layout/SpaceAroundBlockParameters:
     - 'lib/Mailosaur/models/server.rb'
     - 'lib/Mailosaur/models/server_list_result.rb'
     - 'lib/Mailosaur/models/spam_filter_results.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: space, no_space
-Layout/SpaceAroundEqualsInParameterDefault:
-  Exclude:
-    - 'test/mailer.rb'
 
 # Offense count: 4
 # Cop supports --auto-correct.
@@ -127,12 +94,6 @@ Layout/TrailingWhitespace:
     - 'test/emails_test.rb'
     - 'test/files_test.rb'
     - 'test/mailer.rb'
-    - 'test/servers_test.rb'
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Lint/UnifiedInteger:
-  Exclude:
     - 'test/servers_test.rb'
 
 # Offense count: 1
@@ -212,12 +173,6 @@ Style/ClassVars:
     - 'test/files_test.rb'
     - 'test/mailer.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/DefWithParentheses:
-  Exclude:
-    - 'lib/Mailosaur/servers.rb'
-
 # Offense count: 28
 Style/Documentation:
   Enabled: false
@@ -249,23 +204,6 @@ Style/GuardClause:
   Exclude:
     - 'lib/Mailosaur/mailosaur_error.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, UseHashRocketsWithSymbolValues, PreferHashRocketsForNonAlnumEndingSymbols.
-# SupportedStyles: ruby19, hash_rockets, no_mixed_keys, ruby19_no_mixed_keys
-Style/HashSyntax:
-  Exclude:
-    - 'Rakefile'
-    - 'lib/mailosaur.rb'
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/IfUnlessModifier:
-  Exclude:
-    - 'test/emails_test.rb'
-    - 'test/files_test.rb'
-    - 'test/servers_test.rb'
-
 # Offense count: 10
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoredMethods.
@@ -283,24 +221,12 @@ Style/MutableConstant:
   Exclude:
     - 'lib/Mailosaur/version.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: Strict.
-Style/NumericLiterals:
-  MinDigits: 7
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: .
 # SupportedStyles: compact, exploded
 Style/RaiseArgs:
   EnforcedStyle: compact
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/RedundantSelf:
-  Exclude:
-    - 'lib/Mailosaur/models/base_model.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.

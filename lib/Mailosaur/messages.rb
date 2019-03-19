@@ -1,6 +1,5 @@
 module Mailosaur
   class Messages
-
     #
     # Creates and initializes a new instance of the Messages class.
     # @param client connection.
@@ -70,7 +69,7 @@ module Mailosaur
     #
     # @return [MessageListResult] operation results.
     #
-    def list(server, page:nil, items_per_page:nil)
+    def list(server, page: nil, items_per_page: nil)
       url = 'api/messages?server=' + server
       url += page ? '&page=' + page : ''
       url += items_per_page ? '&itemsPerPage=' + items_per_page : ''
@@ -124,7 +123,7 @@ module Mailosaur
     #
     # @return [MessageListResult] operation results.
     #
-    def search(server, criteria, page:nil, items_per_page:nil)
+    def search(server, criteria, page: nil, items_per_page: nil)
       url = 'api/messages/search?server=' + server
       url += page ? '&page=' + page : ''
       url += items_per_page ? '&itemsPerPage=' + items_per_page : ''

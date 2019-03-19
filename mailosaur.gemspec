@@ -13,8 +13,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'json', '<= 3.0', '>= 1.7.5'
   s.add_dependency 'faraday', '<= 1.0', '>= 0.9.0'
 
-  s.add_development_dependency 'rake', '~> 10.5', '>= 10.5.0'
+  s.add_development_dependency 'rake', '>= 10.5.0'
   s.add_development_dependency 'mail', '~> 2.6', '>= 2.6.1'
   s.add_development_dependency 'shoulda-context', '~> 1.2', '>= 1.2.2'
   s.add_development_dependency 'test-unit', '~> 3.2', '>= 3.2.7'
+  s.add_development_dependency 'rubocop', '~> 0.65.0'
 end

@@ -11,10 +11,8 @@ env:
 notifications:
   slack: mailosaur:CsJ9RruwjqHPKr1Iugk8GDtX
 before_deploy:
-- version=`git describe --abbrev=0 --tags` && 
-  sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/mailosaur.rb && 
-  sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/Mailosaur/version.rb &&
-  sed -i s/=\ \'\[0-9]\.\[0-9]\.\[0-9]/=\ \'$version/ mailosaur.gemspec
+- version=`git describe --abbrev=0 --tags` &&
+  sed -i s/\[0-9]\.\[0-9]\.\[0-9]/$version/ lib/Mailosaur/version.rb
 deploy:
   skip_cleanup: true
   provider: script

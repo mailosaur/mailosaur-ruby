@@ -1,7 +1,9 @@
 require 'rake'
+require './lib/Mailosaur/version'
+
 Gem::Specification.new do |s|
   s.name        = 'mailosaur'
-  s.version     = '5.0.0'
+  s.version     = Mailosaur::VERSION
   s.summary     = 'Ruby client library for Mailosaur'
   s.description = 'Ruby client library for Mailosaur.'
   s.authors     = ['Mailosaur Ltd']

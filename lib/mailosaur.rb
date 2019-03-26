@@ -71,15 +71,12 @@ module Mailosaur
     private
 
     def connection
-      conn = Faraday.new(@base_url, {
+      Faraday.new(@base_url, {
         headers: {
           content_type: 'application/json; charset=utf-8',
           user_agent: 'mailosaur-ruby/5.0.0'
         }
-      })
-
-      conn.basic_auth(@api_key, '')
-      conn
+      }).tap { |conn| conn.basic_auth(@api_key, '') }
     end
   end
 end

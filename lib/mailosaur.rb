@@ -38,37 +38,46 @@ module Mailosaur
   end
 
   class MailosaurClient
-    # @return [Analysis] analysis
-    attr_reader :analysis
-
-    # @return [Files] files
-    attr_reader :files
-
-    # @return [Messages] messages
-    attr_reader :messages
-
-    # @return [Servers] servers
-    attr_reader :servers
-
     #
     # Creates initializes a new instance of the MailosaurClient class.
     # @param api_key [String] your Mailosaur API key.
     # @param base_url [String] the base URI of the service.
     #
     def initialize(api_key, base_url)
-      conn = Faraday.new(base_url || 'https://mailosaur.com/', {
+      @api_key = api_key
+      @base_url = base_url
+    end
+
+    def connection
+      conn = Faraday.new(@base_url || 'https://mailosaur.com/', {
         headers: {
           content_type: 'application/json; charset=utf-8',
-          user_agent: 'mailosaur-ruby/' + Mailosaur::VERSION
+          user_agent: 'mailosaur-ruby/5.0.0'
         }
       })
 
-      conn.basic_auth(api_key, '')
+      conn.basic_auth(@api_key, '')
+      conn
+    end
+    
+    # @return [Analysis] analysis
+    def analysis
+      @analysis ||= Analysis.new(conn)
+    end
 
-      @analysis = Analysis.new(conn)
-      @files = Files.new(conn)
-      @messages = Messages.new(conn)
-      @servers = Servers.new(conn)
+    # @return [Files] files
+    def files
+      @files ||= Files.new(conn)
+    end
+
+    # @return [Messages] messages
+    def messages
+      @messages ||= Messages.new(conn)
+    end
+
+    # @return [Servers] servers
+    def servers
+      @servers ||= Servers.new(conn)
     end
   end
 end

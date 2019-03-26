@@ -43,13 +43,35 @@ module Mailosaur
     # @param api_key [String] your Mailosaur API key.
     # @param base_url [String] the base URI of the service.
     #
-    def initialize(api_key, base_url)
+    def initialize(api_key, base_url = 'https://mailosaur.com/')
       @api_key = api_key
       @base_url = base_url
     end
 
+    # @return [Analysis] analysis
+    def analysis
+      @analysis ||= Analysis.new(connection)
+    end
+
+    # @return [Files] files
+    def files
+      @files ||= Files.new(connection)
+    end
+
+    # @return [Messages] messages
+    def messages
+      @messages ||= Messages.new(connection)
+    end
+
+    # @return [Servers] servers
+    def servers
+      @servers ||= Servers.new(connection)
+    end
+
+    private
+
     def connection
-      conn = Faraday.new(@base_url || 'https://mailosaur.com/', {
+      conn = Faraday.new(@base_url, {
         headers: {
           content_type: 'application/json; charset=utf-8',
           user_agent: 'mailosaur-ruby/5.0.0'
@@ -58,26 +80,6 @@ module Mailosaur
 
       conn.basic_auth(@api_key, '')
       conn
-    end
-    
-    # @return [Analysis] analysis
-    def analysis
-      @analysis ||= Analysis.new(conn)
-    end
-
-    # @return [Files] files
-    def files
-      @files ||= Files.new(conn)
-    end
-
-    # @return [Messages] messages
-    def messages
-      @messages ||= Messages.new(conn)
-    end
-
-    # @return [Servers] servers
-    def servers
-      @servers ||= Servers.new(conn)
     end
   end
 end

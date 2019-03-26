@@ -123,6 +123,12 @@ Metrics/ClassLength:
 Metrics/MethodLength:
   Max: 18
 
+# Offense count: 2
+# Cop supports --auto-correct.
+Lint/UnifiedInteger:
+  Exclude:
+    - 'test/servers_test.rb'
+
 # Offense count: 23
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect.

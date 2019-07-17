@@ -186,9 +186,6 @@ module Mailosaur
           
         poll_count += 1
 
-        puts "delay"
-        puts delay
-
         ## Stop if timeout will be exceeded
         if ((1000 * (Time.now.to_f - start_time).to_i) + delay) > timeout
           raise Mailosaur::MailosaurError.new('No matching messages were found in time', nil)

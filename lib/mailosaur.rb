@@ -6,6 +6,7 @@ require 'securerandom'
 require 'time'
 require 'faraday'
 require 'Mailosaur/module_definition'
+require 'Mailosaur/version'
 
 module Mailosaur
   autoload :Analysis,                                           'Mailosaur/analysis.rb'
@@ -58,7 +59,7 @@ module Mailosaur
       conn = Faraday.new(base_url || 'https://mailosaur.com/', {
         :headers => {
           :content_type => 'application/json; charset=utf-8',
-          :user_agent => 'mailosaur-ruby/6.0.0'
+          :user_agent => 'mailosaur-ruby/' + Mailosaur::VERSION
         }
       })
 

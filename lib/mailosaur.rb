@@ -58,7 +58,7 @@ module Mailosaur
       conn = Faraday.new(base_url || 'https://mailosaur.com/', {
         :headers => {
           :content_type => 'application/json; charset=utf-8',
-          :user_agent => 'mailosaur-ruby/5.0.0'
+          :user_agent => 'mailosaur-ruby/6.0.0'
         }
       })
 

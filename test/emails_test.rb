@@ -39,21 +39,6 @@ module Mailosaur
         end
 
         context "get" do
-            should "return a single email" do
-                email_to_retrieve = @@emails[0]
-                email = @@client.messages.get(email_to_retrieve.id)
-                validate_email(email)
-                validate_headers(email)
-            end
-    
-            should "throw an error if email not found" do
-                assert_raise(Mailosaur::MailosaurError) do
-                    @@client.messages.get("efe907e9-74ed-4113-a3e0-a3d41d914765")
-                end
-            end
-        end
-
-        context "wait_for" do
             should "return a match once found" do
                 host = ENV['MAILOSAUR_SMTP_HOST'] || "mailosaur.io"
                 test_email_address = "wait_for_test.%s@%s" % [@@server, host]
@@ -62,8 +47,23 @@ module Mailosaur
 
                 criteria = Mailosaur::Models::SearchCriteria.new()
                 criteria.sent_to = test_email_address                
-                email = @@client.messages.wait_for(@@server, criteria)
+                email = @@client.messages.get(@@server, criteria)
                 validate_email(email)
+            end
+        end
+
+        context "get_by_id" do
+            should "return a single email" do
+                email_to_retrieve = @@emails[0]
+                email = @@client.messages.get_by_id(email_to_retrieve.id)
+                validate_email(email)
+                validate_headers(email)
+            end
+    
+            should "throw an error if email not found" do
+                assert_raise(Mailosaur::MailosaurError) do
+                    @@client.messages.get_by_id("efe907e9-74ed-4113-a3e0-a3d41d914765")
+                end
             end
         end
 

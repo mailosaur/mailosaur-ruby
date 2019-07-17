@@ -29,7 +29,7 @@ module Mailosaur
 
                 criteria = Mailosaur::Models::SearchCriteria.new()
                 criteria.sent_to = test_email_address
-                @@email = @@client.messages.wait_for(@@server, criteria)
+                @@email = @@client.messages.get(@@server, criteria)
             end
         end
 

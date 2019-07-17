@@ -13,6 +13,33 @@ module Mailosaur
     attr_reader :conn
 
     #
+    # Retrieve a message using search criteria
+    #
+    # Returns as soon as a message matching the specified search criteria is
+    # found. This is the most efficient method of looking up a message.
+    #
+    # @param server [String] The identifier of the server hosting the message.
+    # @param criteria [SearchCriteria] The search criteria to use in order to find
+    # a match.
+    # @param timeout [Integer] Specify how long to wait for a matching result 
+    # (in milliseconds).
+    # @param received_after [DateTime] Limits results to only messages received 
+    # after this date/time.
+    #
+    # @return [Message] operation results.
+    #
+    def get(server, criteria, timeout:10000, received_after:DateTime.now - (1.0/24))
+      # Defaults timeout to 10s, receivedAfter to 1h
+      if server.length > 8
+        raise Mailosaur::MailosaurError.new('Use get_by_id to retrieve a message using its identifier', nil)
+      end
+
+      result = search(server, criteria, timeout:timeout, received_after:received_after)
+      return get_by_id(result.items[0].id)
+    end
+    
+
+    #
     # Retrieve a message
     #
     # Retrieves the detail for a single email message. Simply supply the unique
@@ -22,7 +49,7 @@ module Mailosaur
     #
     # @return [Message] operation results.
     #
-    def get(id)
+    def get_by_id(id)
       response = conn.get 'api/messages/' + id
       
       unless response.status == 200
@@ -121,49 +148,51 @@ module Mailosaur
     # pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
     # returned per page. Can be set between 1 and 1000 items, the default is 50.
+    # @param timeout [Integer] Specify how long to wait for a matching result 
+    # (in milliseconds).
+    # @param received_after [DateTime] Limits results to only messages received 
+    # after this date/time.
     #
     # @return [MessageListResult] operation results.
     #
-    def search(server, criteria, page:nil, items_per_page:nil)
+    def search(server, criteria, page:nil, items_per_page:nil, timeout:nil, received_after:nil)
       url = 'api/messages/search?server=' + server
-      url += page ? '&page=' + page : ''
-      url += items_per_page ? '&itemsPerPage=' + items_per_page : ''
-      
-      response = conn.post url, criteria.to_json
-      
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
+      url += page ? '&page=' + page.to_s : ''
+      url += items_per_page ? '&itemsPerPage=' + items_per_page.to_s : ''
+      url += received_after ? '&receivedAfter=' + received_after.iso8601 : ''
+
+      poll_count = 0
+      start_time = Time.now.to_f
+
+      loop do      
+        response = conn.post url, criteria.to_json
+        
+        unless response.status == 200
+          error_model = JSON.load(response.body)
+          mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
+          raise mailosaur_error
+        end
+
+        model = JSON.load(response.body)
+        if timeout.to_i == 0 || model['items'].length != 0
+          return Mailosaur::Models::MessageListResult.new(model)
+        end
+
+        delay_pattern = (response.headers['x-ms-delay'] || '1000').split(',').map{ |x| x.to_i }
+        
+        delay = poll_count >= delay_pattern.length ? 
+          delay_pattern[delay_pattern.length - 1] : 
+          delay_pattern[poll_count]
+          
+        poll_count += 1
+
+        ## Stop if timeout will be exceeded
+        if ((1000 * (Time.now.to_f - start_time).to_i) + delay) > timeout
+          raise Mailosaur::MailosaurError.new('No matching messages were found in time', nil)
+        end
+
+        sleep (delay / 1000)
       end
-
-      model = JSON.load(response.body)
-      Mailosaur::Models::MessageListResult.new(model)
-    end
-
-    #
-    # Wait for a specific message
-    #
-    # Returns as soon as a message matching the specified search criteria is found.
-    # This is the most efficient method of looking up a message.
-    #
-    # @param server [String] The identifier of the server hosting the message.
-    # @param criteria [SearchCriteria] The search criteria to use in order to find
-    # a match.
-    #
-    # @return [Message] operation results.
-    #
-    def wait_for(server, criteria)
-      response = conn.post 'api/messages/await?server=' + server, criteria.to_json
-      
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
-      model = JSON.load(response.body)
-      Mailosaur::Models::Message.new(model)
     end
   end
 end

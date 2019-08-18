@@ -1,6 +1,5 @@
 module Mailosaur
   class Servers
-
     #
     # Creates and initializes a new instance of the Servers class.
     # @param client connection.
@@ -20,7 +19,7 @@ module Mailosaur
     #
     # @return [ServerListResult] operation results.
     #
-    def list()
+    def list
       response = conn.get 'api/servers'
       
       unless response.status == 200

@@ -1,6 +1,5 @@
 module Mailosaur
   class Files
-
     #
     # Creates and initializes a new instance of the Files class.
     # @param client connection.

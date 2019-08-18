@@ -27,6 +27,15 @@ export MAILOSAUR_SERVER=server_id
 bundle exec rake test
 ```
 
+## Linting code
+
+Simply run Rubocop:
+
+```
+bundle install
+bundle exec rubocop
+```
+
 ## Contacting us
 
 You can get us at [support@mailosaur.com](mailto:support@mailosaur.com)

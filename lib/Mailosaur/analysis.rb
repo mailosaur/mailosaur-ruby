@@ -1,6 +1,5 @@
 module Mailosaur
   class Analysis
-
     #
     # Creates and initializes a new instance of the Analysis class.
     # @param conn client connection.

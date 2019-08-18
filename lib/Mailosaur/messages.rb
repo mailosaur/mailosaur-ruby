@@ -1,6 +1,5 @@
 module Mailosaur
   class Messages
-
     #
     # Creates and initializes a new instance of the Messages class.
     # @param client connection.
@@ -28,16 +27,13 @@ module Mailosaur
     #
     # @return [Message] operation results.
     #
-    def get(server, criteria, timeout:10000, received_after:DateTime.now - (1.0/24))
+    def get(server, criteria, timeout: 10_000, received_after: DateTime.now - (1.0 / 24))
       # Defaults timeout to 10s, receivedAfter to 1h
-      if server.length > 8
-        raise Mailosaur::MailosaurError.new('Use get_by_id to retrieve a message using its identifier', nil)
-      end
+      raise Mailosaur::MailosaurError.new('Use get_by_id to retrieve a message using its identifier', nil) if server.length > 8
 
-      result = search(server, criteria, timeout:timeout, received_after:received_after)
-      return get_by_id(result.items[0].id)
+      result = search(server, criteria, timeout: timeout, received_after: received_after)
+      get_by_id(result.items[0].id)
     end
-    
 
     #
     # Retrieve a message
@@ -97,7 +93,7 @@ module Mailosaur
     #
     # @return [MessageListResult] operation results.
     #
-    def list(server, page:nil, items_per_page:nil)
+    def list(server, page: nil, items_per_page: nil)
       url = 'api/messages?server=' + server
       url += page ? '&page=' + page : ''
       url += items_per_page ? '&itemsPerPage=' + items_per_page : ''
@@ -155,7 +151,7 @@ module Mailosaur
     #
     # @return [MessageListResult] operation results.
     #
-    def search(server, criteria, page:nil, items_per_page:nil, timeout:nil, received_after:nil)
+    def search(server, criteria, page: nil, items_per_page: nil, timeout: nil, received_after: nil) # rubocop:disable all
       url = 'api/messages/search?server=' + server
       url += page ? '&page=' + page.to_s : ''
       url += items_per_page ? '&itemsPerPage=' + items_per_page.to_s : ''
@@ -169,20 +165,16 @@ module Mailosaur
         
         unless response.status == 200
           error_model = JSON.load(response.body)
-          mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
+          mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model) # rubocop:disable Metrics/LineLength
           raise mailosaur_error
         end
 
         model = JSON.load(response.body)
-        if timeout.to_i == 0 || model['items'].length != 0
-          return Mailosaur::Models::MessageListResult.new(model)
-        end
+        return Mailosaur::Models::MessageListResult.new(model) if timeout.to_i.zero? || !model['items'].empty?
 
-        delay_pattern = (response.headers['x-ms-delay'] || '1000').split(',').map{ |x| x.to_i }
+        delay_pattern = (response.headers['x-ms-delay'] || '1000').split(',').map(&:to_i)
         
-        delay = poll_count >= delay_pattern.length ? 
-          delay_pattern[delay_pattern.length - 1] : 
-          delay_pattern[poll_count]
+        delay = poll_count >= delay_pattern.length ? delay_pattern[delay_pattern.length - 1] : delay_pattern[poll_count]
           
         poll_count += 1
 
@@ -191,7 +183,7 @@ module Mailosaur
           raise Mailosaur::MailosaurError.new('No matching messages were found in time', nil)
         end
 
-        sleep (delay / 1000)
+        sleep(delay / 1000)
       end
     end
   end

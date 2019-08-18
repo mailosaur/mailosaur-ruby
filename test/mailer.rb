@@ -19,7 +19,7 @@ class Mailer
         end
     end
 
-    def self.send_email(client, server, send_to_address=nil)
+    def self.send_email(client, server, send_to_address = nil)
         Mail.deliver do
             random_string = SecureRandom.hex(5)
 

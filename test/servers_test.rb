@@ -8,9 +8,7 @@ module Mailosaur
             api_key = ENV['MAILOSAUR_API_KEY']
             base_url = ENV['MAILOSAUR_BASE_URL']
             
-            if api_key.nil?
-                raise ArgumentError.new("Missing necessary environment variables - refer to README.md")
-            end
+            raise ArgumentError.new("Missing necessary environment variables - refer to README.md") if api_key.nil?
 
             @client = MailosaurClient.new(api_key, base_url)
         end

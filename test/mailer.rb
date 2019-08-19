@@ -14,7 +14,7 @@ class Mailer
     @@text = File.open("test/resources/testEmail.txt").read
 
     def self.send_emails(client, server, quantity)
-        (1..quantity).each do |i|
+        (1..quantity).each do |_i|
             send_email(client, server)
         end
     end

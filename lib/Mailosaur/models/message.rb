@@ -4,19 +4,19 @@ module Mailosaur
       def initialize(data = {})
         @id = data['id']
         @from = []
-        (data['from'] || []).each do | i | @from << Mailosaur::Models::MessageAddress.new(i) end
+        (data['from'] || []).each do |i| @from << Mailosaur::Models::MessageAddress.new(i) end
         @to = []
-        (data['to'] || []).each do | i | @to << Mailosaur::Models::MessageAddress.new(i) end
+        (data['to'] || []).each do |i| @to << Mailosaur::Models::MessageAddress.new(i) end
         @cc = []
-        (data['cc'] || []).each do | i | @cc << Mailosaur::Models::MessageAddress.new(i) end
+        (data['cc'] || []).each do |i| @cc << Mailosaur::Models::MessageAddress.new(i) end
         @bcc = []
-        (data['bcc'] || []).each do | i | @bcc << Mailosaur::Models::MessageAddress.new(i) end
+        (data['bcc'] || []).each do |i| @bcc << Mailosaur::Models::MessageAddress.new(i) end
         @received = DateTime.parse(data['received'])
         @subject = data['subject']
         @html = Mailosaur::Models::MessageContent.new(data['html'])
         @text = Mailosaur::Models::MessageContent.new(data['text'])
         @attachments = []
-        (data['attachments'] || []).each do | i | @attachments << Mailosaur::Models::Attachment.new(i) end
+        (data['attachments'] || []).each do |i| @attachments << Mailosaur::Models::Attachment.new(i) end
         @metadata = Mailosaur::Models::Metadata.new(data['metadata'])
         @server = data['server']
       end

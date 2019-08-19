@@ -3,7 +3,7 @@ module Mailosaur
     class ServerListResult < BaseModel
       def initialize(data = {})
         @items = []
-        (data['items'] || []).each do | i | @items << Mailosaur::Models::Server.new(i) end
+        (data['items'] || []).each do |i| @items << Mailosaur::Models::Server.new(i) end
       end
 
       # @return [Array<Server>] The individual servers forming the result.

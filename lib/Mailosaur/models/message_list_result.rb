@@ -3,7 +3,7 @@ module Mailosaur
     class MessageListResult < BaseModel
       def initialize(data = {})
         @items = []
-        (data['items'] || []).each do | i | @items << Mailosaur::Models::MessageSummary.new(i) end
+        (data['items'] || []).each do |i| @items << Mailosaur::Models::MessageSummary.new(i) end
       end
       
       # @return [Array<MessageSummary>] The individual summaries of each

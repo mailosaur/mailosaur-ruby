@@ -3,7 +3,7 @@ module Mailosaur
     class Metadata < BaseModel
       def initialize(data = {})
         @headers = []
-        (data['headers'] || []).each do | i | @headers << Mailosaur::Models::MessageHeader.new(i) end
+        (data['headers'] || []).each do |i| @headers << Mailosaur::Models::MessageHeader.new(i) end
       end
 
       # @return [Array<MessageHeader>] Email headers.

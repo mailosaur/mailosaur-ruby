@@ -17,9 +17,9 @@ module Mailosaur
                 raise ArgumentError.new("Missing necessary environment variables - refer to README.md") if api_key.nil? || @@server.nil?
 
                 @@client = MailosaurClient.new(api_key, base_url)
-    
+
                 @@client.messages.delete_all(@@server)
-    
+
                 host = ENV['MAILOSAUR_SMTP_HOST'] || "mailosaur.io"
                 test_email_address = "files_test.%s@%s" % [@@server, host]
 

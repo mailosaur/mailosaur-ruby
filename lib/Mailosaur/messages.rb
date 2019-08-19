@@ -20,9 +20,9 @@ module Mailosaur
     # @param server [String] The identifier of the server hosting the message.
     # @param criteria [SearchCriteria] The search criteria to use in order to find
     # a match.
-    # @param timeout [Integer] Specify how long to wait for a matching result 
+    # @param timeout [Integer] Specify how long to wait for a matching result
     # (in milliseconds).
-    # @param received_after [DateTime] Limits results to only messages received 
+    # @param received_after [DateTime] Limits results to only messages received
     # after this date/time.
     #
     # @return [Message] operation results.
@@ -47,7 +47,7 @@ module Mailosaur
     #
     def get_by_id(id)
       response = conn.get 'api/messages/' + id
-      
+
       unless response.status == 200
         error_model = JSON.load(response.body)
         mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
@@ -99,7 +99,7 @@ module Mailosaur
       url += items_per_page ? '&itemsPerPage=' + items_per_page : ''
 
       response = conn.get url
-      
+
       unless response.status == 200
         error_model = JSON.load(response.body)
         mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
@@ -144,9 +144,9 @@ module Mailosaur
     # pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
     # returned per page. Can be set between 1 and 1000 items, the default is 50.
-    # @param timeout [Integer] Specify how long to wait for a matching result 
+    # @param timeout [Integer] Specify how long to wait for a matching result
     # (in milliseconds).
-    # @param received_after [DateTime] Limits results to only messages received 
+    # @param received_after [DateTime] Limits results to only messages received
     # after this date/time.
     #
     # @return [MessageListResult] operation results.
@@ -160,9 +160,9 @@ module Mailosaur
       poll_count = 0
       start_time = Time.now.to_f
 
-      loop do      
+      loop do
         response = conn.post url, criteria.to_json
-        
+
         unless response.status == 200
           error_model = JSON.load(response.body)
           mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model) # rubocop:disable Metrics/LineLength
@@ -173,9 +173,9 @@ module Mailosaur
         return Mailosaur::Models::MessageListResult.new(model) if timeout.to_i.zero? || !model['items'].empty?
 
         delay_pattern = (response.headers['x-ms-delay'] || '1000').split(',').map(&:to_i)
-        
+
         delay = poll_count >= delay_pattern.length ? delay_pattern[delay_pattern.length - 1] : delay_pattern[poll_count]
-          
+
         poll_count += 1
 
         ## Stop if timeout will be exceeded

@@ -17,7 +17,7 @@ module Mailosaur
         @type = error_model["type"]
         @messages = error_model["messages"]
         @model = error_model["model"]
-      end    
+      end
     end
   end
 end

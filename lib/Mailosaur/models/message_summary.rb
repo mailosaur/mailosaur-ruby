@@ -17,7 +17,7 @@ module Mailosaur
         @received = DateTime.parse(data['received'])
         @subject = data['subject']
         @summary = data['summary']
-        @attachments = data['attachments']        
+        @attachments = data['attachments']
       end
 
       # @return

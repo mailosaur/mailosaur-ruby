@@ -23,7 +23,7 @@ module Mailosaur
     #
     def get_attachment(id)
       response = conn.get 'api/files/attachments/' + id
-      
+
       unless response.status == 200
         error_model = JSON.load(response.body)
         mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
@@ -45,7 +45,7 @@ module Mailosaur
     #
     def get_email(id)
       response = conn.get 'api/files/email/' + id
-      
+
       unless response.status == 200
         error_model = JSON.load(response.body)
         mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)

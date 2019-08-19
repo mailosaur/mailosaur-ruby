@@ -42,7 +42,7 @@ class Mailer
             add_file 'test/resources/dog.png'
 
             inline = attachments['cat.png']
-            inline.content_id = 'ii_1435fadb31d523f6'            
+            inline.content_id = 'ii_1435fadb31d523f6'
         end
     end
 end

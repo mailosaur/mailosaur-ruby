@@ -22,7 +22,7 @@ module Mailosaur
     #
     def spam(email)
       response = conn.get 'api/analysis/spam/' + email
-      
+
       unless response.status == 200
         error_model = JSON.load(response.body)
         mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)

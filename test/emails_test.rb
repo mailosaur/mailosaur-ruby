@@ -17,9 +17,9 @@ module Mailosaur
                 raise ArgumentError.new("Missing necessary environment variables - refer to README.md") if api_key.nil? || @@server.nil?
 
                 @@client = MailosaurClient.new(api_key, base_url)
-    
+
                 @@client.messages.delete_all(@@server)
-    
+
                 Mailer.send_emails(@@client, @@server, 5)
 
                 @@emails = @@client.messages.list(@@server).items
@@ -44,7 +44,7 @@ module Mailosaur
                 Mailer.send_email(@@client, @@server, test_email_address)
 
                 criteria = Mailosaur::Models::SearchCriteria.new()
-                criteria.sent_to = test_email_address                
+                criteria.sent_to = test_email_address
                 email = @@client.messages.get(@@server, criteria)
                 validate_email(email)
             end
@@ -57,7 +57,7 @@ module Mailosaur
                 validate_email(email)
                 validate_headers(email)
             end
-    
+
             should "throw an error if email not found" do
                 assert_raise(Mailosaur::MailosaurError) do
                     @@client.messages.get_by_id("efe907e9-74ed-4113-a3e0-a3d41d914765")
@@ -155,16 +155,16 @@ module Mailosaur
           validate_html(email)
           validate_text(email)
         end
-      
+
           def validate_email_summary(email)
               validate_metadata(email)
               assert_equal(2, email.attachments);
           end
-      
+
           def validate_html(email)
               # Html.Body
               assert_true(email.html.body.start_with?("<div dir=\"ltr\">"))
-              
+
               # Html.Links
               assert_equal(3, email.html.links.length)
               assert_equal("https://mailosaur.com/", email.html.links[0].href)
@@ -173,16 +173,16 @@ module Mailosaur
               assert_nil(email.html.links[1].text)
               assert_equal("http://invalid/", email.html.links[2].href)
               assert_equal("invalid", email.html.links[2].text)
-      
+
               # Html.Images
               assert_true(email.html.images[1].src.start_with?("cid:"))
               assert_equal("Inline image 1", email.html.images[1].alt)
           end
-      
+
           def validate_text(email)
               # Text.Body
               assert_true(email.text.body.start_with?("this is a test"))
-              
+
               # Text.Links
               assert_equal(2, email.text.links.length)
               assert_equal("https://mailosaur.com/", email.text.links[0].href)
@@ -190,17 +190,17 @@ module Mailosaur
               assert_equal("https://mailosaur.com/", email.text.links[1].href)
               assert_equal(email.text.links[1].href, email.text.links[1].text)
           end
-      
+
           def validate_headers(email)
             #   expected_from_header = "%s <%s>" % [expected.from[0].name, expected.from[0].email]
             #   expected_to_header = "%s <%s>" % [expected.to[0].name, expected.to[0].email]
-      
+
               # Fallback casing for headers is used, as header casing is determined by sending server
             #   assert_equal(expected_from_header, actual.headers['from'] || actual.headers['From'])
             #   assert_equal(expected_to_header, actual.headers['to'] || actual.headers['To'])
             #   assert_equal(expected.subject, actual.headers['subject'] || actual.headers['Subject'])
           end
-      
+
           def validate_metadata(email)
               assert_equal(1, email.from.length)
               assert_equal(1, email.to.length)
@@ -210,20 +210,20 @@ module Mailosaur
               assert_not_nil(email.to[0].name)
               assert_not_nil(email.subject)
               assert_not_nil(email.server)
-      
+
               assert_equal(@@iso_date_string, email.received.strftime("%Y-%m-%d"))
           end
-      
+
           def validate_attachments(email)
               assert_equal(2, email.attachments.length)
-      
+
               file1 = email.attachments[0]
               assert_not_nil(file1.id)
               assert_not_nil(file1.url)
               assert_equal(82_138, file1.length)
               assert_equal("cat.png", file1.file_name)
               assert_equal("image/png", file1.content_type)
-      
+
               file2 = email.attachments[1]
               assert_not_nil(file2.id)
               assert_not_nil(file2.url)

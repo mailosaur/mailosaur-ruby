@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'mail', '~> 2.6', '>= 2.6.1'
   s.add_development_dependency 'rake', '~> 12.3', '>= 12.3.0'
-  s.add_development_dependency 'rubocop', '~> 0.65.0'
+  s.add_development_dependency 'rubocop', '~> 0.68.0'
   s.add_development_dependency 'shoulda-context', '~> 1.2', '>= 1.2.2'
   s.add_development_dependency 'test-unit', '~> 3.2', '>= 3.2.7'
 end

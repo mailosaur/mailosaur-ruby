@@ -1,7 +1,7 @@
 module Mailosaur
     module Models
       class BaseModel
-        def to_json
+        def to_json(*_args)
             hash = {}
             instance_variables.each do |var|
               key = var.to_s.delete('@').split('_').collect(&:capitalize).join

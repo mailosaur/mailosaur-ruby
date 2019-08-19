@@ -10,8 +10,8 @@ Mail.defaults do
 end
 
 class Mailer
-    @@html = File.open("test/resources/testEmail.html").read
-    @@text = File.open("test/resources/testEmail.txt").read
+    @@html = File.open('test/resources/testEmail.html').read
+    @@text = File.open('test/resources/testEmail.txt').read
 
     def self.send_emails(client, server, quantity)
         (1..quantity).each do |_i|
@@ -23,19 +23,19 @@ class Mailer
         Mail.deliver do
             random_string = SecureRandom.hex(5)
 
-            subject "%s subject" % [random_string]
+            subject '%s subject' % [random_string]
             random_to_address = send_to_address || client.servers.generate_email_address(server)
 
-            from "%s %s <%s>" % [random_string, random_string, client.servers.generate_email_address(server)]
-            to "%s %s <%s>" % [random_string, random_string, random_to_address]
+            from '%s %s <%s>' % [random_string, random_string, client.servers.generate_email_address(server)]
+            to '%s %s <%s>' % [random_string, random_string, random_to_address]
 
             text_part do
-                body @@text.to_s.gsub("REPLACED_DURING_TEST", random_string)
+                body @@text.to_s.gsub('REPLACED_DURING_TEST', random_string)
             end
 
             html_part do
                 content_type 'text/html; charset=UTF-8'
-                body @@html.to_s.gsub("REPLACED_DURING_TEST", random_string)
+                body @@html.to_s.gsub('REPLACED_DURING_TEST', random_string)
             end
 
             add_file 'test/resources/cat.png'

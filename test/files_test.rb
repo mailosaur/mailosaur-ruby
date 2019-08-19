@@ -8,20 +8,20 @@ module Mailosaur
     class FilesTest < Test::Unit::TestCase
         class << self
             def startup
-                @@iso_date_string = DateTime.now.strftime("%Y-%m-%d")
+                @@iso_date_string = DateTime.now.strftime('%Y-%m-%d')
 
                 api_key = ENV['MAILOSAUR_API_KEY']
                 base_url = ENV['MAILOSAUR_BASE_URL']
                 @@server = ENV['MAILOSAUR_SERVER']
 
-                raise ArgumentError.new("Missing necessary environment variables - refer to README.md") if api_key.nil? || @@server.nil?
+                raise ArgumentError.new('Missing necessary environment variables - refer to README.md') if api_key.nil? || @@server.nil?
 
                 @@client = MailosaurClient.new(api_key, base_url)
 
                 @@client.messages.delete_all(@@server)
 
-                host = ENV['MAILOSAUR_SMTP_HOST'] || "mailosaur.io"
-                test_email_address = "files_test.%s@%s" % [@@server, host]
+                host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.io'
+                test_email_address = 'files_test.%s@%s' % [@@server, host]
 
                 Mailer.send_email(@@client, @@server, test_email_address)
 
@@ -31,8 +31,8 @@ module Mailosaur
             end
         end
 
-        context "get_email" do
-            should "return file content" do
+        context 'get_email' do
+            should 'return file content' do
                 result = @@client.files.get_email(@@email.id)
 
                 assert_not_nil(result)
@@ -41,8 +41,8 @@ module Mailosaur
             end
         end
 
-        context "get_attachment" do
-            should "return file content" do
+        context 'get_attachment' do
+            should 'return file content' do
                 attachment = @@email.attachments[0]
 
                 result = @@client.files.get_attachment(attachment.id)

@@ -14,7 +14,7 @@ module Mailosaur
                 base_url = ENV['MAILOSAUR_BASE_URL']
                 @@server = ENV['MAILOSAUR_SERVER']
 
-                raise ArgumentError.new('Missing necessary environment variables - refer to README.md') if api_key.nil? || @@server.nil?
+                raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if api_key.nil? || @@server.nil?
 
                 @@client = MailosaurClient.new(api_key, base_url)
 
@@ -36,7 +36,7 @@ module Mailosaur
                 result = @@client.files.get_email(@@email.id)
 
                 assert_not_nil(result)
-                assert_true(result.length > 1);
+                assert_true(result.length > 1)
                 assert_true(result.include?(@@email.subject))
             end
         end

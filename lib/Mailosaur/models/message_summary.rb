@@ -5,19 +5,19 @@ module Mailosaur
         @id = data['id']
         @server = data['server']
         @rcpt = []
-        (data['rcpt'] || []).each do | i | @rcpt << Mailosaur::Models::MessageAddress.new(i) end
+        (data['rcpt'] || []).each do |i| @rcpt << Mailosaur::Models::MessageAddress.new(i) end
         @from = []
-        (data['from'] || []).each do | i | @from << Mailosaur::Models::MessageAddress.new(i) end
+        (data['from'] || []).each do |i| @from << Mailosaur::Models::MessageAddress.new(i) end
         @to = []
-        (data['to'] || []).each do | i | @to << Mailosaur::Models::MessageAddress.new(i) end
+        (data['to'] || []).each do |i| @to << Mailosaur::Models::MessageAddress.new(i) end
         @cc = []
-        (data['cc'] || []).each do | i | @cc << Mailosaur::Models::MessageAddress.new(i) end
+        (data['cc'] || []).each do |i| @cc << Mailosaur::Models::MessageAddress.new(i) end
         @bcc = []
-        (data['bcc'] || []).each do | i | @bcc << Mailosaur::Models::MessageAddress.new(i) end
+        (data['bcc'] || []).each do |i| @bcc << Mailosaur::Models::MessageAddress.new(i) end
         @received = DateTime.parse(data['received'])
         @subject = data['subject']
         @summary = data['summary']
-        @attachments = data['attachments']        
+        @attachments = data['attachments']
       end
 
       # @return

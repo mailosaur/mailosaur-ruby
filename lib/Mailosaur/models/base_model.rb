@@ -13,4 +13,3 @@ module Mailosaur
       end
     end
 end
-  

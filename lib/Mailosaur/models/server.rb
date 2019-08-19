@@ -8,7 +8,7 @@ module Mailosaur
         @users = data['users']
         @messages = data['messages']
         @forwarding_rules = []
-        (data['forwardingRules'] || []).each do | i | @forwarding_rules << Mailosaur::Models::ForwardingRule.new(i) end
+        (data['forwardingRules'] || []).each do |i| @forwarding_rules << Mailosaur::Models::ForwardingRule.new(i) end
       end
 
       # @return [String] Unique identifier for the server. Used as username for

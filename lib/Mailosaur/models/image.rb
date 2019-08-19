@@ -5,7 +5,7 @@ module Mailosaur
         @src = data['src']
         @alt = data['alt']
       end
-      
+
       # @return [String]
       attr_accessor :src
 

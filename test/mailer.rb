@@ -3,9 +3,9 @@ require 'securerandom'
 
 Mail.defaults do
     delivery_method :smtp, {
-        address: ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.io',
-        port: ENV['MAILOSAUR_SMTP_PORT'] || 25,
-        enable_starttls_auto: false
+      address: ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.io',
+      port: ENV['MAILOSAUR_SMTP_PORT'] || 25,
+      enable_starttls_auto: false
     }
 end
 

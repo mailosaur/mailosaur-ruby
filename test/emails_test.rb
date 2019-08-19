@@ -147,7 +147,7 @@ module Mailosaur
             end
         end
 
-        private
+      private
 
         def validate_email(email)
           validate_metadata(email)
@@ -195,7 +195,7 @@ module Mailosaur
             #   expected_from_header = "%s <%s>" % [expected.from[0].name, expected.from[0].email]
             #   expected_to_header = "%s <%s>" % [expected.to[0].name, expected.to[0].email]
 
-              # Fallback casing for headers is used, as header casing is determined by sending server
+            # Fallback casing for headers is used, as header casing is determined by sending server
             #   assert_equal(expected_from_header, actual.headers['from'] || actual.headers['From'])
             #   assert_equal(expected_to_header, actual.headers['to'] || actual.headers['To'])
             #   assert_equal(expected.subject, actual.headers['subject'] || actual.headers['Subject'])

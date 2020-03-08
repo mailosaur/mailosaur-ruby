@@ -1,3 +1,5 @@
+require 'uri'
+
 module Mailosaur
   class Messages
     #
@@ -90,13 +92,16 @@ module Mailosaur
     # pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
     # returned per page. Can be set between 1 and 1000 items, the default is 50.
+    # @param received_after [DateTime] Limits results to only messages received
+    # after this date/time.
     #
     # @return [MessageListResult] operation results.
     #
-    def list(server, page: nil, items_per_page: nil)
+    def list(server, page: nil, items_per_page: nil, received_after: nil)
       url = 'api/messages?server=' + server
       url += page ? '&page=' + page : ''
       url += items_per_page ? '&itemsPerPage=' + items_per_page : ''
+      url += received_after ? '&receivedAfter=' + CGI.escape(received_after.iso8601) : ''
 
       response = conn.get url
 
@@ -155,7 +160,7 @@ module Mailosaur
       url = 'api/messages/search?server=' + server
       url += page ? '&page=' + page.to_s : ''
       url += items_per_page ? '&itemsPerPage=' + items_per_page.to_s : ''
-      url += received_after ? '&receivedAfter=' + received_after.iso8601 : ''
+      url += received_after ? '&receivedAfter=' + CGI.escape(received_after.iso8601) : ''
 
       poll_count = 0
       start_time = Time.now.to_f

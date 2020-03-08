@@ -1,3 +1,5 @@
+require 'uri'
+
 module Mailosaur
   class Messages
     #
@@ -99,7 +101,7 @@ module Mailosaur
       url = 'api/messages?server=' + server
       url += page ? '&page=' + page : ''
       url += items_per_page ? '&itemsPerPage=' + items_per_page : ''
-      url += received_after ? '&receivedAfter=' + received_after.iso8601 : ''
+      url += received_after ? '&receivedAfter=' + CGI::escape(received_after.iso8601) : ''
 
       response = conn.get url
 
@@ -158,7 +160,7 @@ module Mailosaur
       url = 'api/messages/search?server=' + server
       url += page ? '&page=' + page.to_s : ''
       url += items_per_page ? '&itemsPerPage=' + items_per_page.to_s : ''
-      url += received_after ? '&receivedAfter=' + received_after.iso8601 : ''
+      url += received_after ? '&receivedAfter=' + CGI::escape(received_after.iso8601) : ''
 
       poll_count = 0
       start_time = Time.now.to_f

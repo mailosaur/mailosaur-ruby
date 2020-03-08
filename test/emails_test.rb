@@ -34,6 +34,11 @@ module Mailosaur
                     validate_email_summary(email)
                 end
             end
+
+            should 'filter on received after date' do
+                future_emails = @@client.messages.list(@@server, received_after: DateTime.now()).items
+                assert_equal(0, future_emails.length)
+            end
         end
 
         context 'get' do

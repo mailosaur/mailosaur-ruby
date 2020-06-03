@@ -41,6 +41,7 @@ jobs:
       run: bundle exec rake
 
   build-next:
+    needs: build
     runs-on: ubuntu-latest
 
     env:

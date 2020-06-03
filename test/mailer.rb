@@ -17,6 +17,9 @@ class Mailer
         (1..quantity).each do |_i|
             send_email(client, server)
         end
+
+        # Allow 2 seconds for any SMTP processing
+        sleep 2
     end
 
     def self.send_email(client, server, send_to_address = nil)

@@ -36,7 +36,8 @@ module Mailosaur
             end
 
             should 'filter on received after date' do
-                past_emails = @@client.messages.list(@@server, received_after: DateTime.new(2000, 1, 1)).items
+                past_date = DateTime.now - (10 / 1440.0)
+                past_emails = @@client.messages.list(@@server, received_after: past_date).items
                 assert_true(!past_emails.empty?)
 
                 future_emails = @@client.messages.list(@@server, received_after: DateTime.now()).items

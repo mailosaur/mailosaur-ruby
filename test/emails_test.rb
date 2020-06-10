@@ -167,6 +167,7 @@ module Mailosaur
 
           def validate_email_summary(email)
               validate_metadata(email)
+              assert_not_nil(email.summary)
               assert_equal(2, email.attachments)
           end
 

@@ -5,12 +5,20 @@ Gem::Specification.new do |s|
   s.name        = 'mailosaur'
   s.version     = Mailosaur::VERSION
   s.required_ruby_version = '>= 2.2'
-  s.summary     = 'Ruby client library for Mailosaur'
-  s.description = 'Ruby client library for Mailosaur.'
-  s.authors     = ['Mailosaur Ltd']
+  s.summary     = 'The Mailosaur Ruby library'
+  s.description = 'The Mailosaur Ruby library lets you integrate email and SMS testing into your continuous integration process.'
+  s.author      = 'Mailosaur'
   s.email       = 'code@mailosaur.com'
-  s.homepage    = 'https://mailosaur.com'
+  s.homepage    = 'https://mailosaur.com/'
   s.license     = 'MIT'
+
+  s.metadata = {
+    "bug_tracker_uri" => "https://github.com/mailosaur/mailosaur-ruby/issues",
+    "documentation_uri" => "https://mailosaur.com/docs/email-testing/ruby/",
+    "github_repo" => "ssh://github.com/mailosaur/mailosaur-ruby",
+    "homepage_uri" => "https://mailosaur.com/",
+    "source_code_uri" => "https://github.com/mailosaur/mailosaur-ruby",
+  }
 
   s.files       = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']
   s.add_dependency 'faraday', '<= 1.0', '>= 0.9.0'

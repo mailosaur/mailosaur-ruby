@@ -4,8 +4,9 @@ module Mailosaur
     # Creates and initializes a new instance of the Analysis class.
     # @param conn client connection.
     #
-    def initialize(conn)
+    def initialize(conn, handle_http_error)
       @conn = conn
+      @handle_http_error = handle_http_error
     end
 
     # @return [Connection] the client connection.
@@ -22,13 +23,7 @@ module Mailosaur
     #
     def spam(email)
       response = conn.get 'api/analysis/spam/' + email
-
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::SpamAnalysisResult.new(model)
     end

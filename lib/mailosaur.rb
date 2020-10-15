@@ -50,22 +50,22 @@ module Mailosaur
 
     # @return [Analysis] analysis
     def analysis
-      @analysis ||= Analysis.new(connection)
+      @analysis ||= Analysis.new(connection, method(:handle_http_error))
     end
 
     # @return [Files] files
     def files
-      @files ||= Files.new(connection)
+      @files ||= Files.new(connection, method(:handle_http_error))
     end
 
     # @return [Messages] messages
     def messages
-      @messages ||= Messages.new(connection)
+      @messages ||= Messages.new(connection, method(:handle_http_error))
     end
 
     # @return [Servers] servers
     def servers
-      @servers ||= Servers.new(connection)
+      @servers ||= Servers.new(connection, method(:handle_http_error))
     end
 
     private
@@ -77,6 +77,21 @@ module Mailosaur
           user_agent: 'mailosaur-ruby/' + Mailosaur::VERSION
         }
       }).tap { |conn| conn.basic_auth(@api_key, '') }
+    end
+
+    def handle_http_error(response)
+      case response.status
+      when 400
+        raise Mailosaur::MailosaurError.new('Request had one or more invalid parameters.', 'invalid_request', response.status, response.body)
+      when 401
+        raise Mailosaur::MailosaurError.new('Authentication failed, check your API key.', 'authentication_error', response.status, response.body)
+      when 403
+        raise Mailosaur::MailosaurError.new('Insufficient permission to perform that task.', 'permission_error', response.status, response.body)
+      when 404
+        raise Mailosaur::MailosaurError.new('Request did not find any matching resources.', 'invalid_request', response.status, response.body)
+      else
+        raise Mailosaur::MailosaurError.new('An API error occurred, see httpResponse for further information.', 'api_error', response.status, response.body)
+      end
     end
   end
 end

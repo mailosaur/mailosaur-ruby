@@ -77,10 +77,10 @@ module Mailosaur
               pass
             end
 
-            assert_equal("Operation returned an invalid status code '400'", ex.message)
-            assert_equal('ValidationError', ex.type)
-            assert_equal(1, ex.messages.length)
-            assert_not_nil(ex.messages['name'])
+            assert_equal('Request had one or more invalid parameters.', ex.message)
+            assert_equal('invalid_request', ex.error_type)
+            assert_equal(400, ex.http_status_code)
+            assert_equal('{"type":"ValidationError","messages":{"name":"Please provide a name for your server"}}', ex.http_response_body)
         end
     end
 end

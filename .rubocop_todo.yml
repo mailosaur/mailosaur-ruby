@@ -155,4 +155,4 @@ Style/MethodCallWithoutArgsParentheses:
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
 Metrics/LineLength:
-  Max: 146
+  Max: 256

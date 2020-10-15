@@ -4,8 +4,9 @@ module Mailosaur
     # Creates and initializes a new instance of the Servers class.
     # @param client connection.
     #
-    def initialize(conn)
+    def initialize(conn, handle_http_error)
       @conn = conn
+      @handle_http_error = handle_http_error
     end
 
     # @return [Connection] the client connection.
@@ -21,13 +22,7 @@ module Mailosaur
     #
     def list
       response = conn.get 'api/servers'
-
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::ServerListResult.new(model)
     end
@@ -43,13 +38,7 @@ module Mailosaur
     #
     def create(server_create_options)
       response = conn.post 'api/servers', server_create_options.to_json
-
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Server.new(model)
     end
@@ -66,13 +55,7 @@ module Mailosaur
     #
     def get(id)
       response = conn.get 'api/servers/' + id
-
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Server.new(model)
     end
@@ -89,13 +72,7 @@ module Mailosaur
     #
     def update(id, server)
       response = conn.put 'api/servers/' + id, server.to_json
-
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Server.new(model)
     end
@@ -110,13 +87,7 @@ module Mailosaur
     #
     def delete(id)
       response = conn.delete 'api/servers/' + id
-
-      unless response.status == 204
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 204
       nil
     end
 

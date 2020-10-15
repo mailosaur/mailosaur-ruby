@@ -6,8 +6,9 @@ module Mailosaur
     # Creates and initializes a new instance of the Messages class.
     # @param client connection.
     #
-    def initialize(conn)
+    def initialize(conn, handle_http_error)
       @conn = conn
+      @handle_http_error = handle_http_error
     end
 
     # @return [Connection] the client connection.
@@ -31,7 +32,7 @@ module Mailosaur
     #
     def get(server, criteria, timeout: 10_000, received_after: DateTime.now - (1.0 / 24))
       # Defaults timeout to 10s, receivedAfter to 1h
-      raise Mailosaur::MailosaurError.new('Use get_by_id to retrieve a message using its identifier', nil) if server.length > 8
+      raise Mailosaur::MailosaurError.new('Must provide a valid Server ID.', 'invalid_request') if server.length != 8
 
       result = search(server, criteria, timeout: timeout, received_after: received_after)
       get_by_id(result.items[0].id)
@@ -49,13 +50,7 @@ module Mailosaur
     #
     def get_by_id(id)
       response = conn.get 'api/messages/' + id
-
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Message.new(model)
     end
@@ -70,13 +65,7 @@ module Mailosaur
     #
     def delete(id)
       response = conn.delete 'api/messages/' + id
-
-      unless response.status == 204
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 204
       nil
     end
 
@@ -99,17 +88,13 @@ module Mailosaur
     #
     def list(server, page: nil, items_per_page: nil, received_after: nil)
       url = 'api/messages?server=' + server
-      url += page ? '&page=' + page : ''
-      url += items_per_page ? '&itemsPerPage=' + items_per_page : ''
+      url += page ? '&page=' + page.to_s : ''
+      url += items_per_page ? '&itemsPerPage=' + items_per_page.to_s : ''
       url += received_after ? '&receivedAfter=' + CGI.escape(received_after.iso8601) : ''
 
       response = conn.get url
 
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
+      @handle_http_error.call(response) unless response.status == 200
 
       model = JSON.load(response.body)
       Mailosaur::Models::MessageListResult.new(model)
@@ -125,13 +110,7 @@ module Mailosaur
     #
     def delete_all(server)
       response = conn.delete 'api/messages?server=' + server
-
-      unless response.status == 204
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 204
       nil
     end
 
@@ -168,11 +147,7 @@ module Mailosaur
       loop do
         response = conn.post url, criteria.to_json
 
-        unless response.status == 200
-          error_model = JSON.load(response.body)
-          mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model) # rubocop:disable Metrics/LineLength
-          raise mailosaur_error
-        end
+        @handle_http_error.call(response) unless response.status == 200
 
         model = JSON.load(response.body)
         return Mailosaur::Models::MessageListResult.new(model) if timeout.to_i.zero? || !model['items'].empty?
@@ -185,7 +160,7 @@ module Mailosaur
 
         ## Stop if timeout will be exceeded
         if ((1000 * (Time.now.to_f - start_time).to_i) + delay) > timeout
-          raise Mailosaur::MailosaurError.new('No matching messages were found in time', nil)
+          raise Mailosaur::MailosaurError.new('No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).', 'search_timeout')
         end
 
         sleep(delay / 1000)

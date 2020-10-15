@@ -1,23 +1,15 @@
-require 'json'
-
 module Mailosaur
   class MailosaurError < StandardError
-    attr_reader :type
-    attr_reader :messages
-    attr_reader :model
+    attr_reader :error_type
+    attr_reader :http_status_code
+    attr_reader :http_response_body
 
-    def initialize(message, error_model)
+    def initialize(message = '', error_type = '', http_status_code = nil, http_response_body = nil)
       super(message)
 
-      @type = nil
-      @messages = nil
-      @model = nil
-
-      unless error_model.nil?
-        @type = error_model['type']
-        @messages = error_model['messages']
-        @model = error_model['model']
-      end
+      @error_type = error_type
+      @http_status_code = http_status_code
+      @http_response_body = http_response_body
     end
   end
 end

@@ -4,8 +4,9 @@ module Mailosaur
     # Creates and initializes a new instance of the Files class.
     # @param client connection.
     #
-    def initialize(conn)
+    def initialize(conn, handle_http_error)
       @conn = conn
+      @handle_http_error = handle_http_error
     end
 
     # @return [Connection] the client connection.
@@ -23,13 +24,7 @@ module Mailosaur
     #
     def get_attachment(id)
       response = conn.get 'api/files/attachments/' + id
-
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 200
       response.body
     end
 
@@ -45,13 +40,7 @@ module Mailosaur
     #
     def get_email(id)
       response = conn.get 'api/files/email/' + id
-
-      unless response.status == 200
-        error_model = JSON.load(response.body)
-        mailosaur_error = Mailosaur::MailosaurError.new('Operation returned an invalid status code \'' + response.status.to_s + '\'', error_model)
-        raise mailosaur_error
-      end
-
+      @handle_http_error.call(response) unless response.status == 200
       response.body
     end
   end

@@ -13,14 +13,14 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.metadata = {
-    "bug_tracker_uri" => "https://github.com/mailosaur/mailosaur-ruby/issues",
-    "documentation_uri" => "https://mailosaur.com/docs/email-testing/ruby/",
-    "github_repo" => "ssh://github.com/mailosaur/mailosaur-ruby",
-    "homepage_uri" => "https://mailosaur.com/",
-    "source_code_uri" => "https://github.com/mailosaur/mailosaur-ruby",
+    'bug_tracker_uri' => 'https://github.com/mailosaur/mailosaur-ruby/issues',
+    'documentation_uri' => 'https://mailosaur.com/docs/email-testing/ruby/',
+    'github_repo' => 'ssh://github.com/mailosaur/mailosaur-ruby',
+    'homepage_uri' => 'https://mailosaur.com/',
+    'source_code_uri' => 'https://github.com/mailosaur/mailosaur-ruby'
   }
 
-  s.files       = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']
+  s.files = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']
   s.add_dependency 'faraday', '<= 1.0', '>= 0.9.0'
   s.add_dependency 'json', '<= 3.0', '>= 1.7.5'
 

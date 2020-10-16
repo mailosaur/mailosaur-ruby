@@ -52,7 +52,7 @@ module Mailosaur
             assert_instance_of(Array, retrieved_server.forwarding_rules)
 
             # Update a server and confirm it has changed
-            retrieved_server.name += ' EDITED'
+            retrieved_server.name += ' updated with ellipsis … and emoji 👨🏿‍🚒'
             updated_server = @client.servers.update(retrieved_server.id, retrieved_server)
             assert_equal(retrieved_server.id, updated_server.id)
             assert_equal(retrieved_server.name, updated_server.name)

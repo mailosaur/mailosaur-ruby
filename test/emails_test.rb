@@ -128,6 +128,15 @@ module Mailosaur
                     assert_equal(target_email.subject, results[0].subject)
                 end
             end
+
+            context 'with special characters' do
+                should 'support special characters' do
+                    criteria = Mailosaur::Models::SearchCriteria.new()
+                    criteria.subject = 'Search with ellipsis … and emoji 👨🏿‍🚒'
+                    results = @@client.messages.search(@@server, criteria).items
+                    assert_equal(0, results.length)
+                end
+            end
         end
 
         context 'spam_analysis' do

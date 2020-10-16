@@ -34,7 +34,7 @@ module Mailosaur
       # Defaults timeout to 10s, receivedAfter to 1h
       raise Mailosaur::MailosaurError.new('Must provide a valid Server ID.', 'invalid_request') if server.length != 8
 
-      result = search(server, criteria, 0, 1, timeout, received_after)
+      result = search(server, criteria, page: 0, items_per_page: 1, timeout: timeout, received_after: received_after)
       get_by_id(result.items[0].id)
     end
 

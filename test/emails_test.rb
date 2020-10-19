@@ -129,6 +129,32 @@ module Mailosaur
                 end
             end
 
+            context 'with match all' do
+                should 'return matching results' do
+                    target_email = @@emails[1]
+                    unique_string = target_email.subject[0, 10]
+                    criteria = Mailosaur::Models::SearchCriteria.new()
+                    criteria.subject = unique_string
+                    criteria.body = "this is a link"
+                    criteria.match = 'ALL'
+                    results = @@client.messages.search(@@server, criteria).items
+                    assert_equal(1, results.length)
+                end
+            end
+
+            context 'with match any' do
+                should 'return matching results' do
+                    target_email = @@emails[1]
+                    unique_string = target_email.subject[0, 10]
+                    criteria = Mailosaur::Models::SearchCriteria.new()
+                    criteria.subject = unique_string
+                    criteria.body = "this is a link"
+                    criteria.match = 'ANY'
+                    results = @@client.messages.search(@@server, criteria).items
+                    assert_equal(5, results.length)
+                end
+            end
+
             context 'with special characters' do
                 should 'support special characters' do
                     criteria = Mailosaur::Models::SearchCriteria.new()

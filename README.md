@@ -1,6 +1,6 @@
 # Mailosaur Ruby Client Library
 
-[Mailosaur](https://mailosaur.com) allows you to automate tests involving email. Allowing you to perform end-to-end automated and functional email testing.
+[Mailosaur](https://mailosaur.com) lets you automate email and SMS tests, like account verification and password resets, and integrate these into your CI/CD pipeline.
 
 [![](https://github.com/mailosaur/mailosaur-ruby/workflows/CI/badge.svg)](https://github.com/mailosaur/mailosaur-ruby/actions)
 
@@ -10,29 +10,52 @@
 gem install mailosaur
 ```
 
-## Documentation and usage examples
+## Documentation
 
-[Mailosaur's documentation](https://mailosaur.com/docs) includes all the information and usage examples you'll need.
+Please see the [Ruby client reference](https://mailosaur.com/docs/email-testing/ruby/client-reference/) for the most up-to-date documentation.
 
-## Running tests
+## Usage
 
-Once you've cloned this repository locally, you can simply run:
+example.rb
 
+```ruby
+require "mailosaur"
+mailosaur = Mailosaur::MailosaurClient.new("YOUR_API_KEY")
+
+result = mailosaur.servers.list()
+
+print("You have a server called: " + result.items[0].name)
 ```
-bundle install
 
+## Development
+
+You must have the following prerequisites installed:
+
+* [Bundler](https://bundler.io/)
+
+Install all development dependencies:
+
+```sh
+bundle install
+```
+
+The test suite requires the following environment variables to be set:
+
+```sh
+export MAILOSAUR_BASE_URL=https://mailosaur.com/
 export MAILOSAUR_API_KEY=your_api_key
 export MAILOSAUR_SERVER=server_id
+```
 
+Run all tests:
+
+```sh
 bundle exec rake test
 ```
 
-## Linting code
+Lint code (via Rubocop):
 
-Simply run Rubocop:
-
-```
-bundle install
+```sh
 bundle exec rubocop
 ```
 

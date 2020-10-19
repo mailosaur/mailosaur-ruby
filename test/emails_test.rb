@@ -135,7 +135,7 @@ module Mailosaur
                     unique_string = target_email.subject[0, 10]
                     criteria = Mailosaur::Models::SearchCriteria.new()
                     criteria.subject = unique_string
-                    criteria.body = "this is a link"
+                    criteria.body = 'this is a link'
                     criteria.match = 'ALL'
                     results = @@client.messages.search(@@server, criteria).items
                     assert_equal(1, results.length)
@@ -148,7 +148,7 @@ module Mailosaur
                     unique_string = target_email.subject[0, 10]
                     criteria = Mailosaur::Models::SearchCriteria.new()
                     criteria.subject = unique_string
-                    criteria.body = "this is a link"
+                    criteria.body = 'this is a link'
                     criteria.match = 'ANY'
                     results = @@client.messages.search(@@server, criteria).items
                     assert_equal(5, results.length)

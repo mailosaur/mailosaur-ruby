@@ -20,7 +20,7 @@ module Mailosaur
       # text body.
       attr_accessor :body
 
-      # @return [String] If set to ALL (default), then only results that match all 
+      # @return [String] If set to ALL (default), then only results that match all
       # specified criteria will be returned. If set to ANY, results that match any of the
       # specified criteria will be returned.
       attr_accessor :match

@@ -82,6 +82,27 @@ module Mailosaur
                 end
             end
 
+            context 'by sent_from' do
+                should 'return matching results' do
+                    target_email = @@emails[1]
+                    criteria = Mailosaur::Models::SearchCriteria.new()
+                    criteria.sent_from = target_email.from[0].email
+                    results = @@client.messages.search(@@server, criteria).items
+                    assert_equal(1, results.length)
+                    assert_equal(target_email.from[0].email, results[0].from[0].email)
+                    assert_equal(target_email.subject, results[0].subject)
+                end
+
+                should 'throw an error on invalid email address' do
+                    criteria = Mailosaur::Models::SearchCriteria.new()
+                    criteria.sent_from = '.not_an_email_address'
+
+                    assert_raise(Mailosaur::MailosaurError) do
+                        @@client.messages.search(@@server, criteria)
+                    end
+                end
+            end
+
             context 'by sent_to' do
                 should 'return matching results' do
                     target_email = @@emails[1]

@@ -2,11 +2,16 @@ module Mailosaur
   module Models
     class SearchCriteria < BaseModel
       def initialize(data = {})
+        @sent_from = data['sentFrom']
         @sent_to = data['sentTo']
         @subject = data['subject']
         @body = data['body']
         @match = data['match'] || 'ALL'
       end
+
+      # @return [String] The full email address from which the target email was
+      # sent.
+      attr_accessor :sent_from
 
       # @return [String] The full email address to which the target email was
       # sent.

@@ -82,6 +82,13 @@ module Mailosaur
                 end
             end
 
+            should 'return empty array if errors suppressed' do
+                criteria = Mailosaur::Models::SearchCriteria.new()
+                criteria.sent_from = 'neverfound@example.com'
+                results = @@client.messages.search(@@server, criteria, timeout: 1, error_on_timeout: false).items
+                assert_equal(0, results.length)
+            end
+
             context 'by sent_from' do
                 should 'return matching results' do
                     target_email = @@emails[1]

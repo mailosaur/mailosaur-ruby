@@ -132,10 +132,12 @@ module Mailosaur
     # (in milliseconds).
     # @param received_after [DateTime] Limits results to only messages received
     # after this date/time.
+    # @param error_on_timeout [Boolean] When set to false, an error will not be
+    # throw if timeout is reached (default: true).
     #
     # @return [MessageListResult] operation results.
     #
-    def search(server, criteria, page: nil, items_per_page: nil, timeout: nil, received_after: nil) # rubocop:disable all
+    def search(server, criteria, page: nil, items_per_page: nil, timeout: nil, received_after: nil, error_on_timeout: true) # rubocop:disable all
       url = 'api/messages/search?server=' + server
       url += page ? '&page=' + page.to_s : ''
       url += items_per_page ? '&itemsPerPage=' + items_per_page.to_s : ''
@@ -160,6 +162,9 @@ module Mailosaur
 
         ## Stop if timeout will be exceeded
         if ((1000 * (Time.now.to_f - start_time).to_i) + delay) > timeout
+          if !error_on_timeout
+            return Mailosaur::Models::MessageListResult.new(model)
+          end
           raise Mailosaur::MailosaurError.new('No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).', 'search_timeout')
         end
 

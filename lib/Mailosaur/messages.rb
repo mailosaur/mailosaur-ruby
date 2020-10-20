@@ -162,9 +162,8 @@ module Mailosaur
 
         ## Stop if timeout will be exceeded
         if ((1000 * (Time.now.to_f - start_time).to_i) + delay) > timeout
-          if !error_on_timeout
-            return Mailosaur::Models::MessageListResult.new(model)
-          end
+          return Mailosaur::Models::MessageListResult.new(model) unless error_on_timeout
+
           raise Mailosaur::MailosaurError.new('No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).', 'search_timeout')
         end
 

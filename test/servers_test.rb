@@ -40,7 +40,6 @@ module Mailosaur
             assert_not_nil(created_server.password)
             assert_instance_of(Array, created_server.users)
             assert_instance_of(Fixnum, created_server.messages)
-            assert_instance_of(Array, created_server.forwarding_rules)
 
             # Retrieve a server and confirm it has expected content
             retrieved_server = @client.servers.get(created_server.id)
@@ -49,7 +48,6 @@ module Mailosaur
             assert_not_nil(retrieved_server.password)
             assert_instance_of(Array, retrieved_server.users)
             assert_instance_of(Fixnum, retrieved_server.messages)
-            assert_instance_of(Array, retrieved_server.forwarding_rules)
 
             # Update a server and confirm it has changed
             retrieved_server.name += ' updated with ellipsis … and emoji 👨🏿‍🚒'
@@ -59,7 +57,6 @@ module Mailosaur
             assert_equal(retrieved_server.password, updated_server.password)
             assert_equal(retrieved_server.users, updated_server.users)
             assert_equal(retrieved_server.messages, updated_server.messages)
-            assert_equal(retrieved_server.forwarding_rules, updated_server.forwarding_rules)
 
             @client.servers.delete(retrieved_server.id)
 

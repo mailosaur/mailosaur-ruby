@@ -7,8 +7,6 @@ module Mailosaur
         @name = data['name']
         @users = data['users']
         @messages = data['messages']
-        @forwarding_rules = []
-        (data['forwardingRules'] || []).each do |i| @forwarding_rules << Mailosaur::Models::ForwardingRule.new(i) end
       end
 
       # @return [String] Unique identifier for the server. Used as username for
@@ -26,10 +24,6 @@ module Mailosaur
 
       # @return [Integer] The number of messages currently in the server.
       attr_accessor :messages
-
-      # @return [Array<ForwardingRule>] The rules used to manage email
-      # forwarding for this server.
-      attr_accessor :forwarding_rules
     end
   end
 end

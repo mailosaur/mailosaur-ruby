@@ -27,7 +27,6 @@ module Mailosaur
     autoload :MessageListResult,                                  'Mailosaur/models/message_list_result.rb'
     autoload :Attachment,                                         'Mailosaur/models/attachment.rb'
     autoload :SearchCriteria,                                     'Mailosaur/models/search_criteria.rb'
-    autoload :ForwardingRule,                                     'Mailosaur/models/forwarding_rule.rb'
     autoload :MessageContent,                                     'Mailosaur/models/message_content.rb'
     autoload :Server,                                             'Mailosaur/models/server.rb'
     autoload :Link,                                               'Mailosaur/models/link.rb'

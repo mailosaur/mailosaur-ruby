@@ -47,8 +47,8 @@ module Mailosaur
 
         context 'get' do
             should 'return a match once found' do
-                host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.io'
-                test_email_address = 'wait_for_test.%s@%s' % [@@server, host]
+                host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.net'
+                test_email_address = 'wait_for_test@%s.%s' % [@@server, host]
 
                 Mailer.send_email(@@client, @@server, test_email_address)
 

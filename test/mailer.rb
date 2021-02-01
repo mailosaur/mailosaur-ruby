@@ -3,7 +3,7 @@ require 'securerandom'
 
 Mail.defaults do
     delivery_method :smtp, {
-      address: ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.io',
+      address: ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.net',
       port: ENV['MAILOSAUR_SMTP_PORT'] || 25,
       enable_starttls_auto: false
     }
@@ -17,9 +17,6 @@ class Mailer
         (1..quantity).each do |_i|
             send_email(client, server)
         end
-
-        # Allow 2 seconds for any SMTP processing
-        sleep 2
     end
 
     def self.send_email(client, server, send_to_address = nil)

@@ -20,8 +20,8 @@ module Mailosaur
 
                 @@client.messages.delete_all(@@server)
 
-                host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.io'
-                test_email_address = 'files_test.%s@%s' % [@@server, host]
+                host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.net'
+                test_email_address = 'files_test@%s.%s' % [@@server, host]
 
                 Mailer.send_email(@@client, @@server, test_email_address)
 

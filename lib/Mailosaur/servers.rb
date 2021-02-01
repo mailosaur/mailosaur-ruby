@@ -92,8 +92,8 @@ module Mailosaur
     end
 
     def generate_email_address(server)
-      host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.io'
-      '%s.%s@%s' % [SecureRandom.hex(3), server, host]
+      host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.net'
+      '%s@%s.%s' % [SecureRandom.hex(3), server, host]
     end
   end
 end

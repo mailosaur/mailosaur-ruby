@@ -37,7 +37,6 @@ module Mailosaur
             created_server = @client.servers.create(create_options)
             assert_not_nil(created_server.id)
             assert_equal(server_name, created_server.name)
-            assert_not_nil(created_server.password)
             assert_instance_of(Array, created_server.users)
             assert_instance_of(Fixnum, created_server.messages)
 
@@ -45,7 +44,6 @@ module Mailosaur
             retrieved_server = @client.servers.get(created_server.id)
             assert_equal(created_server.id, retrieved_server.id)
             assert_equal(created_server.name, retrieved_server.name)
-            assert_not_nil(retrieved_server.password)
             assert_instance_of(Array, retrieved_server.users)
             assert_instance_of(Fixnum, retrieved_server.messages)
 
@@ -54,7 +52,6 @@ module Mailosaur
             updated_server = @client.servers.update(retrieved_server.id, retrieved_server)
             assert_equal(retrieved_server.id, updated_server.id)
             assert_equal(retrieved_server.name, updated_server.name)
-            assert_equal(retrieved_server.password, updated_server.password)
             assert_equal(retrieved_server.users, updated_server.users)
             assert_equal(retrieved_server.messages, updated_server.messages)
 

@@ -61,6 +61,23 @@ module Mailosaur
     end
 
     #
+    # Retrieve server password
+    #
+    # Retrieves the password for use with SMTP and POP3 for a single server. 
+    # Simply supply the unique identifier for the required server.
+    #
+    # @param id [String] The identifier of the server.
+    #
+    # @return [String] Server password.
+    #
+    def get_password(id)
+      response = conn.get 'api/servers/' + id + '/password'
+      @handle_http_error.call(response) unless response.status == 200
+      model = JSON.load(response.body)
+      model.value
+    end
+
+    #
     # Update a server
     #
     # Updats a single server and returns it.

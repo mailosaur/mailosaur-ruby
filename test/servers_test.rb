@@ -47,6 +47,10 @@ module Mailosaur
             assert_instance_of(Array, retrieved_server.users)
             assert_instance_of(Fixnum, retrieved_server.messages)
 
+            # Retrieve server password
+            password = @client.servers.get_password(created_server.id)
+            assert_true(password.length >= 8)
+
             # Update a server and confirm it has changed
             retrieved_server.name += ' updated with ellipsis … and emoji 👨🏿‍🚒'
             updated_server = @client.servers.update(retrieved_server.id, retrieved_server)

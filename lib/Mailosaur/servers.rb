@@ -74,7 +74,7 @@ module Mailosaur
       response = conn.get 'api/servers/' + id + '/password'
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
-      model.value
+      model['value']
     end
 
     #

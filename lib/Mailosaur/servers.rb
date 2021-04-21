@@ -63,7 +63,7 @@ module Mailosaur
     #
     # Retrieve server password
     #
-    # Retrieves the password for use with SMTP and POP3 for a single server. 
+    # Retrieves the password for use with SMTP and POP3 for a single server.
     # Simply supply the unique identifier for the required server.
     #
     # @param id [String] The identifier of the server.

@@ -13,6 +13,7 @@ module Mailosaur
   autoload :Files,                                              'Mailosaur/files.rb'
   autoload :Messages,                                           'Mailosaur/messages.rb'
   autoload :Servers,                                            'Mailosaur/servers.rb'
+  autoload :Usage,                                              'Mailosaur/usage.rb'
   autoload :MailosaurError,                                     'Mailosaur/mailosaur_error.rb'
 
   module Models
@@ -33,6 +34,10 @@ module Mailosaur
     autoload :ServerListResult,                                   'Mailosaur/models/server_list_result.rb'
     autoload :SpamFilterResults,                                  'Mailosaur/models/spam_filter_results.rb'
     autoload :ServerCreateOptions,                                'Mailosaur/models/server_create_options.rb'
+    autoload :UsageAccountLimits,                                 'Mailosaur/models/usage_account_limits.rb'
+    autoload :UsageAccountLimit,                                  'Mailosaur/models/usage_account_limit.rb'
+    autoload :UsageTransactionListResult,                         'Mailosaur/models/usage_transaction_list_result.rb'
+    autoload :UsageTransaction,                                   'Mailosaur/models/usage_transaction.rb'
     autoload :BaseModel,                                          'Mailosaur/models/base_model.rb'
   end
 
@@ -65,6 +70,11 @@ module Mailosaur
     # @return [Servers] servers
     def servers
       @servers ||= Servers.new(connection, method(:handle_http_error))
+    end
+
+    # @return [Usage] usage
+    def usage
+      @usage ||= Usage.new(connection, method(:handle_http_error))
     end
 
     private

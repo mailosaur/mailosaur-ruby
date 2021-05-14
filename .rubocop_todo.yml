@@ -96,7 +96,7 @@ Style/BlockDelimiters:
     - 'lib/Mailosaur/models/server.rb'
     - 'lib/Mailosaur/models/server_list_result.rb'
     - 'lib/Mailosaur/models/spam_filter_results.rb'
-    - 'lib/Mailosaur/models/usage_transaction.rb'
+    - 'lib/Mailosaur/models/usage_transaction_list_result.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.

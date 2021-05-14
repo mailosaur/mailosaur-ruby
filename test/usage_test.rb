@@ -37,4 +37,5 @@ module Mailosaur
               assert_not_nil(result.items[0].sms)
             end
         end
+    end
 end

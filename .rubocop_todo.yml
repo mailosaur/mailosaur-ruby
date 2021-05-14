@@ -34,6 +34,7 @@ Layout/IndentationWidth:
     - 'test/files_test.rb'
     - 'test/mailer.rb'
     - 'test/servers_test.rb'
+    - 'test/usage_test.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -70,6 +71,7 @@ Security/JSONLoad:
     - 'lib/Mailosaur/files.rb'
     - 'lib/Mailosaur/messages.rb'
     - 'lib/Mailosaur/servers.rb'
+    - 'lib/Mailosaur/usage.rb'
 
 # Offense count: 2
 # Configuration parameters: AllowedChars.
@@ -94,6 +96,7 @@ Style/BlockDelimiters:
     - 'lib/Mailosaur/models/server.rb'
     - 'lib/Mailosaur/models/server_list_result.rb'
     - 'lib/Mailosaur/models/spam_filter_results.rb'
+    - 'lib/Mailosaur/models/usage_transaction.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
@@ -150,6 +153,7 @@ Style/MethodCallWithoutArgsParentheses:
     - 'test/emails_test.rb'
     - 'test/files_test.rb'
     - 'test/servers_test.rb'
+    - 'test/usage_test.rb'
 
 # Offense count: 89
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.

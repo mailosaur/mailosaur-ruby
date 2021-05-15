@@ -26,7 +26,7 @@ You can find the full [Mailosaur documentation](https://mailosaur.com/docs/) on 
 
 If you get stuck, just contact us at support@mailosaur.com.
 
-## Installation
+### Installation
 
 ```
 gem install mailosaur

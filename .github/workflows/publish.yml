@@ -29,3 +29,11 @@ jobs:
         gem push *.gem
       env:
         GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_AUTH_TOKEN }}
+    - name: Notify on Failure
+      uses: skitionek/notify-microsoft-teams@master
+      if: ${{ failure() }}
+      with:
+        webhook_url: ${{ secrets.TEAMS_BUILDS_WEBHOOK }}
+        needs: ${{ toJson(needs) }}
+        job: ${{ toJson(job) }}
+        steps: ${{ toJson(steps) }}

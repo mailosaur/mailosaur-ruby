@@ -21,8 +21,8 @@ Gem::Specification.new do |s|
   }
 
   s.files = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']
-  s.add_dependency 'faraday', '<= 1.0', '>= 0.9.0'
-  s.add_dependency 'json', '<= 3.0', '>= 1.7.5'
+  s.add_dependency 'faraday', '>= 0.9', '< 2'
+  s.add_dependency 'json', '>= 1.7.5', '< 4'
 
   s.add_development_dependency 'mail', '~> 2.6', '>= 2.6.1'
   s.add_development_dependency 'rake', '~> 12.3', '>= 12.3.0'

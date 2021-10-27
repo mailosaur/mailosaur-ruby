@@ -12,7 +12,7 @@ end
 class Mailer
     @@html = File.open('test/resources/testEmail.html').read
     @@text = File.open('test/resources/testEmail.txt').read
-    @@verified_domain = ENV['MAILOSAUR_VERIFIED_DOMAIN']
+    @@verified_domain = ENV['MAILOSAUR_VERIFIED_DOMAIN'] || 'mailosaur.net'
 
     def self.send_emails(client, server, quantity)
         (1..quantity).each do |_i|

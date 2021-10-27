@@ -7,7 +7,7 @@ module Mailosaur
         @html = data['html']
       end
 
-      # @return [String] The email address to which the email will be sent. 
+      # @return [String] The email address to which the email will be sent.
       # Must be a verified email address.
       attr_accessor :to
 

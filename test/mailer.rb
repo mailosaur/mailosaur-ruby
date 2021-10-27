@@ -12,6 +12,7 @@ end
 class Mailer
     @@html = File.open('test/resources/testEmail.html').read
     @@text = File.open('test/resources/testEmail.txt').read
+    @@verified_domain = ENV['MAILOSAUR_VERIFIED_DOMAIN']
 
     def self.send_emails(client, server, quantity)
         (1..quantity).each do |_i|
@@ -26,7 +27,7 @@ class Mailer
             subject '%s subject' % [random_string]
             random_to_address = send_to_address || client.servers.generate_email_address(server)
 
-            from '%s %s <%s>' % [random_string, random_string, client.servers.generate_email_address(server)]
+            from '%s %s <%s@%s>' % [random_string, random_string, random_string, @@verified_domain]
             to '%s %s <%s>' % [random_string, random_string, random_to_address]
 
             text_part do

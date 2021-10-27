@@ -13,8 +13,9 @@ module Mailosaur
                 api_key = ENV['MAILOSAUR_API_KEY']
                 base_url = ENV['MAILOSAUR_BASE_URL']
                 @@server = ENV['MAILOSAUR_SERVER']
+                @@verified_domain = ENV['MAILOSAUR_VERIFIED_DOMAIN']
 
-                raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if api_key.nil? || @@server.nil?
+                raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if api_key.nil? || @@server.nil? || @@verified_domain.nil?
 
                 @@client = MailosaurClient.new(api_key, base_url)
 
@@ -216,6 +217,80 @@ module Mailosaur
                 assert_raise(Mailosaur::MailosaurError) do
                     @@client.messages.delete(target_id)
                 end
+            end
+        end
+
+        context 'create_and_send' do
+            should 'send with text content' do
+                subject = 'New message'
+                options = Mailosaur::Models::MessageCreateOptions.new()
+                options.to = 'anything@%s' % [@@verified_domain]
+                options.send = true
+                options.subject = subject
+                options.text = 'This is a new email'
+                message = @@client.messages.create(@@server, options)
+                assert_not_nil(message.id)
+                assert_equal(subject, message.subject)
+            end
+
+            should 'send with HTML content' do
+                subject = 'New HTML message'
+                options = Mailosaur::Models::MessageCreateOptions.new()
+                options.to = 'anything@%s' % [@@verified_domain]
+                options.send = true
+                options.subject = subject
+                options.html = '<p>This is a new email.</p>'
+                message = @@client.messages.create(@@server, options)
+                assert_not_nil(message.id)
+                assert_equal(subject, message.subject)
+            end
+        end
+
+        context 'forward' do
+            should 'forward with text content' do
+                target_email = @@emails[0]
+                body = "Forwarded message"
+                options = Mailosaur::Models::MessageForwardOptions.new()
+                options.to = 'anything@%s' % [@@verified_domain]
+                options.text = body
+                message = @@client.messages.forward(target_email.id, options)
+                assert_not_nil(message.id)
+                assert_true(message.text.body.include? body)
+            end
+
+            should 'forward with HTML content' do
+                target_email = @@emails[0]
+                body = "<p>Forwarded <strong>HTML</strong> message.</p>"
+                options = Mailosaur::Models::MessageForwardOptions.new()
+                options.to = 'anything@%s' % [@@verified_domain]
+                options.html = body
+                message = @@client.messages.forward(target_email.id, options)
+                assert_not_nil(message.id)
+                assert_true(message.html.body.include? body)
+            end
+        end
+
+        context 'reply' do
+            should 'reply with text content' do
+                target_email = @@emails[0]
+                body = "Reply message"
+                options = Mailosaur::Models::MessageForwardOptions.new()
+                options.to = 'anything@%s' % [@@verified_domain]
+                options.text = body
+                message = @@client.messages.reply(target_email.id, options)
+                assert_not_nil(message.id)
+                assert_true(message.text.body.include? body)
+            end
+
+            should 'reply with HTML content' do
+                target_email = @@emails[0]
+                body = "<p>Reply <strong>HTML</strong> message.</p>"
+                options = Mailosaur::Models::MessageForwardOptions.new()
+                options.to = 'anything@%s' % [@@verified_domain]
+                options.html = body
+                message = @@client.messages.reply(target_email.id, options)
+                assert_not_nil(message.id)
+                assert_true(message.html.body.include? body)
             end
         end
 

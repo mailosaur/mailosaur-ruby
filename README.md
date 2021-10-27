@@ -306,6 +306,7 @@ The test suite requires the following environment variables to be set:
 export MAILOSAUR_BASE_URL=https://mailosaur.com/
 export MAILOSAUR_API_KEY=your_api_key
 export MAILOSAUR_SERVER=server_id
+export MAILOSAUR_VERIFIED_DOMAIN=server_domain
 ```
 
 Run all tests:

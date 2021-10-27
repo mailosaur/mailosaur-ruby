@@ -170,5 +170,61 @@ module Mailosaur
         sleep(delay / 1000)
       end
     end
+
+    #
+    # Create a message.
+    # 
+    # Creates a new message that can be sent to a verified email address. This is
+    # useful in scenarios where you want an email to trigger a workflow in your
+    # product
+    #
+    # @param server [String] The identifier of the server to create the message in.
+    # @param options [MessageCreateOptions] The options with which to create the message.
+    # 
+    # @return [Message] operation result.
+    #
+    def create(server, options)
+      response = conn.post 'api/messages?server=' + server, message_create_options.to_json
+      @handle_http_error.call(response) unless response.status == 200
+      model = JSON.load(response.body)
+      Mailosaur::Models::Message.new(model)
+    end
+
+    #
+    # Forward an email.
+    # 
+    # Forwards the specified email to a verified email address.
+    #
+    # @param id [String] The identifier of the email to forward.
+    # @param options [MessageForwardOptions] The options with which to forward the email.
+    # against.
+    # 
+    # @return [Message] operation result.
+    #
+    def forward(id, options)
+      response = conn.post 'api/messages/' + id + '/forward', message_forward_options.to_json
+      @handle_http_error.call(response) unless response.status == 200
+      model = JSON.load(response.body)
+      Mailosaur::Models::Message.new(model)
+    end
+
+    #
+    # Reply to an email.
+    # 
+    # Sends a reply to the specified email. This is useful for when simulating a user
+    # replying to one of your emails.
+    #
+    # @param id [String] The identifier of the email to reply to.
+    # @param options [MessageReplyOptions] The options with which to reply to the email.
+    # against.
+    # 
+    # @return [Message] operation result.
+    #
+    def reply(id, options)
+      response = conn.post 'api/messages/' + id + '/reply', message_reply_options.to_json
+      @handle_http_error.call(response) unless response.status == 200
+      model = JSON.load(response.body)
+      Mailosaur::Models::Message.new(model)
+    end
   end
 end

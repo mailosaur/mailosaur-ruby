@@ -21,3 +21,4 @@ doc/
 .DS_Store
 /.idea/
 Gemfile.lock
+.ruby-version

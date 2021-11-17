@@ -49,7 +49,7 @@ module Mailosaur
     # @return [Message] operation results.
     #
     def get_by_id(id)
-      response = conn.get 'api/messages/' + id
+      response = conn.get "api/messages/#{id}"
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Message.new(model)
@@ -64,7 +64,7 @@ module Mailosaur
     # @param id The identifier of the message to be deleted.
     #
     def delete(id)
-      response = conn.delete 'api/messages/' + id
+      response = conn.delete "api/messages/#{id}"
       @handle_http_error.call(response) unless response.status == 204
       nil
     end
@@ -87,10 +87,10 @@ module Mailosaur
     # @return [MessageListResult] operation results.
     #
     def list(server, page: nil, items_per_page: nil, received_after: nil)
-      url = 'api/messages?server=' + server
-      url += page ? '&page=' + page.to_s : ''
-      url += items_per_page ? '&itemsPerPage=' + items_per_page.to_s : ''
-      url += received_after ? '&receivedAfter=' + CGI.escape(received_after.iso8601) : ''
+      url = "api/messages?server=#{server}"
+      url += page ? "&page=#{page}" : ''
+      url += items_per_page ? "&itemsPerPage=#{items_per_page}" : ''
+      url += received_after ? "&receivedAfter=#{CGI.escape(received_after.iso8601)}" : ''
 
       response = conn.get url
 
@@ -109,7 +109,7 @@ module Mailosaur
     # @param server [String] The identifier of the server to be emptied.
     #
     def delete_all(server)
-      response = conn.delete 'api/messages?server=' + server
+      response = conn.delete "api/messages?server=#{server}"
       @handle_http_error.call(response) unless response.status == 204
       nil
     end
@@ -138,10 +138,10 @@ module Mailosaur
     # @return [MessageListResult] operation results.
     #
     def search(server, criteria, page: nil, items_per_page: nil, timeout: nil, received_after: nil, error_on_timeout: true) # rubocop:disable all
-      url = 'api/messages/search?server=' + server
-      url += page ? '&page=' + page.to_s : ''
-      url += items_per_page ? '&itemsPerPage=' + items_per_page.to_s : ''
-      url += received_after ? '&receivedAfter=' + CGI.escape(received_after.iso8601) : ''
+      url = "api/messages/search?server=#{server}"
+      url += page ? "&page=#{page}" : ''
+      url += items_per_page ? "&itemsPerPage=#{items_per_page}" : ''
+      url += received_after ? "&receivedAfter=#{CGI.escape(received_after.iso8601)}" : ''
 
       poll_count = 0
       start_time = Time.now.to_f
@@ -184,7 +184,7 @@ module Mailosaur
     # @return [Message] operation result.
     #
     def create(server, message_create_options)
-      response = conn.post 'api/messages?server=' + server, message_create_options.to_json
+      response = conn.post "api/messages?server=#{server}", message_create_options.to_json
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Message.new(model)
@@ -202,7 +202,7 @@ module Mailosaur
     # @return [Message] operation result.
     #
     def forward(id, message_forward_options)
-      response = conn.post 'api/messages/' + id + '/forward', message_forward_options.to_json
+      response = conn.post "api/messages/#{id}/forward", message_forward_options.to_json
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Message.new(model)
@@ -221,7 +221,7 @@ module Mailosaur
     # @return [Message] operation result.
     #
     def reply(id, message_reply_options)
-      response = conn.post 'api/messages/' + id + '/reply', message_reply_options.to_json
+      response = conn.post "api/messages/#{id}/reply", message_reply_options.to_json
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Message.new(model)

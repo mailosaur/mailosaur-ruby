@@ -23,7 +23,7 @@ module Mailosaur
     # @return [NOT_IMPLEMENTED] operation results.
     #
     def get_attachment(id)
-      response = conn.get 'api/files/attachments/' + id
+      response = conn.get "api/files/attachments/#{id}"
       @handle_http_error.call(response) unless response.status == 200
       response.body
     end
@@ -39,7 +39,7 @@ module Mailosaur
     # @return [NOT_IMPLEMENTED] operation results.
     #
     def get_email(id)
-      response = conn.get 'api/files/email/' + id
+      response = conn.get "api/files/email/#{id}"
       @handle_http_error.call(response) unless response.status == 200
       response.body
     end

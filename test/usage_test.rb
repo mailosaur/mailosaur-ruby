@@ -21,10 +21,10 @@ module Mailosaur
               assert_not_nil(result.email)
               assert_not_nil(result.sms)
 
-              assert_true(result.servers.limit > 0)
-              assert_true(result.users.limit > 0)
-              assert_true(result.email.limit > 0)
-              assert_true(result.sms.limit > 0)
+              assert_true(result.servers.limit.positive?)
+              assert_true(result.users.limit.positive?)
+              assert_true(result.email.limit.positive?)
+              assert_true(result.sms.limit.positive?)
             end
         end
 

@@ -54,7 +54,7 @@ module Mailosaur
     # @return [Server] operation results.
     #
     def get(id)
-      response = conn.get 'api/servers/' + id
+      response = conn.get "api/servers/#{id}"
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Server.new(model)
@@ -71,7 +71,7 @@ module Mailosaur
     # @return [String] Server password.
     #
     def get_password(id)
-      response = conn.get 'api/servers/' + id + '/password'
+      response = conn.get "api/servers/#{id}/password"
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       model['value']
@@ -88,7 +88,7 @@ module Mailosaur
     # @return [Server] operation results.
     #
     def update(id, server)
-      response = conn.put 'api/servers/' + id, server.to_json
+      response = conn.put "api/servers/#{id}", server.to_json
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::Server.new(model)
@@ -103,7 +103,7 @@ module Mailosaur
     # @param id [String] The identifier of the server to be deleted.
     #
     def delete(id)
-      response = conn.delete 'api/servers/' + id
+      response = conn.delete "api/servers/#{id}"
       @handle_http_error.call(response) unless response.status == 204
       nil
     end

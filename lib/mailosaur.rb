@@ -86,9 +86,9 @@ module Mailosaur
       Faraday.new(@base_url, {
         headers: {
           content_type: 'application/json; charset=utf-8',
-          user_agent: 'mailosaur-ruby/' + Mailosaur::VERSION
+          user_agent: "mailosaur-ruby/#{Mailosaur::VERSION}"
         }
-      }).tap { |conn| conn.basic_auth(@api_key, '') }
+      }).tap { |conn| conn.request(:basic_auth, @api_key, '') }
     end
 
     def handle_http_error(response)

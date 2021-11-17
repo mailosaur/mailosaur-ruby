@@ -10,7 +10,7 @@
 # Cop supports --auto-correct.
 # Configuration parameters: IndentationWidth.
 # SupportedStyles: special_inside_parentheses, consistent, align_braces
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 # Offense count: 7
@@ -102,10 +102,6 @@ Style/BlockDelimiters:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Exclude:
-    - 'lib/mailosaur.rb'
-    - 'test/mailer.rb'
 
 # Offense count: 10
 Style/ClassVars:
@@ -115,7 +111,22 @@ Style/ClassVars:
     - 'test/mailer.rb'
 
 # Offense count: 28
+Style/FrozenStringLiteralComment:
+    Enabled: false
+
 Style/Documentation:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Metrics/ParameterLists:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
   Enabled: false
 
 # Offense count: 7
@@ -158,5 +169,5 @@ Style/MethodCallWithoutArgsParentheses:
 # Offense count: 89
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, IgnoredPatterns.
 # URISchemes: http, https
-Metrics/LineLength:
+Layout/LineLength:
   Max: 256

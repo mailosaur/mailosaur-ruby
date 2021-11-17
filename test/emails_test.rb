@@ -222,7 +222,7 @@ module Mailosaur
 
         context 'create_and_send' do
             should 'send with text content' do
-                omit_if(@@verified_domain.empty?)
+                omit_if(@@verified_domain.nil?)
                 subject = 'New message'
                 options = Mailosaur::Models::MessageCreateOptions.new()
                 options.to = 'anything@%s' % [@@verified_domain]
@@ -235,7 +235,7 @@ module Mailosaur
             end
 
             should 'send with HTML content' do
-                omit_if(@@verified_domain.empty?)
+                omit_if(@@verified_domain.nil?)
                 subject = 'New HTML message'
                 options = Mailosaur::Models::MessageCreateOptions.new()
                 options.to = 'anything@%s' % [@@verified_domain]
@@ -250,7 +250,7 @@ module Mailosaur
 
         context 'forward' do
             should 'forward with text content' do
-                omit_if(@@verified_domain.empty?)
+                omit_if(@@verified_domain.nil?)
                 target_email = @@emails[0]
                 body = 'Forwarded message'
                 options = Mailosaur::Models::MessageForwardOptions.new()
@@ -262,7 +262,7 @@ module Mailosaur
             end
 
             should 'forward with HTML content' do
-                omit_if(@@verified_domain.empty?)
+                omit_if(@@verified_domain.nil?)
                 target_email = @@emails[0]
                 body = '<p>Forwarded <strong>HTML</strong> message.</p>'
                 options = Mailosaur::Models::MessageForwardOptions.new()
@@ -276,7 +276,7 @@ module Mailosaur
 
         context 'reply' do
             should 'reply with text content' do
-                omit_if(@@verified_domain.empty?)
+                omit_if(@@verified_domain.nil?)
                 target_email = @@emails[0]
                 body = 'Reply message'
                 options = Mailosaur::Models::MessageForwardOptions.new()
@@ -288,7 +288,7 @@ module Mailosaur
             end
 
             should 'reply with HTML content' do
-                omit_if(@@verified_domain.empty?)
+                omit_if(@@verified_domain.nil?)
                 target_email = @@emails[0]
                 body = '<p>Reply <strong>HTML</strong> message.</p>'
                 options = Mailosaur::Models::MessageForwardOptions.new()

@@ -22,7 +22,7 @@ module Mailosaur
     # @return [SpamAnalysisResult] operation results.
     #
     def spam(email)
-      response = conn.get 'api/analysis/spam/' + email
+      response = conn.get "api/analysis/spam/#{email}"
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.load(response.body)
       Mailosaur::Models::SpamAnalysisResult.new(model)

@@ -3,6 +3,7 @@ require 'test/unit'
 require 'shoulda/context'
 require './test/mailer'
 require 'date'
+require 'base64'
 
 module Mailosaur
     class EmailsTest < Test::Unit::TestCase
@@ -246,6 +247,34 @@ module Mailosaur
                 assert_not_nil(message.id)
                 assert_equal(subject, message.subject)
             end
+
+            should 'send with attachment' do
+                omit_if(@@verified_domain.nil?)
+
+                data = File.open('test/resources/cat.png').read
+                attachment = Mailosaur::Models::Attachment.new()
+                attachment.file_name = 'cat.png'
+                attachment.content = Base64.encode64(data)
+                attachment.content_type = 'image/png'
+
+                subject = 'New message with attachment'
+                options = Mailosaur::Models::MessageCreateOptions.new()
+                options.to = 'anything@%s' % [@@verified_domain]
+                options.send = true
+                options.subject = subject
+                options.html = '<p>This is a new email with attachment.</p>'
+                options.attachments = [attachment]
+
+                message = @@client.messages.create(@@server, options)
+
+                assert_equal(1, message.attachments.length)
+                file1 = message.attachments[0]
+                assert_not_nil(file1.id)
+                assert_not_nil(file1.url)
+                assert_equal(82_138, file1.length)
+                assert_equal('cat.png', file1.file_name)
+                assert_equal('image/png', file1.content_type)
+            end
         end
 
         context 'forward' do
@@ -297,6 +326,32 @@ module Mailosaur
                 message = @@client.messages.reply(target_email.id, options)
                 assert_not_nil(message.id)
                 assert_true(message.html.body.include?(body))
+            end
+
+            should 'reply with attachment' do
+                omit_if(@@verified_domain.nil?)
+                target_email = @@emails[0]
+                body = '<p>Reply with attachment.</p>'
+
+                data = File.open('test/resources/cat.png').read
+                attachment = Mailosaur::Models::Attachment.new()
+                attachment.file_name = 'cat.png'
+                attachment.content = Base64.encode64(data)
+                attachment.content_type = 'image/png'
+
+                options = Mailosaur::Models::MessageReplyOptions.new()
+                options.html = body
+                options.attachments = [attachment]
+
+                message = @@client.messages.reply(target_email.id, options)
+
+                assert_equal(1, message.attachments.length)
+                file1 = message.attachments[0]
+                assert_not_nil(file1.id)
+                assert_not_nil(file1.url)
+                assert_equal(82_138, file1.length)
+                assert_equal('cat.png', file1.file_name)
+                assert_equal('image/png', file1.content_type)
             end
         end
 

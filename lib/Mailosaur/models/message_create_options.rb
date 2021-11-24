@@ -7,6 +7,7 @@ module Mailosaur
         @subject = data['subject']
         @text = data['text']
         @html = data['html']
+        @attachments = data['attachments']
       end
 
       # @return [String] The email address to which the email will be sent.
@@ -26,6 +27,9 @@ module Mailosaur
       # @return [String] The HTML body of the email. Note that only text
       # or html can be supplied, not both.
       attr_accessor :html
+
+      # @return [Array<Attachment>] Any message attachments.
+      attr_accessor :attachments
     end
   end
 end

@@ -5,6 +5,7 @@ module Mailosaur
         @id = data['id']
         @content_type = data['contentType']
         @file_name = data['fileName']
+        @content = data['content']
         @content_id = data['contentId']
         @length = data['length']
         @url = data['url']
@@ -18,6 +19,9 @@ module Mailosaur
 
       # @return [String]
       attr_accessor :file_name
+
+      # @return [String]
+      attr_accessor :content
 
       # @return [String]
       attr_accessor :content_id

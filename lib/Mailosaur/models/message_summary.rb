@@ -4,8 +4,6 @@ module Mailosaur
       def initialize(data = {})
         @id = data['id']
         @server = data['server']
-        @rcpt = []
-        (data['rcpt'] || []).each do |i| @rcpt << Mailosaur::Models::MessageAddress.new(i) end
         @from = []
         (data['from'] || []).each do |i| @from << Mailosaur::Models::MessageAddress.new(i) end
         @to = []
@@ -25,9 +23,6 @@ module Mailosaur
 
       # @return [String]
       attr_accessor :server
-
-      # @return [Array<MessageAddress>]
-      attr_accessor :rcpt
 
       # @return [Array<MessageAddress>]
       attr_accessor :from

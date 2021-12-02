@@ -362,6 +362,9 @@ module Mailosaur
           validate_attachments(email)
           validate_html(email)
           validate_text(email)
+          assert_not_nil(email.metadata.ehlo)
+          assert_not_nil(email.metadata.mail_from)
+          assert_equal(1, email.metadata.rcpt_to.length)
         end
 
           def validate_email_summary(email)

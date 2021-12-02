@@ -78,7 +78,7 @@ module Mailosaur
             assert_equal('Request had one or more invalid parameters.', ex.message)
             assert_equal('invalid_request', ex.error_type)
             assert_equal(400, ex.http_status_code)
-            assert_equal('{"type":"ValidationError","messages":{"name":"Please provide a name for your server"}}', ex.http_response_body)
+            assert_true(ex.http_response_body.include?('{"type":'))
         end
     end
 end

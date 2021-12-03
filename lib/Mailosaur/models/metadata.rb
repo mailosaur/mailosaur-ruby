@@ -6,7 +6,7 @@ module Mailosaur
         (data['headers'] || []).each do |i| @headers << Mailosaur::Models::MessageHeader.new(i) end
 
         @ehlo = data['ehlo']
-        
+
         @mail_from = data['mailFrom']
 
         @rcpt_to = []

@@ -14,7 +14,9 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
-concurrency: mailosaur-ruby
+concurrency: 
+  group: mailosaur-ruby
+  cancel-in-progress: true
 
 jobs:
   build:

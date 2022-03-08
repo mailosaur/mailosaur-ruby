@@ -1,5 +1,4 @@
 require 'mail'
-require 'securerandom'
 
 Mail.defaults do
     delivery_method :smtp, {
@@ -22,7 +21,7 @@ class Mailer
 
     def self.send_email(client, server, send_to_address = nil)
         Mail.deliver do
-            random_string = SecureRandom.hex(5)
+            random_string = (0...10).map { rand(65..90).chr }.join
 
             subject '%s subject' % [random_string]
             random_to_address = send_to_address || client.servers.generate_email_address(server)

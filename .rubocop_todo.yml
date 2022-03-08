@@ -44,7 +44,7 @@ Lint/UnifiedInteger:
 
 # Offense count: 16
 Metrics/AbcSize:
-  Max: 49
+  Max: 100
 
 # Offense count: 2
 # Configuration parameters: CountComments, ExcludedMethods.

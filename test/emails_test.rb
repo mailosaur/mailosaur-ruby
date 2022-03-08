@@ -386,6 +386,11 @@ module Mailosaur
               assert_equal('http://invalid/', email.html.links[2].href)
               assert_equal('invalid', email.html.links[2].text)
 
+              # Html.Links
+              assert_equal(2, email.html.codes.length)
+              assert_equal('123456', email.html.codes[0].value)
+              assert_equal('G3H1Y2', email.html.codes[1].value)
+
               # Html.Images
               assert_true(email.html.images[1].src.start_with?('cid:'))
               assert_equal('Inline image 1', email.html.images[1].alt)
@@ -401,6 +406,11 @@ module Mailosaur
               assert_equal(email.text.links[0].href, email.text.links[0].text)
               assert_equal('https://mailosaur.com/', email.text.links[1].href)
               assert_equal(email.text.links[1].href, email.text.links[1].text)
+
+              # Text.Links
+              assert_equal(2, email.text.codes.length)
+              assert_equal('654321', email.text.codes[0].value)
+              assert_equal('5H0Y2', email.text.codes[1].value)
           end
 
           def validate_headers(email)

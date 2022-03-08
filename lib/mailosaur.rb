@@ -34,6 +34,7 @@ module Mailosaur
     autoload :MessageContent,                                     'Mailosaur/models/message_content.rb'
     autoload :Server,                                             'Mailosaur/models/server.rb'
     autoload :Link,                                               'Mailosaur/models/link.rb'
+    autoload :Code,                                               'Mailosaur/models/code.rb'
     autoload :ServerListResult,                                   'Mailosaur/models/server_list_result.rb'
     autoload :SpamFilterResults,                                  'Mailosaur/models/spam_filter_results.rb'
     autoload :ServerCreateOptions,                                'Mailosaur/models/server_create_options.rb'

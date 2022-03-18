@@ -101,15 +101,6 @@ module Mailosaur
                     assert_equal(target_email.from[0].email, results[0].from[0].email)
                     assert_equal(target_email.subject, results[0].subject)
                 end
-
-                should 'throw an error on invalid email address' do
-                    criteria = Mailosaur::Models::SearchCriteria.new()
-                    criteria.sent_from = '.not_an_email_address'
-
-                    assert_raise(Mailosaur::MailosaurError) do
-                        @@client.messages.search(@@server, criteria)
-                    end
-                end
             end
 
             context 'by sent_to' do
@@ -121,15 +112,6 @@ module Mailosaur
                     assert_equal(1, results.length)
                     assert_equal(target_email.to[0].email, results[0].to[0].email)
                     assert_equal(target_email.subject, results[0].subject)
-                end
-
-                should 'throw an error on invalid email address' do
-                    criteria = Mailosaur::Models::SearchCriteria.new()
-                    criteria.sent_to = '.not_an_email_address'
-
-                    assert_raise(Mailosaur::MailosaurError) do
-                        @@client.messages.search(@@server, criteria)
-                    end
                 end
             end
 

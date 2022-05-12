@@ -51,7 +51,7 @@ module Mailosaur
     def get_by_id(id)
       response = conn.get "api/messages/#{id}"
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::Message.new(model)
     end
 
@@ -96,7 +96,7 @@ module Mailosaur
 
       @handle_http_error.call(response) unless response.status == 200
 
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::MessageListResult.new(model)
     end
 
@@ -151,7 +151,7 @@ module Mailosaur
 
         @handle_http_error.call(response) unless response.status == 200
 
-        model = JSON.load(response.body)
+        model = JSON.parse(response.body)
         return Mailosaur::Models::MessageListResult.new(model) if timeout.to_i.zero? || !model['items'].empty?
 
         delay_pattern = (response.headers['x-ms-delay'] || '1000').split(',').map(&:to_i)
@@ -186,7 +186,7 @@ module Mailosaur
     def create(server, message_create_options)
       response = conn.post "api/messages?server=#{server}", message_create_options.to_json
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::Message.new(model)
     end
 
@@ -204,7 +204,7 @@ module Mailosaur
     def forward(id, message_forward_options)
       response = conn.post "api/messages/#{id}/forward", message_forward_options.to_json
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::Message.new(model)
     end
 
@@ -223,7 +223,7 @@ module Mailosaur
     def reply(id, message_reply_options)
       response = conn.post "api/messages/#{id}/reply", message_reply_options.to_json
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::Message.new(model)
     end
   end

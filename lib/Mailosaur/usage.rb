@@ -22,7 +22,7 @@ module Mailosaur
     def limits
       response = conn.get 'api/usage/limits'
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::UsageAccountLimits.new(model)
     end
 
@@ -34,7 +34,7 @@ module Mailosaur
     def transactions
       response = conn.get 'api/usage/transactions'
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::UsageTransactionListResult.new(model)
     end
   end

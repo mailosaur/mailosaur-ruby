@@ -14,6 +14,7 @@ module Mailosaur
   autoload :Messages,                                           'Mailosaur/messages.rb'
   autoload :Servers,                                            'Mailosaur/servers.rb'
   autoload :Usage,                                              'Mailosaur/usage.rb'
+  autoload :Devices,                                            'Mailosaur/devices.rb'
   autoload :MailosaurError,                                     'Mailosaur/mailosaur_error.rb'
 
   module Models
@@ -42,6 +43,10 @@ module Mailosaur
     autoload :UsageAccountLimit,                                  'Mailosaur/models/usage_account_limit.rb'
     autoload :UsageTransactionListResult,                         'Mailosaur/models/usage_transaction_list_result.rb'
     autoload :UsageTransaction,                                   'Mailosaur/models/usage_transaction.rb'
+    autoload :Device,                                             'Mailosaur/models/device.rb'
+    autoload :DeviceListResult,                                   'Mailosaur/models/device_list_result.rb'
+    autoload :DeviceCreateOptions,                                'Mailosaur/models/device_create_options.rb'
+    autoload :OtpResult,                                          'Mailosaur/models/otp_result.rb'
     autoload :BaseModel,                                          'Mailosaur/models/base_model.rb'
   end
 
@@ -79,6 +84,11 @@ module Mailosaur
     # @return [Usage] usage
     def usage
       @usage ||= Usage.new(connection, method(:handle_http_error))
+    end
+
+    # @return [Devices] usage
+    def devices
+      @devices ||= Devices.new(connection, method(:handle_http_error))
     end
 
     private

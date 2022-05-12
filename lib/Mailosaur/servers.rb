@@ -23,7 +23,7 @@ module Mailosaur
     def list
       response = conn.get 'api/servers'
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::ServerListResult.new(model)
     end
 
@@ -39,7 +39,7 @@ module Mailosaur
     def create(server_create_options)
       response = conn.post 'api/servers', server_create_options.to_json
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::Server.new(model)
     end
 
@@ -56,7 +56,7 @@ module Mailosaur
     def get(id)
       response = conn.get "api/servers/#{id}"
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::Server.new(model)
     end
 
@@ -73,7 +73,7 @@ module Mailosaur
     def get_password(id)
       response = conn.get "api/servers/#{id}/password"
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       model['value']
     end
 
@@ -90,7 +90,7 @@ module Mailosaur
     def update(id, server)
       response = conn.put "api/servers/#{id}", server.to_json
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::Server.new(model)
     end
 
@@ -110,7 +110,7 @@ module Mailosaur
 
     def generate_email_address(server)
       host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.net'
-      '%s@%s.%s' % [SecureRandom.hex(3), server, host]
+      format('%s@%s.%s', SecureRandom.hex(3), server, host)
     end
   end
 end

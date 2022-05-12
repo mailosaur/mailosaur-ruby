@@ -24,7 +24,7 @@ module Mailosaur
     def spam(email)
       response = conn.get "api/analysis/spam/#{email}"
       @handle_http_error.call(response) unless response.status == 200
-      model = JSON.load(response.body)
+      model = JSON.parse(response.body)
       Mailosaur::Models::SpamAnalysisResult.new(model)
     end
   end

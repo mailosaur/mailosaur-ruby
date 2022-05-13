@@ -30,11 +30,13 @@ module Mailosaur
       otp_result = @client.devices.otp(created_device.id)
       assert_equal(6, otp_result.code.length)
 
-      list_result = @client.devices.list
-      assert_equal(1, list_result.items.length)
+      before = @client.devices.list
+      assert_true(before.items.any? { |x| x.id == created_device.id })
+
       @client.devices.delete(created_device.id)
-      list_result = @client.devices.list
-      assert_equal(0, list_result.items.length)
+
+      after = @client.devices.list
+      assert_false(after.items.any? { |x| x.id == created_device.id })
     end
 
     should 'return OTP given via a shared secret' do

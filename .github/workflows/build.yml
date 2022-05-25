@@ -19,29 +19,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check-secrets:
+      runs-on: ubuntu-latest
+      outputs:
+        teams-build-webhooks: ${{ steps.teams-build-webhooks.outputs.defined }}
+      steps:
+          - id: teams-build-webhooks
+            if: "${{ env.CHECK_KEY != '' }}"
+            run: echo "::set-output name=defined::true"
+            env:
+                CHECK_KEY: ${{ secrets.TEAMS_BUILDS_WEBHOOK }}
+
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    needs: [check-secrets]
 
     strategy:
       fail-fast: false
       matrix:
         ruby-version: [2.7, 3.1]
         appraisal-set: ["faraday0", "faraday1", "faraday2"]
-        server-version: [
-          {
-            MAILOSAUR_BASE_URL: https://mailosaur.com/,
+        server-version:
+          - MAILOSAUR_BASE_URL: https://mailosaur.com/
             MAILOSAUR_SMTP_HOST: mailosaur.net
-          },
-          {
-            MAILOSAUR_BASE_URL: https://next.mailosaur.com/,
+          - MAILOSAUR_BASE_URL: https://next.mailosaur.com/
             MAILOSAUR_SMTP_HOST: mailosaur.email
-          }
-        ]
 
     env:
-      MAILOSAUR_BASE_URL: ${{ matrix.server-version["MAILOSAUR_BASE_URL"] }}
-      MAILOSAUR_SMTP_HOST: ${{ matrix.server-version["MAILOSAUR_SMTP_HOST"] }}
+      MAILOSAUR_BASE_URL: ${{ matrix.server-version.MAILOSAUR_BASE_URL }}
+      MAILOSAUR_SMTP_HOST: ${{ matrix.server-version.MAILOSAUR_SMTP_HOST }}
       MAILOSAUR_SMTP_PORT: 2525
       MAILOSAUR_API_KEY: ${{ secrets.MAILOSAUR_API_KEY }}
       MAILOSAUR_SERVER: ${{ secrets.MAILOSAUR_SERVER }}
@@ -59,7 +66,7 @@ jobs:
       run: bundle exec rake
     - name: Notify on Failure
       uses: skitionek/notify-microsoft-teams@master
-      if: ${{ failure() }}
+      if: ${{ failure() && needs.check-secrets.outputs.team-builds-webhook == 'true' }}
       with:
         webhook_url: ${{ secrets.TEAMS_BUILDS_WEBHOOK }}
         needs: ${{ toJson(needs) }}

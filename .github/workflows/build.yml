@@ -23,6 +23,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: [2.7, 3.1]
+        appraisal-set: ["faraday0", "faraday1", "faraday2"]
+
     env:
       MAILOSAUR_BASE_URL: https://mailosaur.com/
       MAILOSAUR_SMTP_HOST: mailosaur.net
@@ -36,9 +42,9 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7
+        ruby-version: ${{ matrix.ruby-version }}
     - name: Install dependencies
-      run: bundle install
+      run: bundle install --gemfile=gemfiles/${{ matrix.appraisal-set }}.gemfile
     - name: Run tests
       run: bundle exec rake
     - name: Notify on Failure

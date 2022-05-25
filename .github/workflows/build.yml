@@ -28,10 +28,20 @@ jobs:
       matrix:
         ruby-version: [2.7, 3.1]
         appraisal-set: ["faraday0", "faraday1", "faraday2"]
+        server-version: [
+          {
+            MAILOSAUR_BASE_URL: https://mailosaur.com/,
+            MAILOSAUR_SMTP_HOST: mailosaur.net
+          },
+          {
+            MAILOSAUR_BASE_URL: https://next.mailosaur.com/,
+            MAILOSAUR_SMTP_HOST: mailosaur.email
+          }
+        ]
 
     env:
-      MAILOSAUR_BASE_URL: https://mailosaur.com/
-      MAILOSAUR_SMTP_HOST: mailosaur.net
+      MAILOSAUR_BASE_URL: ${{ matrix.server-version["MAILOSAUR_BASE_URL"] }}
+      MAILOSAUR_SMTP_HOST: ${{ matrix.server-version["MAILOSAUR_SMTP_HOST"] }}
       MAILOSAUR_SMTP_PORT: 2525
       MAILOSAUR_API_KEY: ${{ secrets.MAILOSAUR_API_KEY }}
       MAILOSAUR_SERVER: ${{ secrets.MAILOSAUR_SERVER }}
@@ -45,39 +55,6 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
     - name: Install dependencies
       run: bundle install --gemfile=gemfiles/${{ matrix.appraisal-set }}.gemfile
-    - name: Run tests
-      run: bundle exec rake
-    - name: Notify on Failure
-      uses: skitionek/notify-microsoft-teams@master
-      if: ${{ failure() }}
-      with:
-        webhook_url: ${{ secrets.TEAMS_BUILDS_WEBHOOK }}
-        needs: ${{ toJson(needs) }}
-        job: ${{ toJson(job) }}
-        overwrite: "{ title: `${workflow} failed for ${repository.name}` }"
-
-  build-next:
-    if: ${{ always() }}
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    env:
-      MAILOSAUR_BASE_URL: https://next.mailosaur.com/
-      MAILOSAUR_SMTP_HOST: mailosaur.email
-      MAILOSAUR_SMTP_PORT: 2525
-      MAILOSAUR_API_KEY: ${{ secrets.MAILOSAUR_API_KEY }}
-      MAILOSAUR_SERVER: ${{ secrets.MAILOSAUR_SERVER }}
-      MAILOSAUR_VERIFIED_DOMAIN: ${{ secrets.MAILOSAUR_VERIFIED_DOMAIN }}
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 2.7
-    - name: Install dependencies
-      run: bundle install
     - name: Run tests
       run: bundle exec rake
     - name: Notify on Failure

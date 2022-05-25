@@ -99,7 +99,14 @@ module Mailosaur
           content_type: 'application/json; charset=utf-8',
           user_agent: "mailosaur-ruby/#{Mailosaur::VERSION}"
         }
-      }).tap { |conn| conn.request(:basic_auth, @api_key, '') }
+      }).tap do |conn|
+        case Faraday::VERSION
+        when /^0/
+          conn.basic_auth @api_key, ''
+        else
+          conn.request(:basic_auth, @api_key, '')
+        end
+      end
     end
 
     def handle_http_error(response)

@@ -308,11 +308,19 @@ export MAILOSAUR_API_KEY=your_api_key
 export MAILOSAUR_SERVER=server_id
 ```
 
-Run all tests:
+Run all tests across all Gem sets:
 
 ```sh
-bundle exec rake test
+bundle exec appraisal rake test
 ```
+
+To run the tests against a specific labelled Gem set:
+
+```sh
+bundle exec appraisal faraday0 rake test
+```
+
+The plain command `bundle exec rake test` will run against the most up-to-date set of gems
 
 Lint code (via Rubocop):
 

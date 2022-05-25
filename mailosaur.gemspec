@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'faraday', '>= 0.9', '< 2'
   s.add_dependency 'json', '>= 1.7.5', '< 4'
 
+  s.add_development_dependency 'appraisal', '~> 2.4.1'
   s.add_development_dependency 'mail', '~> 2.6', '>= 2.6.1'
   s.add_development_dependency 'rake', '~> 13.0'
   s.add_development_dependency 'rubocop', '~> 1.19.0'

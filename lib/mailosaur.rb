@@ -103,8 +103,10 @@ module Mailosaur
         case Faraday::VERSION
         when /^0/
           conn.basic_auth @api_key, ''
-        else
+        when /^1/
           conn.request(:basic_auth, @api_key, '')
+        else
+          conn.request(:authorization, :basic, @api_key, '')
         end
       end
     end

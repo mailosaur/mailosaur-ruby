@@ -21,12 +21,12 @@ Gem::Specification.new do |s|
   }
 
   s.files = Dir['LICENSE', 'README.md', 'lib/mailosaur.rb', 'lib/**/*']
-  s.add_dependency 'faraday', '>= 0.9', '< 2'
+  s.add_dependency 'faraday', '>= 2.0', '< 3'
   s.add_dependency 'json', '>= 1.7.5', '< 4'
 
-  s.add_development_dependency 'mail', '~> 2.6', '>= 2.6.1'
+  s.add_development_dependency 'mail', '~> 2.7', '>= 2.7.1'
   s.add_development_dependency 'rake', '~> 13.0'
-  s.add_development_dependency 'rubocop', '~> 1.19.0'
-  s.add_development_dependency 'shoulda-context', '~> 1.2', '>= 1.2.2'
-  s.add_development_dependency 'test-unit', '~> 3.2', '>= 3.2.7'
+  s.add_development_dependency 'rubocop', '~> 1.30.0'
+  s.add_development_dependency 'shoulda-context', '~> 2.0', '>= 2.0.0'
+  s.add_development_dependency 'test-unit', '~> 3.5', '>= 3.5.3'
 end

@@ -137,7 +137,7 @@ module Mailosaur
     #
     # @return [MessageListResult] operation results.
     #
-    def search(server, criteria, page: nil, items_per_page: nil, timeout: nil, received_after: nil, error_on_timeout: true) # rubocop:disable all
+    def search(server, criteria, page: nil, items_per_page: nil, timeout: nil, received_after: nil, error_on_timeout: true)
       url = "api/messages/search?server=#{server}"
       url += page ? "&page=#{page}" : ''
       url += items_per_page ? "&itemsPerPage=#{items_per_page}" : ''

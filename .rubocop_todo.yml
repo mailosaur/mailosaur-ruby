@@ -60,7 +60,7 @@ Metrics/ClassLength:
 # Offense count: 7
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/MethodLength:
-  Max: 18
+  Max: 30
 
 # Offense count: 21
 # Cop supports --auto-correct.
@@ -144,11 +144,7 @@ Style/FormatString:
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: annotated, template, unannotated
 Style/FormatStringToken:
-  Exclude:
-    - 'lib/Mailosaur/servers.rb'
-    - 'test/emails_test.rb'
-    - 'test/files_test.rb'
-    - 'test/mailer.rb'
+  Enabled: false
 
 # Offense count: 1
 # Configuration parameters: MinBodyLength.

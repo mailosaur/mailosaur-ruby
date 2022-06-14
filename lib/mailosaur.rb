@@ -118,7 +118,7 @@ module Mailosaur
         begin
           json = JSON.parse(response.body)
           json['errors'].each do |err|
-            message += format('(%s) %s\r\n', err['field'], err['detail'][0]['description'])
+            message += format('(%<field>s) %<detail>s\r\n', err['field'], err['detail'][0]['description'])
           end
         rescue StandardError
           message = 'Request had one or more invalid parameters.'

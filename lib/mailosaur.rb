@@ -112,15 +112,24 @@ module Mailosaur
     end
 
     def handle_http_error(response)
+      message = ''
       case response.status
       when 400
-        raise Mailosaur::MailosaurError.new('Request had one or more invalid parameters.', 'invalid_request', response.status, response.body)
+        begin
+          json = JSON.parse(response.body)
+          json['errors'].each do |err|
+            message += format('(%s) %s\r\n', err['field'], err['detail'][0]['description'])
+          end
+        rescue StandardError
+          message = 'Request had one or more invalid parameters.'
+        end
+        raise Mailosaur::MailosaurError.new(message, 'invalid_request', response.status, response.body)
       when 401
         raise Mailosaur::MailosaurError.new('Authentication failed, check your API key.', 'authentication_error', response.status, response.body)
       when 403
         raise Mailosaur::MailosaurError.new('Insufficient permission to perform that task.', 'permission_error', response.status, response.body)
       when 404
-        raise Mailosaur::MailosaurError.new('Request did not find any matching resources.', 'invalid_request', response.status, response.body)
+        raise Mailosaur::MailosaurError.new('Not found, check input parameters.', 'invalid_request', response.status, response.body)
       else
         raise Mailosaur::MailosaurError.new('An API error occurred, see httpResponse for further information.', 'api_error', response.status, response.body)
       end

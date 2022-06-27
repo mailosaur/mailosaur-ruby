@@ -29,7 +29,7 @@ module Mailosaur
         client.servers.create(create_options)
         pass
       end
-      assert_equal('(name) Please provide a name for your server\r\n', ex.message)
+      assert_equal('(name) Servers need a name\r\n', ex.message)
     end
   end
 end

@@ -75,7 +75,7 @@ module Mailosaur
         pass
       end
 
-      assert_equal('(name) Please provide a name for your server\r\n', ex.message)
+      assert_equal('(name) Servers need a name\r\n', ex.message)
       assert_equal('invalid_request', ex.error_type)
       assert_equal(400, ex.http_status_code)
       assert_true(ex.http_response_body.include?('{"type":'))

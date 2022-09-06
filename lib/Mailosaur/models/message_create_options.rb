@@ -3,6 +3,7 @@ module Mailosaur
     class MessageCreateOptions < BaseModel
       def initialize(data = {})
         @to = data['to']
+        @from = data['from']
         @send = data['send']
         @subject = data['subject']
         @text = data['text']
@@ -13,6 +14,11 @@ module Mailosaur
       # @return [String] The email address to which the email will be sent.
       # Must be a verified email address.
       attr_accessor :to
+
+      # @return [String] Allows for the partial override of the message's
+      # 'from' address. This **must** be an address ending with
+      # `YOUR_SERVER.mailosaur.net`, such as `my-emails@a1bcdef2.mailosaur.net`.
+      attr_accessor :from
 
       # @return [Boolean] If true, email will be sent upon creation.
       attr_accessor :send

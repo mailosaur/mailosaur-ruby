@@ -406,6 +406,7 @@ module Mailosaur
           end
 
           def validate_metadata(email)
+              assert_equal('Email', email.type)
               assert_equal(1, email.from.length)
               assert_equal(1, email.to.length)
               assert_not_nil(email.from[0].email)

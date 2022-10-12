@@ -3,15 +3,16 @@ module Mailosaur
     class MessageSummary < BaseModel
       def initialize(data = {})
         @id = data['id']
+        @type = data['type']
         @server = data['server']
         @from = []
-        (data['from'] || []).each do |i| @from << Mailosaur::Models::MessageAddress.new(i) end
+        (data['from'] || []).each { |i| @from << Mailosaur::Models::MessageAddress.new(i) }
         @to = []
-        (data['to'] || []).each do |i| @to << Mailosaur::Models::MessageAddress.new(i) end
+        (data['to'] || []).each { |i| @to << Mailosaur::Models::MessageAddress.new(i) }
         @cc = []
-        (data['cc'] || []).each do |i| @cc << Mailosaur::Models::MessageAddress.new(i) end
+        (data['cc'] || []).each { |i| @cc << Mailosaur::Models::MessageAddress.new(i) }
         @bcc = []
-        (data['bcc'] || []).each do |i| @bcc << Mailosaur::Models::MessageAddress.new(i) end
+        (data['bcc'] || []).each { |i| @bcc << Mailosaur::Models::MessageAddress.new(i) }
         @received = DateTime.parse(data['received'])
         @subject = data['subject']
         @summary = data['summary']
@@ -20,6 +21,9 @@ module Mailosaur
 
       # @return
       attr_accessor :id
+
+      # @return
+      attr_accessor :type
 
       # @return [String]
       attr_accessor :server

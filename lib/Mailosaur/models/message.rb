@@ -3,26 +3,30 @@ module Mailosaur
     class Message < BaseModel
       def initialize(data = {})
         @id = data['id']
+        @type = data['type']
         @from = []
-        (data['from'] || []).each do |i| @from << Mailosaur::Models::MessageAddress.new(i) end
+        (data['from'] || []).each { |i| @from << Mailosaur::Models::MessageAddress.new(i) }
         @to = []
-        (data['to'] || []).each do |i| @to << Mailosaur::Models::MessageAddress.new(i) end
+        (data['to'] || []).each { |i| @to << Mailosaur::Models::MessageAddress.new(i) }
         @cc = []
-        (data['cc'] || []).each do |i| @cc << Mailosaur::Models::MessageAddress.new(i) end
+        (data['cc'] || []).each { |i| @cc << Mailosaur::Models::MessageAddress.new(i) }
         @bcc = []
-        (data['bcc'] || []).each do |i| @bcc << Mailosaur::Models::MessageAddress.new(i) end
+        (data['bcc'] || []).each { |i| @bcc << Mailosaur::Models::MessageAddress.new(i) }
         @received = DateTime.parse(data['received'])
         @subject = data['subject']
         @html = Mailosaur::Models::MessageContent.new(data['html'])
         @text = Mailosaur::Models::MessageContent.new(data['text'])
         @attachments = []
-        (data['attachments'] || []).each do |i| @attachments << Mailosaur::Models::Attachment.new(i) end
+        (data['attachments'] || []).each { |i| @attachments << Mailosaur::Models::Attachment.new(i) }
         @metadata = Mailosaur::Models::Metadata.new(data['metadata'])
         @server = data['server']
       end
 
       # @return Unique identifier for the message.
       attr_accessor :id
+
+      # @return The type of message.
+      attr_accessor :type
 
       # @return [Array<MessageAddress>] The sender of the message.
       attr_accessor :from

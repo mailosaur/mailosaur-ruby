@@ -27,14 +27,16 @@ module Mailosaur
     # (in milliseconds).
     # @param received_after [DateTime] Limits results to only messages received
     # after this date/time.
+    # @param dir [String] Optionally limits results based on the direction (`Sent`
+    # or `Received`), with the default being `Received`.
     #
     # @return [Message] operation results.
     #
-    def get(server, criteria, timeout: 10_000, received_after: DateTime.now - (1.0 / 24))
+    def get(server, criteria, timeout: 10_000, received_after: DateTime.now - (1.0 / 24), dir: nil)
       # Defaults timeout to 10s, receivedAfter to 1h
       raise Mailosaur::MailosaurError.new('Must provide a valid Server ID.', 'invalid_request') if server.length != 8
 
-      result = search(server, criteria, page: 0, items_per_page: 1, timeout: timeout, received_after: received_after)
+      result = search(server, criteria, page: 0, items_per_page: 1, timeout: timeout, received_after: received_after, dir: dir)
       get_by_id(result.items[0].id)
     end
 
@@ -83,14 +85,17 @@ module Mailosaur
     # returned per page. Can be set between 1 and 1000 items, the default is 50.
     # @param received_after [DateTime] Limits results to only messages received
     # after this date/time.
+    # @param dir [String] Optionally limits results based on the direction (`Sent`
+    # or `Received`), with the default being `Received`.
     #
     # @return [MessageListResult] operation results.
     #
-    def list(server, page: nil, items_per_page: nil, received_after: nil)
+    def list(server, page: nil, items_per_page: nil, received_after: nil, dir: nil)
       url = "api/messages?server=#{server}"
       url += page ? "&page=#{page}" : ''
       url += items_per_page ? "&itemsPerPage=#{items_per_page}" : ''
       url += received_after ? "&receivedAfter=#{CGI.escape(received_after.iso8601)}" : ''
+      url += dir ? "&dir=#{dir}" : ''
 
       response = conn.get url
 
@@ -134,14 +139,17 @@ module Mailosaur
     # after this date/time.
     # @param error_on_timeout [Boolean] When set to false, an error will not be
     # throw if timeout is reached (default: true).
+    # @param dir [String] Optionally limits results based on the direction (`Sent`
+    # or `Received`), with the default being `Received`.
     #
     # @return [MessageListResult] operation results.
     #
-    def search(server, criteria, page: nil, items_per_page: nil, timeout: nil, received_after: nil, error_on_timeout: true)
+    def search(server, criteria, page: nil, items_per_page: nil, timeout: nil, received_after: nil, error_on_timeout: true, dir: nil)
       url = "api/messages/search?server=#{server}"
       url += page ? "&page=#{page}" : ''
       url += items_per_page ? "&itemsPerPage=#{items_per_page}" : ''
       url += received_after ? "&receivedAfter=#{CGI.escape(received_after.iso8601)}" : ''
+      url += dir ? "&dir=#{dir}" : ''
 
       poll_count = 0
       start_time = Time.now.to_f

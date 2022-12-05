@@ -6,7 +6,7 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04 # 22.04 (latest) has build issues
     timeout-minutes: 10
 
     steps:

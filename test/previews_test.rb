@@ -26,7 +26,7 @@ module Mailosaur
     end
 
     context 'generate previews' do
-      should 'reply with attachment' do
+      should 'generate email previews' do
         omit_if(@@server.nil?)
 
         random_string = (0...10).map { rand(65..90).chr }.join
@@ -44,7 +44,7 @@ module Mailosaur
 
         result = @@client.messages.generate_previews(email.id, options)
 
-        assert_false(result.items.empty)
+        assert_false(result.items.empty?)
 
         # Ensure we can download one of the generated preview
         file = @@client.files.get_preview(result.items[0].id)

@@ -1,7 +1,7 @@
 module Mailosaur
   module Models
     class PreviewRequest < BaseModel
-      def initialize(email_client, disable_images = false)
+      def initialize(email_client, disable_images: false)
         @email_client = email_client
         @disable_images = disable_images
       end

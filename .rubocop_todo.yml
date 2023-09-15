@@ -108,6 +108,7 @@ Style/ClassVars:
   Exclude:
     - 'test/emails_test.rb'
     - 'test/files_test.rb'
+    - 'test/previews_test.rb'
     - 'test/mailer.rb'
 
 # Offense count: 28

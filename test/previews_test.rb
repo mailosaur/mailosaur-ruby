@@ -44,7 +44,7 @@ module Mailosaur
 
         result = @@client.messages.generate_previews(email.id, options)
 
-        assert_true(result.items.length > 0)
+        assert_false(result.items.empty)
 
         # Ensure we can download one of the generated preview
         file = @@client.files.get_preview(result.items[0].id)

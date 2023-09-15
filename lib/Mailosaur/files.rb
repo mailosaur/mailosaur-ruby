@@ -43,5 +43,21 @@ module Mailosaur
       @handle_http_error.call(response) unless response.status == 200
       response.body
     end
+
+    #
+    # Download an email preview
+    #
+    # Downloads a screenshot of your email rendered in a real email client. Simply supply
+    # the unique identifier for the required preview.
+    #
+    # @param id The identifier of the email preview to be downloaded.
+    #
+    # @return [NOT_IMPLEMENTED] operation results.
+    #
+    def get_preview(id)
+      response = conn.get "api/files/previews/#{id}"
+      @handle_http_error.call(response) unless response.status == 200
+      response.body
+    end
   end
 end

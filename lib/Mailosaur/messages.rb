@@ -234,5 +234,22 @@ module Mailosaur
       model = JSON.parse(response.body)
       Mailosaur::Models::Message.new(model)
     end
+
+    #
+    # Generate email previews.
+    #
+    # Generates screenshots of an email rendered in the specified email clients.
+    #
+    # @param id [String] The identifier of the email to preview.
+    # @param options [PreviewRequestOptions] The options with which to generate previews.
+    #
+    # @return [PreviewListResult] operation result.
+    #
+    def generate_previews(id, options)
+      response = conn.post "api/messages/#{id}/previews", options.to_json
+      @handle_http_error.call(response) unless response.status == 200
+      model = JSON.parse(response.body)
+      Mailosaur::Models::PreviewListResult.new(model)
+    end
   end
 end

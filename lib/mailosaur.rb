@@ -15,6 +15,7 @@ module Mailosaur
   autoload :Servers,                                            'Mailosaur/servers.rb'
   autoload :Usage,                                              'Mailosaur/usage.rb'
   autoload :Devices,                                            'Mailosaur/devices.rb'
+  autoload :Previews,                                           'Mailosaur/previews.rb'
   autoload :MailosaurError,                                     'Mailosaur/mailosaur_error.rb'
 
   module Models
@@ -47,6 +48,12 @@ module Mailosaur
     autoload :DeviceListResult,                                   'Mailosaur/models/device_list_result.rb'
     autoload :DeviceCreateOptions,                                'Mailosaur/models/device_create_options.rb'
     autoload :OtpResult,                                          'Mailosaur/models/otp_result.rb'
+    autoload :Preview,                                            'Mailosaur/models/preview.rb'
+    autoload :PreviewEmailClient,                                 'Mailosaur/models/preview_email_client.rb'
+    autoload :PreviewEmailClientListResult,                       'Mailosaur/models/preview_email_client_list_result.rb'
+    autoload :PreviewListResult,                                  'Mailosaur/models/preview_list_result.rb'
+    autoload :PreviewRequest,                                     'Mailosaur/models/preview_request.rb'
+    autoload :PreviewRequestOptions,                              'Mailosaur/models/preview_request_options.rb'
     autoload :BaseModel,                                          'Mailosaur/models/base_model.rb'
   end
 
@@ -86,9 +93,14 @@ module Mailosaur
       @usage ||= Usage.new(connection, method(:handle_http_error))
     end
 
-    # @return [Devices] usage
+    # @return [Devices] devices
     def devices
       @devices ||= Devices.new(connection, method(:handle_http_error))
+    end
+
+    # @return [Previews] previews
+    def previews
+      @previews ||= Previews.new(connection, method(:handle_http_error))
     end
 
     private

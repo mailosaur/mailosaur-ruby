@@ -3,10 +3,10 @@ module Mailosaur
     class PreviewEmailClient < BaseModel
       def initialize(data = {})
         @id = data['id']
-        @name = data['id']
-        @platform_group = data['id']
-        @platform_type = data['id']
-        @platform_version = data['id']
+        @name = data['name']
+        @platform_group = data['platformGroup']
+        @platform_type = data['platformType']
+        @platform_version = data['platformVersion']
         @can_disable_images = data['canDisableImages']
         @status = data['status']
       end

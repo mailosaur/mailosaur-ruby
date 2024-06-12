@@ -172,7 +172,9 @@ module Mailosaur
         if ((1000 * (Time.now.to_f - start_time).to_i) + delay) > timeout
           return Mailosaur::Models::MessageListResult.new(model) unless error_on_timeout
 
-          raise Mailosaur::MailosaurError.new('No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this).', 'search_timeout')
+          msg = format('No matching messages found in time. By default, only messages received in the last hour are checked (use receivedAfter to override this). The search criteria used for this query was [%s] which timed out after %sms',
+                       criteria.to_json, timeout)
+          raise Mailosaur::MailosaurError.new(msg, 'search_timeout')
         end
 
         sleep(delay / 1000)

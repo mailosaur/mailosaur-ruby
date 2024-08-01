@@ -8,7 +8,7 @@ module Mailosaur
       @api_key = ENV['MAILOSAUR_API_KEY']
       @base_url = ENV['MAILOSAUR_BASE_URL']
 
-      raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if @@api_key.nil?
+      raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if @api_key.nil?
     end
 
     should 'Unauthorized' do

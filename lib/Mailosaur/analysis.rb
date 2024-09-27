@@ -27,5 +27,21 @@ module Mailosaur
       model = JSON.parse(response.body)
       Mailosaur::Models::SpamAnalysisResult.new(model)
     end
+
+    #
+    # Perform a deliverability report
+    #
+    # Perform deliverability test on the specified email
+    #
+    # @param email The identifier of the email to be analyzed.
+    #
+    # @return [DeliverabilityReport] operation results.
+    #
+    def deliverability(email)
+      response = conn.get "api/analysis/deliverability/#{email}"
+      @handle_http_error.call(response) unless response.status == 200
+      model = JSON.parse(response.body)
+      Mailosaur::Models::DeliverabilityReport.new(model)
+    end
   end
 end

@@ -190,6 +190,40 @@ module Mailosaur
             end
         end
 
+        context 'deliverability_report' do
+            should 'perform a deliverability report on an email' do
+                target_id = @@emails[0].id
+                result = @@client.analysis.deliverability(target_id)
+
+                assert_not_nil(result.spf)
+
+                result.dkim.each do |dkim|
+                    assert_not_nil(dkim)
+                end
+
+                assert_not_nil(result.dmarc)
+
+                assert_not_nil(result.block_lists)
+                result.block_lists.each do |block_list|
+                    assert_not_nil(block_list.id)
+                    assert_not_nil(block_list.name)
+                end
+
+                assert_not_nil(result.content)
+
+                assert_not_nil(result.dns_records)
+                assert_not_nil(result.dns_records.a)
+                assert_not_nil(result.dns_records.mx)
+                assert_not_nil(result.dns_records.ptr)
+
+                result.spam_assassin.rules.each do |rule|
+                    assert_instance_of(Float, rule.score)
+                    assert_not_nil(rule.rule)
+                    assert_not_nil(rule.description)
+                end
+            end
+        end
+
         context 'delete' do
             should 'delete an email' do
                 target_id = @@emails[4].id

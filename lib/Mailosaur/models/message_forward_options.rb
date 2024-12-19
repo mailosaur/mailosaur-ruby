@@ -3,6 +3,7 @@ module Mailosaur
     class MessageForwardOptions < BaseModel
       def initialize(data = {})
         @to = data['to']
+        @cc = data['cc']
         @text = data['text']
         @html = data['html']
       end
@@ -10,6 +11,10 @@ module Mailosaur
       # @return [String] The email address to which the email will be sent.
       # Must be a verified email address.
       attr_accessor :to
+
+      # @return [String] The email address to which the email will be CC'd.
+      # Must be a verified email address.
+      attr_accessor :cc
 
       # @return [String] Any additional plain text content to forward the
       # email with. Note that only text or html can be supplied, not both.

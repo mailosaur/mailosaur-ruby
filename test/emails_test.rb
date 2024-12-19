@@ -264,6 +264,24 @@ module Mailosaur
                 assert_equal(subject, message.subject)
             end
 
+            should 'send with CC recipient' do
+                omit_if(@@verified_domain.nil?)
+                subject = 'CC message'
+                cc_recipient = 'someoneelse@%s' % [@@verified_domain]
+                options = Mailosaur::Models::MessageCreateOptions.new()
+                options.to = 'anything@%s' % [@@verified_domain]
+                options.cc = cc_recipient
+                options.send = true
+                options.subject = subject
+                options.html = '<p>This is a new email.</p>'
+                message = @@client.messages.create(@@server, options)
+
+                assert_not_nil(message.id)
+                assert_equal(subject, message.subject)
+                assert_equal(1, message.cc.count)
+                assert_equal(cc_recipient, message.cc[0].email)
+            end
+
             should 'send with attachment' do
                 omit_if(@@verified_domain.nil?)
 
@@ -317,6 +335,24 @@ module Mailosaur
                 assert_not_nil(message.id)
                 assert_true(message.html.body.include?(body))
             end
+
+            should 'forward with CC recipient' do
+                omit_if(@@verified_domain.nil?)
+                target_email = @@emails[0]
+                body = '<p>Forwarded <strong>HTML</strong> message.</p>'
+                cc_recipient = 'someoneelse@%s' % [@@verified_domain]
+
+                options = Mailosaur::Models::MessageForwardOptions.new()
+                options.to = 'forwardcc@%s' % [@@verified_domain]
+                options.cc = cc_recipient
+                options.html = body
+                message = @@client.messages.forward(target_email.id, options)
+
+                assert_not_nil(message.id)
+                assert_true(message.html.body.include?(body))
+                assert_equal(1, message.cc.count)
+                assert_equal(cc_recipient, message.cc[0].email)
+            end
         end
 
         context 'reply' do
@@ -324,8 +360,7 @@ module Mailosaur
                 omit_if(@@verified_domain.nil?)
                 target_email = @@emails[0]
                 body = 'Reply message'
-                options = Mailosaur::Models::MessageForwardOptions.new()
-                options.to = 'anything@%s' % [@@verified_domain]
+                options = Mailosaur::Models::MessageReplyOptions.new()
                 options.text = body
                 message = @@client.messages.reply(target_email.id, options)
                 assert_not_nil(message.id)
@@ -336,12 +371,28 @@ module Mailosaur
                 omit_if(@@verified_domain.nil?)
                 target_email = @@emails[0]
                 body = '<p>Reply <strong>HTML</strong> message.</p>'
-                options = Mailosaur::Models::MessageForwardOptions.new()
-                options.to = 'anything@%s' % [@@verified_domain]
+                options = Mailosaur::Models::MessageReplyOptions.new()
                 options.html = body
                 message = @@client.messages.reply(target_email.id, options)
                 assert_not_nil(message.id)
                 assert_true(message.html.body.include?(body))
+            end
+
+            should 'reply with CC recipient' do
+                omit_if(@@verified_domain.nil?)
+                target_email = @@emails[0]
+                body = '<p>Reply <strong>HTML</strong> message.</p>'
+                cc_recipient = 'someoneelse@%s' % [@@verified_domain]
+
+                options = Mailosaur::Models::MessageReplyOptions.new()
+                options.cc = cc_recipient
+                options.html = body
+                message = @@client.messages.reply(target_email.id, options)
+
+                assert_not_nil(message.id)
+                assert_true(message.html.body.include?(body))
+                assert_equal(1, message.cc.count)
+                assert_equal(cc_recipient, message.cc[0].email)
             end
 
             should 'reply with attachment' do

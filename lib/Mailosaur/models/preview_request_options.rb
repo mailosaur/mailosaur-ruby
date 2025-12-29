@@ -1,12 +1,12 @@
 module Mailosaur
   module Models
     class PreviewRequestOptions < BaseModel
-      def initialize(previews)
-        @previews = previews
+      def initialize(email_clients)
+        @email_clients = email_clients
       end
 
-      # @return [PreviewRequest] The list of email preview requests.
-      attr_accessor :previews
+      # @return [Array<String>] The list email clients to generate previews with.
+      attr_accessor :email_clients
     end
   end
 end

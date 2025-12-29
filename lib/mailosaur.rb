@@ -55,10 +55,9 @@ module Mailosaur
     autoload :DeviceCreateOptions,                                'Mailosaur/models/device_create_options.rb'
     autoload :OtpResult,                                          'Mailosaur/models/otp_result.rb'
     autoload :Preview,                                            'Mailosaur/models/preview.rb'
-    autoload :PreviewEmailClient,                                 'Mailosaur/models/preview_email_client.rb'
-    autoload :PreviewEmailClientListResult,                       'Mailosaur/models/preview_email_client_list_result.rb'
+    autoload :EmailClient,                                        'Mailosaur/models/email_client.rb'
+    autoload :EmailClientListResult,                              'Mailosaur/models/email_client_list_result.rb'
     autoload :PreviewListResult,                                  'Mailosaur/models/preview_list_result.rb'
-    autoload :PreviewRequest,                                     'Mailosaur/models/preview_request.rb'
     autoload :PreviewRequestOptions,                              'Mailosaur/models/preview_request_options.rb'
     autoload :BaseModel,                                          'Mailosaur/models/base_model.rb'
   end
@@ -148,6 +147,8 @@ module Mailosaur
         raise Mailosaur::MailosaurError.new('Insufficient permission to perform that task.', 'permission_error', response.status, response.body)
       when 404
         raise Mailosaur::MailosaurError.new('Not found, check input parameters.', 'invalid_request', response.status, response.body)
+      when 410
+        raise Mailosaur::MailosaurError.new('Permanently expired or deleted.', 'gone', response.status, response.body)
       else
         raise Mailosaur::MailosaurError.new('An API error occurred, see httpResponse for further information.', 'api_error', response.status, response.body)
       end

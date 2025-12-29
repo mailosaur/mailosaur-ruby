@@ -55,9 +55,34 @@ module Mailosaur
     # @return [NOT_IMPLEMENTED] operation results.
     #
     def get_preview(id)
-      response = conn.get "api/files/previews/#{id}"
-      @handle_http_error.call(response) unless response.status == 200
-      response.body
+      timeout = 120_000
+      poll_count = 0
+      start_time = Time.now.to_f
+
+      loop do
+        response = conn.get "api/files/screenshots/#{id}"
+
+        if response.status == 200
+          @handle_http_error.call(response) unless response.status == 200
+          return response.body
+        end
+
+        @handle_http_error.call(response) unless response.status == 202
+
+        delay_pattern = (response.headers['x-ms-delay'] || '1000').split(',').map(&:to_i)
+
+        delay = poll_count >= delay_pattern.length ? delay_pattern[delay_pattern.length - 1] : delay_pattern[poll_count]
+
+        poll_count += 1
+
+        ## Stop if timeout will be exceeded
+        if ((1000 * (Time.now.to_f - start_time).to_i) + delay) > timeout
+          msg = format('An email preview was not generated in time. The email client may not be available, or the preview ID [%s] may be incorrect.', id)
+          raise Mailosaur::MailosaurError.new(msg, 'preview_timeout')
+        end
+
+        sleep(delay / 1000.0)
+      end
     end
   end
 end

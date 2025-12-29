@@ -17,13 +17,13 @@ module Mailosaur
     #
     # Returns a list of available email clients.
     #
-    # @return [PreviewEmailClientListResult] operation results.
+    # @return [EmailClientListResult] operation results.
     #
     def list_email_clients
-      response = conn.get 'api/previews/clients'
+      response = conn.get 'api/screenshots/clients'
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.parse(response.body)
-      Mailosaur::Models::PreviewEmailClientListResult.new(model)
+      Mailosaur::Models::EmailClientListResult.new(model)
     end
   end
 end

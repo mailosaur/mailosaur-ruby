@@ -248,7 +248,7 @@ module Mailosaur
     # @return [PreviewListResult] operation result.
     #
     def generate_previews(id, options)
-      response = conn.post "api/messages/#{id}/previews", options.to_json
+      response = conn.post "api/messages/#{id}/screenshots", options.to_json
       @handle_http_error.call(response) unless response.status == 200
       model = JSON.parse(response.body)
       Mailosaur::Models::PreviewListResult.new(model)

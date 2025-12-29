@@ -62,9 +62,7 @@ module Mailosaur
       loop do
         response = conn.get "api/files/screenshots/#{id}"
 
-        if response.status == 200
-          return response.body
-        end
+        return response.body if response.status == 200
 
         @handle_http_error.call(response) unless response.status == 202
 

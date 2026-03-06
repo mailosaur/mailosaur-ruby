@@ -65,11 +65,15 @@ module Mailosaur
   class MailosaurClient
     #
     # Creates initializes a new instance of the MailosaurClient class.
-    # @param api_key [String] your Mailosaur API key.
+    # @param api_key [String] Optional API key. Overrides the MAILOSAUR_API_KEY environment variable if set.
     # @param base_url [String] the base URI of the service.
     #
-    def initialize(api_key, base_url = 'https://mailosaur.com/')
-      @api_key = api_key
+    def initialize(api_key = nil, base_url: 'https://mailosaur.com/')
+      resolved_api_key = api_key || ENV['MAILOSAUR_API_KEY']
+
+      raise ArgumentError, "'api_key' must be set. Set the MAILOSAUR_API_KEY environment variable or pass it to the MailosaurClient constructor." unless resolved_api_key
+
+      @api_key = resolved_api_key
       @base_url = base_url
     end
 

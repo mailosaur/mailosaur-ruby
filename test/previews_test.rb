@@ -8,13 +8,12 @@ module Mailosaur
   class PreviewsTest < Test::Unit::TestCase
     class << self
       def startup
-        api_key = ENV['MAILOSAUR_API_KEY']
         base_url = ENV['MAILOSAUR_BASE_URL']
         @@server = ENV['MAILOSAUR_SERVER']
 
-        raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if api_key.nil? || @@server.nil?
+        raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if @@server.nil?
 
-        @@client = MailosaurClient.new(api_key, base_url)
+        @@client = MailosaurClient.new(base_url: base_url)
       end
     end
 

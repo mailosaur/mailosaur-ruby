@@ -11,14 +11,13 @@ module Mailosaur
             def startup
                 @@iso_date_string = DateTime.now.strftime('%Y-%m-%d')
 
-                api_key = ENV['MAILOSAUR_API_KEY']
                 base_url = ENV['MAILOSAUR_BASE_URL']
                 @@server = ENV['MAILOSAUR_SERVER']
                 @@verified_domain = ENV['MAILOSAUR_VERIFIED_DOMAIN']
 
-                raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if api_key.nil? || @@server.nil?
+                raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if @@server.nil?
 
-                @@client = MailosaurClient.new(api_key, base_url)
+                @@client = MailosaurClient.new(base_url: base_url)
 
                 @@client.messages.delete_all(@@server)
 

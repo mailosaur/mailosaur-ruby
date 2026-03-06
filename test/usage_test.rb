@@ -5,12 +5,9 @@ require 'shoulda/context'
 module Mailosaur
     class UsageTest < Test::Unit::TestCase
         setup do
-            api_key = ENV['MAILOSAUR_API_KEY']
             base_url = ENV['MAILOSAUR_BASE_URL']
 
-            raise ArgumentError, 'Missing necessary environment variables - refer to README.md' if api_key.nil?
-
-            @client = MailosaurClient.new(api_key, base_url)
+            @client = MailosaurClient.new(base_url: base_url)
         end
 
         context 'limits' do

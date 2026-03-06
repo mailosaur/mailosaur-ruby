@@ -11,6 +11,10 @@ Mailosaur lets you automate email and SMS tests as part of software development 
 This guide provides several key sections:
 
   - [Get Started](#get-started)
+  - [Installation](#installation)
+  - [Set your API key](#set-your-api-key)
+  - [Create your code](#create-your-code)
+  - [API Reference](#api-reference)
   - [Creating an account](#creating-an-account)
   - [Test email addresses with Mailosaur](#test-email-addresses-with-mailosaur)
   - [Find an email](#find-an-email)
@@ -32,11 +36,21 @@ If you get stuck, just contact us at support@mailosaur.com.
 gem install mailosaur
 ```
 
-Then import the library into your code. The value for `YOUR_API_KEY` is covered in the next step ([creating an account](#creating-an-account)):
+### Set your API key
+
+Get your API key from the Mailosaur Dashboard and set it as an environment variable:
+
+```sh
+export MAILOSAUR_API_KEY='your-api-key-here'
+```
+
+### Create your code
+
+Then import the library into your code:
 
 ```ruby
 require 'mailosaur'
-mailosaur = Mailosaur::MailosaurClient.new("YOUR_API_KEY")
+mailosaur = Mailosaur::MailosaurClient.new()
 ```
 
 ### API Reference
@@ -79,7 +93,7 @@ In automated tests you will want to wait for a new email to arrive. This library
 ```ruby
 require 'mailosaur'
 
-mailosaur = Mailosaur::MailosaurClient.new("API_KEY")
+mailosaur = Mailosaur::MailosaurClient.new()
 
 # See https://mailosaur.com/app/project/api
 server_id = "abc123"
@@ -95,7 +109,7 @@ puts(email.subject) # "Hello world!"
 
 ### What is this code doing?
 
-1. Sets up an instance of `MailosaurClient` with your API key.
+1. Sets up an instance of `MailosaurClient` using the `MAILOSAUR_API_KEY` environment variable.
 2. Waits for an email to arrive at the server with ID `abc123`.
 3. Outputs the subject line of the email.
 
@@ -108,7 +122,7 @@ If your account has [SMS testing](https://mailosaur.com/sms-testing/) enabled, y
 ```ruby
 require 'mailosaur'
 
-mailosaur = Mailosaur::MailosaurClient.new("API_KEY")
+mailosaur = Mailosaur::MailosaurClient.new()
 
 server_id = "abc123"
 

@@ -10,21 +10,32 @@ Mailosaur lets you automate email and SMS tests as part of software development 
 
 This guide provides several key sections:
 
+- [Mailosaur - Ruby library · ](#mailosaur---ruby-library--)
   - [Get Started](#get-started)
-  - [Installation](#installation)
-  - [Set your API key](#set-your-api-key)
-  - [Create your code](#create-your-code)
-  - [API Reference](#api-reference)
+    - [Installation](#installation)
+    - [Set your API key](#set-your-api-key)
+    - [Create your code](#create-your-code)
+    - [API Reference](#api-reference)
   - [Creating an account](#creating-an-account)
   - [Test email addresses with Mailosaur](#test-email-addresses-with-mailosaur)
   - [Find an email](#find-an-email)
+    - [What is this code doing?](#what-is-this-code-doing)
+    - [My email wasn't found](#my-email-wasnt-found)
   - [Find an SMS message](#find-an-sms-message)
   - [Testing plain text content](#testing-plain-text-content)
+    - [Extracting verification codes from plain text](#extracting-verification-codes-from-plain-text)
   - [Testing HTML content](#testing-html-content)
+    - [Working with HTML using Nokogiri](#working-with-html-using-nokogiri)
   - [Working with hyperlinks](#working-with-hyperlinks)
+    - [Links in plain text (including SMS messages)](#links-in-plain-text-including-sms-messages)
   - [Working with attachments](#working-with-attachments)
+    - [Writing an attachment to disk](#writing-an-attachment-to-disk)
   - [Working with images and web beacons](#working-with-images-and-web-beacons)
+    - [Remotely-hosted images](#remotely-hosted-images)
+    - [Triggering web beacons](#triggering-web-beacons)
   - [Spam checking](#spam-checking)
+  - [Development](#development)
+  - [Contacting us](#contacting-us)
 
 You can find the full [Mailosaur documentation](https://mailosaur.com/docs/) on the website.
 
@@ -32,7 +43,7 @@ If you get stuck, just contact us at support@mailosaur.com.
 
 ### Installation
 
-```
+```sh
 gem install mailosaur
 ```
 
@@ -46,11 +57,11 @@ export MAILOSAUR_API_KEY='your-api-key-here'
 
 ### Create your code
 
-Then import the library into your code:
+Now import the library and create a client:
 
 ```ruby
 require 'mailosaur'
-mailosaur = Mailosaur::MailosaurClient.new()
+mailosaur = Mailosaur::MailosaurClient.new
 ```
 
 ### API Reference
@@ -58,7 +69,7 @@ mailosaur = Mailosaur::MailosaurClient.new()
 This library is powered by the Mailosaur [email & SMS testing API](https://mailosaur.com/docs/api/). You can easily check out the API itself by looking at our [API reference documentation](https://mailosaur.com/docs/api/) or via our Postman or Insomnia collections:
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/6961255-6cc72dff-f576-451a-9023-b82dec84f95d?action=collection%2Ffork&collection-url=entityId%3D6961255-6cc72dff-f576-451a-9023-b82dec84f95d%26entityType%3Dcollection%26workspaceId%3D386a4af1-4293-4197-8f40-0eb49f831325)
- [![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Mailosaur&uri=https%3A%2F%2Fmailosaur.com%2Finsomnia.json)
+ [![Run in Insomnia](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Mailosaur&uri=https%3A%2F%2Fmailosaur.com%2Finsomnia.json)
 
 ## Creating an account
 
@@ -93,13 +104,13 @@ In automated tests you will want to wait for a new email to arrive. This library
 ```ruby
 require 'mailosaur'
 
-mailosaur = Mailosaur::MailosaurClient.new()
+mailosaur = Mailosaur::MailosaurClient.new
 
 # See https://mailosaur.com/app/project/api
 server_id = "abc123"
 server_domain = "abc123.mailosaur.net"
 
-criteria = Mailosaur::Models::SearchCriteria.new()
+criteria = Mailosaur::Models::SearchCriteria.new
 criteria.sent_to = "anything@" + server_domain
 
 email = mailosaur.messages.get(server_id, criteria)
@@ -109,9 +120,26 @@ puts(email.subject) # "Hello world!"
 
 ### What is this code doing?
 
-1. Sets up an instance of `MailosaurClient` using the `MAILOSAUR_API_KEY` environment variable.
+1. Sets up an instance of `MailosaurClient`, reading the API key from the `MAILOSAUR_API_KEY` environment variable.
 2. Waits for an email to arrive at the server with ID `abc123`.
 3. Outputs the subject line of the email.
+
+### My email wasn't found
+
+First, check that the email you sent is visible in the [Mailosaur Dashboard](https://mailosaur.com/app/project/messages).
+
+If it is, the likely reason is that by default, `messages.get` only searches emails received by Mailosaur in the last 1 hour. You can override this behavior (see the `received_after` argument below), however we only recommend doing this during setup, as your tests will generally run faster with the default settings:
+
+```ruby
+require 'date'
+
+email = mailosaur.messages.get(
+  server_id,
+  criteria,
+  # Override received_after to search all messages since Jan 1st
+  received_after: DateTime.new(2021, 1, 1)
+)
+```
 
 ## Find an SMS message
 
@@ -122,11 +150,13 @@ If your account has [SMS testing](https://mailosaur.com/sms-testing/) enabled, y
 ```ruby
 require 'mailosaur'
 
-mailosaur = Mailosaur::MailosaurClient.new()
+mailosaur = Mailosaur::MailosaurClient.new
 
+# See https://mailosaur.com/app/project/api
 server_id = "abc123"
+server_domain = "abc123.mailosaur.net"
 
-criteria = Mailosaur::Models::SearchCriteria.new()
+criteria = Mailosaur::Models::SearchCriteria.new
 criteria.sent_to = "4471235554444"
 
 sms = mailosaur.messages.get(server_id, criteria)
@@ -169,9 +199,9 @@ Most emails also have an HTML body, as well as the plain text content. You can a
 puts(message.html.body) # "<html><head ..."
 ```
 
-### Working with HTML using nokogiri
+### Working with HTML using Nokogiri
 
-If you need to traverse the HTML content of an email. For example, finding an element via a CSS selector, you can use the [nokogiri](https://rubygems.org/gems/nokogiri) library.
+If you need to traverse the HTML content of an email — for example, finding an element via a CSS selector — you can use the [Nokogiri](https://rubygems.org/gems/nokogiri) library.
 
 ```sh
 gem install nokogiri
@@ -182,12 +212,12 @@ require 'nokogiri'
 
 # ...
 
-@doc = Nokogiri::HTML(message.html.body)
-el = @doc.css(".verification-code")
+doc = Nokogiri::HTML(message.html.body)
+el = doc.at_css(".verification-code")
 
 verification_code = el.text
 
-puts verification_code # "542163"
+puts(verification_code) # "542163"
 ```
 
 [Read more](https://mailosaur.com/docs/test-cases/html-content/)
@@ -207,7 +237,7 @@ puts(first_link.text) # "Google Search"
 puts(first_link.href) # "https://www.google.com/"
 ```
 
-**Important:** To ensure you always have valid emails. Mailosaur only extracts links that have been correctly marked up with `<a>` or `<area>` tags.
+**Important:** To ensure you always have valid emails, Mailosaur only extracts links that have been correctly marked up with `<a>` or `<area>` tags.
 
 ### Links in plain text (including SMS messages)
 
@@ -243,6 +273,15 @@ The `length` property returns the size of the attached file (in bytes):
 ```ruby
 first_attachment = message.attachments[0]
 puts(first_attachment.length) # 4028
+```
+
+### Writing an attachment to disk
+
+```ruby
+first_attachment = message.attachments[1]
+
+file_bytes = mailosaur.files.get_attachment(first_attachment.id)
+File.binwrite(first_attachment.file_name, file_bytes)
 ```
 
 ## Working with images and web beacons

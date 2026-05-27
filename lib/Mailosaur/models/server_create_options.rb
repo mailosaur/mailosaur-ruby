@@ -5,7 +5,7 @@ module Mailosaur
         @name = data['name']
       end
 
-      # @return [String] A name used to identify the server.
+      # @return [String] A name used to identify the inbox (server).
       attr_accessor :name
     end
   end

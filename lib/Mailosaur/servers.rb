@@ -1,5 +1,5 @@
 module Mailosaur
-  # Operations for creating and managing your Mailosaur servers — the virtual inboxes that
+  # Operations for creating and managing your Mailosaur inboxes (servers) — they
   # group your tests together, each with its own domain and SMTP/POP3/IMAP credentials.
   # Accessed via +client.servers+.
   class Servers
@@ -17,10 +17,10 @@ module Mailosaur
     attr_reader :conn
 
     #
-    # Returns a list of your virtual servers. Servers are returned sorted in
+    # Returns a list of your inboxes (servers). Inboxes (servers) are returned sorted in
     # alphabetical order.
     #
-    # @return [Mailosaur::Models::ServerListResult] Your servers.
+    # @return [Mailosaur::Models::ServerListResult] Your inboxes (servers).
     #
     def list
       response = conn.get 'api/servers'
@@ -30,12 +30,12 @@ module Mailosaur
     end
 
     #
-    # Creates a new virtual server.
+    # Creates a new inbox (server).
     #
     # @param server_create_options [Mailosaur::Models::ServerCreateOptions] Options used to
-    #   create a new Mailosaur server.
+    #   create a new Mailosaur inbox (server).
     #
-    # @return [Mailosaur::Models::Server] The newly-created server.
+    # @return [Mailosaur::Models::Server] The newly-created inbox (server).
     #
     def create(server_create_options)
       response = conn.post 'api/servers', server_create_options.to_json
@@ -45,11 +45,11 @@ module Mailosaur
     end
 
     #
-    # Retrieves the detail for a single server.
+    # Retrieves the detail for a single inbox (server).
     #
-    # @param id [String] The unique identifier of the server.
+    # @param id [String] The unique identifier of the inbox (server).
     #
-    # @return [Mailosaur::Models::Server] The server.
+    # @return [Mailosaur::Models::Server] The inbox (server).
     #
     def get(id)
       response = conn.get "api/servers/#{id}"
@@ -59,12 +59,12 @@ module Mailosaur
     end
 
     #
-    # Retrieves the password for a server. This password can be used for SMTP, POP3, and
+    # Retrieves the password for an inbox (server). This password can be used for SMTP, POP3, and
     # IMAP connectivity.
     #
-    # @param id [String] The unique identifier of the server.
+    # @param id [String] The unique identifier of the inbox (server).
     #
-    # @return [String] The server's password.
+    # @return [String] The password for the inbox (server).
     #
     def get_password(id)
       response = conn.get "api/servers/#{id}/password"
@@ -74,12 +74,12 @@ module Mailosaur
     end
 
     #
-    # Updates the attributes of a server.
+    # Updates the attributes of an inbox (server).
     #
-    # @param id [String] The unique identifier of the server.
-    # @param server [Mailosaur::Models::Server] The updated server.
+    # @param id [String] The unique identifier of the inbox (server).
+    # @param server [Mailosaur::Models::Server] The updated inbox (server).
     #
-    # @return [Mailosaur::Models::Server] The updated server.
+    # @return [Mailosaur::Models::Server] The updated inbox (server).
     #
     def update(id, server)
       response = conn.put "api/servers/#{id}", server.to_json
@@ -89,12 +89,12 @@ module Mailosaur
     end
 
     #
-    # Permanently delete a server. This will also delete all messages, associated attachments,
-    # etc. within the server. This operation cannot be undone.
+    # Permanently delete an inbox (server). This will also delete all messages, associated attachments,
+    # etc. within the inbox (server). This operation cannot be undone.
     #
-    # @param id [String] The unique identifier of the server.
+    # @param id [String] The unique identifier of the inbox (server).
     #
-    # @return [nil] Once the server has been deleted.
+    # @return [nil] Once the inbox (server) has been deleted.
     #
     def delete(id)
       response = conn.delete "api/servers/#{id}"
@@ -103,12 +103,12 @@ module Mailosaur
     end
 
     #
-    # Generates a random email address by appending a random string in front of the server's
-    # domain name.
+    # Generates a random email address by appending a random string in front of the
+    # domain name of the inbox (server).
     #
-    # @param server [String] The identifier of the server.
+    # @param server [String] The identifier of the inbox (server).
     #
-    # @return [String] A random email address ending in the server's domain.
+    # @return [String] A random email address ending in the domain of the inbox (server).
     #
     def generate_email_address(server)
       host = ENV['MAILOSAUR_SMTP_HOST'] || 'mailosaur.net'

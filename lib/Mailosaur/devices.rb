@@ -1,8 +1,12 @@
 module Mailosaur
+  # Operations for managing virtual security devices and retrieving their current one-time
+  # passwords (OTPs), used to automate testing of app-based multi-factor authentication.
+  # Accessed via +client.devices+.
   class Devices
     #
     # Creates and initializes a new instance of the Devices class.
-    # @param client connection.
+    # @param conn [Faraday::Connection] The client connection.
+    # @param handle_http_error [Method] Callback used to convert HTTP error responses into errors.
     #
     def initialize(conn, handle_http_error)
       @conn = conn
@@ -13,11 +17,9 @@ module Mailosaur
     attr_reader :conn
 
     #
-    # List all devices
-    #
     # Returns a list of your virtual security devices.
     #
-    # @return [DeviceListResult] operation results.
+    # @return [Mailosaur::Models::DeviceListResult] Your devices.
     #
     def list
       response = conn.get 'api/devices'
@@ -27,13 +29,12 @@ module Mailosaur
     end
 
     #
-    # Create a device
+    # Creates a new virtual security device.
     #
-    # Creates a new virtual security device and returns it.
+    # @param device_create_options [Mailosaur::Models::DeviceCreateOptions] Options used to
+    #   create a new Mailosaur virtual security device.
     #
-    # @param device_create_options [DeviceCreateOptions]
-    #
-    # @return [Device] operation results.
+    # @return [Mailosaur::Models::Device] The newly-created device.
     #
     def create(device_create_options)
       response = conn.post 'api/devices', device_create_options.to_json
@@ -43,13 +44,13 @@ module Mailosaur
     end
 
     #
-    # Retrieve OTP
+    # Retrieves the current one-time password for a saved device, or given base32-encoded
+    # shared secret.
     #
-    # Retrieves the current one-time password for a saved device, or given base32-encoded shared secret.
+    # @param query [String] Either the unique identifier of the device, or a base32-encoded
+    #   shared secret.
     #
-    # @param query [String] Either the unique identifier of the device, or a base32-encoded shared secret.
-    #
-    # @return [OtpResult] operation results.
+    # @return [Mailosaur::Models::OtpResult] The current one-time password.
     #
     def otp(query)
       if query.include? '-'
@@ -68,11 +69,11 @@ module Mailosaur
     end
 
     #
-    # Delete a device
+    # Permanently delete a virtual security device. This operation cannot be undone.
     #
-    # Permanently deletes a device. This operation cannot be undone.
+    # @param id [String] The unique identifier of the device.
     #
-    # @param id [String] The identifier of the device to be deleted.
+    # @return [nil] Once the device has been deleted.
     #
     def delete(id)
       response = conn.delete "api/devices/#{id}"

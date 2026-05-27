@@ -1,10 +1,13 @@
 require 'uri'
 
 module Mailosaur
+  # Operations for finding, retrieving, creating, forwarding, replying to, and deleting the
+  # email and SMS messages received by your Mailosaur servers. Accessed via +client.messages+.
   class Messages
     #
     # Creates and initializes a new instance of the Messages class.
-    # @param client connection.
+    # @param conn [Faraday::Connection] The client connection.
+    # @param handle_http_error [Method] Callback used to convert HTTP error responses into errors.
     #
     def initialize(conn, handle_http_error)
       @conn = conn
@@ -15,22 +18,24 @@ module Mailosaur
     attr_reader :conn
 
     #
-    # Retrieve a message using search criteria
+    # Waits for a message to be found. Returns as soon as a message matching the specified
+    # search criteria is found. This is the most efficient method of looking up a message,
+    # therefore we recommend using it wherever possible.
     #
-    # Returns as soon as a message matching the specified search criteria is
-    # found. This is the most efficient method of looking up a message.
-    #
-    # @param server [String] The identifier of the server hosting the message.
-    # @param criteria [SearchCriteria] The search criteria to use in order to find
-    # a match.
+    # @param server [String] The unique identifier of the containing server.
+    # @param criteria [Mailosaur::Models::SearchCriteria] The criteria with which to find
+    #   messages during a search.
     # @param timeout [Integer] Specify how long to wait for a matching result
-    # (in milliseconds).
+    #   (in milliseconds).
     # @param received_after [DateTime] Limits results to only messages received
-    # after this date/time.
-    # @param dir [String] Optionally limits results based on the direction (`Sent`
-    # or `Received`), with the default being `Received`.
+    #   after this date/time.
+    # @param dir [String] Optionally limits results based on the direction (+Sent+
+    #   or +Received+), with the default being +Received+.
     #
-    # @return [Message] operation results.
+    # @return [Mailosaur::Models::Message] The first message matching the criteria.
+    #
+    # @raise [Mailosaur::MailosaurError] With error code +no_messages_found+ if no matching
+    #   message exists, or +search_timeout+ if no matching message arrives before the timeout elapses.
     #
     def get(server, criteria, timeout: 10_000, received_after: DateTime.now - (1.0 / 24), dir: nil)
       # Defaults timeout to 10s, receivedAfter to 1h
@@ -41,14 +46,12 @@ module Mailosaur
     end
 
     #
-    # Retrieve a message
+    # Retrieves the detail for a single message. Must be used in conjunction with either
+    # {#list} or {#search} in order to get the unique identifier for the required message.
     #
-    # Retrieves the detail for a single email message. Simply supply the unique
-    # identifier for the required message.
+    # @param id [String] The unique identifier of the message to be retrieved.
     #
-    # @param id The identifier of the email message to be retrieved.
-    #
-    # @return [Message] operation results.
+    # @return [Mailosaur::Models::Message] The full message.
     #
     def get_by_id(id)
       response = conn.get "api/messages/#{id}"
@@ -58,12 +61,12 @@ module Mailosaur
     end
 
     #
-    # Delete a message
+    # Permanently deletes a message. Also deletes any attachments related to the message.
+    # This operation cannot be undone.
     #
-    # Permanently deletes a message. This operation cannot be undone. Also deletes
-    # any attachments related to the message.
+    # @param id [String] The identifier for the message.
     #
-    # @param id The identifier of the message to be deleted.
+    # @return [nil] Once the message has been deleted.
     #
     def delete(id)
       response = conn.delete "api/messages/#{id}"
@@ -72,23 +75,21 @@ module Mailosaur
     end
 
     #
-    # List all messages
-    #
     # Returns a list of your messages in summary form. The summaries are returned
     # sorted by received date, with the most recently-received messages appearing
     # first.
     #
-    # @param server [String] The identifier of the server hosting the messages.
-    # @param page [Integer] Used in conjunction with `itemsPerPage` to support
-    # pagination.
+    # @param server [String] The unique identifier of the required server.
+    # @param page [Integer] Used in conjunction with +items_per_page+ to support
+    #   pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
-    # returned per page. Can be set between 1 and 1000 items, the default is 50.
+    #   returned per page. Can be set between 1 and 1000 items, the default is 50.
     # @param received_after [DateTime] Limits results to only messages received
-    # after this date/time.
-    # @param dir [String] Optionally limits results based on the direction (`Sent`
-    # or `Received`), with the default being `Received`.
+    #   after this date/time.
+    # @param dir [String] Optionally limits results based on the direction (+Sent+
+    #   or +Received+), with the default being +Received+.
     #
-    # @return [MessageListResult] operation results.
+    # @return [Mailosaur::Models::MessageListResult] The message summaries.
     #
     def list(server, page: nil, items_per_page: nil, received_after: nil, dir: nil)
       url = "api/messages?server=#{server}"
@@ -106,12 +107,11 @@ module Mailosaur
     end
 
     #
-    # Delete all messages
+    # Permanently delete all messages within a server. This operation cannot be undone.
     #
-    # Permanently deletes all messages held by the specified server. This operation
-    # cannot be undone. Also deletes any attachments related to each message.
+    # @param server [String] The unique identifier of the server.
     #
-    # @param server [String] The identifier of the server to be emptied.
+    # @return [nil] Once all messages within the server have been deleted.
     #
     def delete_all(server)
       response = conn.delete "api/messages?server=#{server}"
@@ -120,29 +120,30 @@ module Mailosaur
     end
 
     #
-    # Search for messages
-    #
     # Returns a list of messages matching the specified search criteria, in summary
     # form. The messages are returned sorted by received date, with the most
     # recently-received messages appearing first.
     #
-    # @param server [String] The identifier of the server hosting the messages.
-    # @param criteria [SearchCriteria] The search criteria to match results
-    # against.
-    # @param page [Integer] Used in conjunction with `itemsPerPage` to support
-    # pagination.
+    # @param server [String] The unique identifier of the server to search.
+    # @param criteria [Mailosaur::Models::SearchCriteria] The criteria with which to find
+    #   messages during a search.
+    # @param page [Integer] Used in conjunction with +items_per_page+ to support
+    #   pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
-    # returned per page. Can be set between 1 and 1000 items, the default is 50.
+    #   returned per page. Can be set between 1 and 1000 items, the default is 50.
     # @param timeout [Integer] Specify how long to wait for a matching result
-    # (in milliseconds).
+    #   (in milliseconds).
     # @param received_after [DateTime] Limits results to only messages received
-    # after this date/time.
+    #   after this date/time.
     # @param error_on_timeout [Boolean] When set to false, an error will not be
-    # throw if timeout is reached (default: true).
-    # @param dir [String] Optionally limits results based on the direction (`Sent`
-    # or `Received`), with the default being `Received`.
+    #   raised if the timeout is reached (default: true).
+    # @param dir [String] Optionally limits results based on the direction (+Sent+
+    #   or +Received+), with the default being +Received+.
     #
-    # @return [MessageListResult] operation results.
+    # @return [Mailosaur::Models::MessageListResult] The matching message summaries.
+    #
+    # @raise [Mailosaur::MailosaurError] With error code +search_timeout+ if no matching message
+    #   is found before the timeout elapses, unless +error_on_timeout+ is set to false.
     #
     def search(server, criteria, page: nil, items_per_page: nil, timeout: nil, received_after: nil, error_on_timeout: true, dir: nil)
       url = "api/messages/search?server=#{server}"
@@ -182,16 +183,15 @@ module Mailosaur
     end
 
     #
-    # Create a message.
-    #
     # Creates a new message that can be sent to a verified email address. This is
     # useful in scenarios where you want an email to trigger a workflow in your
-    # product
+    # product.
     #
-    # @param server [String] The identifier of the server to create the message in.
-    # @param options [MessageCreateOptions] The options with which to create the message.
+    # @param server [String] The unique identifier of the required server.
+    # @param message_create_options [Mailosaur::Models::MessageCreateOptions] Options to use
+    #   when creating a new message.
     #
-    # @return [Message] operation result.
+    # @return [Mailosaur::Models::Message] The newly-created message.
     #
     def create(server, message_create_options)
       response = conn.post "api/messages?server=#{server}", message_create_options.to_json
@@ -201,15 +201,14 @@ module Mailosaur
     end
 
     #
-    # Forward an email.
+    # Forwards the specified message to a verified email address. This is useful for
+    # simulating a user forwarding one of your email messages.
     #
-    # Forwards the specified email to a verified email address.
+    # @param id [String] The unique identifier of the message to be forwarded.
+    # @param message_forward_options [Mailosaur::Models::MessageForwardOptions] Options to use
+    #   when forwarding a message.
     #
-    # @param id [String] The identifier of the email to forward.
-    # @param options [MessageForwardOptions] The options with which to forward the email.
-    # against.
-    #
-    # @return [Message] operation result.
+    # @return [Mailosaur::Models::Message] The forwarded message.
     #
     def forward(id, message_forward_options)
       response = conn.post "api/messages/#{id}/forward", message_forward_options.to_json
@@ -219,16 +218,14 @@ module Mailosaur
     end
 
     #
-    # Reply to an email.
+    # Sends a reply to the specified message. This is useful for when simulating a user
+    # replying to one of your email or SMS messages.
     #
-    # Sends a reply to the specified email. This is useful for when simulating a user
-    # replying to one of your emails.
+    # @param id [String] The unique identifier of the message to be replied to.
+    # @param message_reply_options [Mailosaur::Models::MessageReplyOptions] Options to use
+    #   when replying to a message.
     #
-    # @param id [String] The identifier of the email to reply to.
-    # @param options [MessageReplyOptions] The options with which to reply to the email.
-    # against.
-    #
-    # @return [Message] operation result.
+    # @return [Mailosaur::Models::Message] The reply message.
     #
     def reply(id, message_reply_options)
       response = conn.post "api/messages/#{id}/reply", message_reply_options.to_json
@@ -238,14 +235,13 @@ module Mailosaur
     end
 
     #
-    # Generate email previews.
-    #
     # Generates screenshots of an email rendered in the specified email clients.
     #
     # @param id [String] The identifier of the email to preview.
-    # @param options [PreviewRequestOptions] The options with which to generate previews.
+    # @param options [Mailosaur::Models::PreviewRequestOptions] The options with which to
+    #   generate previews.
     #
-    # @return [PreviewListResult] operation result.
+    # @return [Mailosaur::Models::PreviewListResult] The generated previews.
     #
     def generate_previews(id, options)
       response = conn.post "api/messages/#{id}/screenshots", options.to_json

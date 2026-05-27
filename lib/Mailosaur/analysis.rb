@@ -1,8 +1,11 @@
 module Mailosaur
+  # Operations for analyzing the content and deliverability of an email, including SpamAssassin
+  # scoring and per-provider deliverability reports. Accessed via +client.analysis+.
   class Analysis
     #
     # Creates and initializes a new instance of the Analysis class.
-    # @param conn client connection.
+    # @param conn [Faraday::Connection] The client connection.
+    # @param handle_http_error [Method] Callback used to convert HTTP error responses into errors.
     #
     def initialize(conn, handle_http_error)
       @conn = conn
@@ -13,13 +16,11 @@ module Mailosaur
     attr_reader :conn
 
     #
-    # Perform a spam test
+    # Perform a spam analysis of an email.
     #
-    # Perform spam testing on the specified email
+    # @param email [String] The identifier of the message to be analyzed.
     #
-    # @param email The identifier of the email to be analyzed.
-    #
-    # @return [SpamAnalysisResult] operation results.
+    # @return [Mailosaur::Models::SpamAnalysisResult] The spam score and filter results.
     #
     def spam(email)
       response = conn.get "api/analysis/spam/#{email}"
@@ -29,13 +30,11 @@ module Mailosaur
     end
 
     #
-    # Perform a deliverability report
+    # Perform a deliverability report of an email.
     #
-    # Perform deliverability test on the specified email
+    # @param email [String] The identifier of the message to be analyzed.
     #
-    # @param email The identifier of the email to be analyzed.
-    #
-    # @return [DeliverabilityReport] operation results.
+    # @return [Mailosaur::Models::DeliverabilityReport] The deliverability report for the email.
     #
     def deliverability(email)
       response = conn.get "api/analysis/deliverability/#{email}"

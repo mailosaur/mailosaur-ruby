@@ -62,11 +62,16 @@ module Mailosaur
     autoload :BaseModel,                                          'Mailosaur/models/base_model.rb'
   end
 
+  # The Mailosaur client — the main entry point to the Mailosaur API. Construct an instance with
+  # your API key (or set the +MAILOSAUR_API_KEY+ environment variable), then use the operations
+  # namespaces (+messages+, +servers+, +files+, +devices+, +analysis+, +previews+, +usage+) to
+  # automate email and SMS testing.
   class MailosaurClient
     #
-    # Creates initializes a new instance of the MailosaurClient class.
+    # Returns an instance of the Mailosaur client.
     # @param api_key [String] Optional API key. Overrides the MAILOSAUR_API_KEY environment variable if set.
-    # @param base_url [String] the base URI of the service.
+    # @param base_url [String] Optionally overrides the base URL of the Mailosaur service.
+    # @raise [ArgumentError] If no API key is provided and the MAILOSAUR_API_KEY environment variable is not set.
     #
     def initialize(api_key = nil, base_url: 'https://mailosaur.com/')
       resolved_api_key = api_key || ENV['MAILOSAUR_API_KEY']
@@ -77,37 +82,44 @@ module Mailosaur
       @base_url = base_url
     end
 
-    # @return [Analysis] analysis
+    # Operations for analyzing email content and deliverability, including spam scoring.
+    # @return [Analysis] the analysis operations namespace.
     def analysis
       @analysis ||= Analysis.new(connection, method(:handle_http_error))
     end
 
-    # @return [Files] files
+    # Operations for downloading attachments, EML source, and email preview screenshots.
+    # @return [Files] the files operations namespace.
     def files
       @files ||= Files.new(connection, method(:handle_http_error))
     end
 
-    # @return [Messages] messages
+    # Operations for finding, retrieving, creating, and managing email and SMS messages.
+    # @return [Messages] the messages operations namespace.
     def messages
       @messages ||= Messages.new(connection, method(:handle_http_error))
     end
 
-    # @return [Servers] servers
+    # Operations for creating and managing your Mailosaur servers (virtual inboxes).
+    # @return [Servers] the servers operations namespace.
     def servers
       @servers ||= Servers.new(connection, method(:handle_http_error))
     end
 
-    # @return [Usage] usage
+    # Operations for inspecting account usage limits and recent transactional usage.
+    # @return [Usage] the usage operations namespace.
     def usage
       @usage ||= Usage.new(connection, method(:handle_http_error))
     end
 
-    # @return [Devices] devices
+    # Operations for managing virtual security devices and retrieving their one-time passwords.
+    # @return [Devices] the devices operations namespace.
     def devices
       @devices ||= Devices.new(connection, method(:handle_http_error))
     end
 
-    # @return [Previews] previews
+    # Operations for discovering the email clients available for generating email previews.
+    # @return [Previews] the previews operations namespace.
     def previews
       @previews ||= Previews.new(connection, method(:handle_http_error))
     end

@@ -1,8 +1,11 @@
 module Mailosaur
+  # Operations for downloading the raw content associated with a message — file attachments,
+  # the full EML source of an email, and rendered email previews. Accessed via +client.files+.
   class Files
     #
     # Creates and initializes a new instance of the Files class.
-    # @param client connection.
+    # @param conn [Faraday::Connection] The client connection.
+    # @param handle_http_error [Method] Callback used to convert HTTP error responses into errors.
     #
     def initialize(conn, handle_http_error)
       @conn = conn
@@ -13,14 +16,11 @@ module Mailosaur
     attr_reader :conn
 
     #
-    # Download an attachment
+    # Downloads a single attachment.
     #
-    # Downloads a single attachment. Simply supply the unique identifier for the
-    # required attachment.
+    # @param id [String] The identifier for the required attachment.
     #
-    # @param id The identifier of the attachment to be downloaded.
-    #
-    # @return [NOT_IMPLEMENTED] operation results.
+    # @return [String] The attachment's binary content.
     #
     def get_attachment(id)
       response = conn.get "api/files/attachments/#{id}"
@@ -29,14 +29,11 @@ module Mailosaur
     end
 
     #
-    # Download EML
+    # Downloads an EML file representing the specified email.
     #
-    # Downloads an EML file representing the specified email. Simply supply the
-    # unique identifier for the required email.
+    # @param id [String] The identifier for the required message.
     #
-    # @param id The identifier of the email to be downloaded.
-    #
-    # @return [NOT_IMPLEMENTED] operation results.
+    # @return [String] The raw EML content of the email.
     #
     def get_email(id)
       response = conn.get "api/files/email/#{id}"
@@ -45,14 +42,15 @@ module Mailosaur
     end
 
     #
-    # Download an email preview
-    #
     # Downloads a screenshot of your email rendered in a real email client. Simply supply
     # the unique identifier for the required preview.
     #
-    # @param id The identifier of the email preview to be downloaded.
+    # @param id [String] The identifier of the email preview to be downloaded.
     #
-    # @return [NOT_IMPLEMENTED] operation results.
+    # @return [String] The preview screenshot image content.
+    #
+    # @raise [Mailosaur::MailosaurError] With error code +preview_timeout+ if the preview is
+    #   not generated within the time limit.
     #
     def get_preview(id)
       timeout = 120_000

@@ -63,7 +63,7 @@ module Mailosaur
       # @return [Metadata]
       attr_accessor :metadata
 
-      # @return [String] Identifier for the server in which the message is
+      # @return [String] Identifier for the inbox (server) in which the message is
       # located.
       attr_accessor :server
     end

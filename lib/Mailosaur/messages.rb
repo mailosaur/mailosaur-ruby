@@ -2,7 +2,7 @@ require 'uri'
 
 module Mailosaur
   # Operations for finding, retrieving, creating, forwarding, replying to, and deleting the
-  # email and SMS messages received by your Mailosaur servers. Accessed via +client.messages+.
+  # email and SMS messages received by your Mailosaur inboxes (servers). Accessed via +client.messages+.
   class Messages
     #
     # Creates and initializes a new instance of the Messages class.
@@ -22,7 +22,7 @@ module Mailosaur
     # search criteria is found. This is the most efficient method of looking up a message,
     # therefore we recommend using it wherever possible.
     #
-    # @param server [String] The unique identifier of the containing server.
+    # @param server [String] The unique identifier of the containing inbox (server).
     # @param criteria [Mailosaur::Models::SearchCriteria] The criteria with which to find
     #   messages during a search.
     # @param timeout [Integer] Specify how long to wait for a matching result
@@ -79,7 +79,7 @@ module Mailosaur
     # sorted by received date, with the most recently-received messages appearing
     # first.
     #
-    # @param server [String] The unique identifier of the required server.
+    # @param server [String] The unique identifier of the required inbox (server).
     # @param page [Integer] Used in conjunction with +items_per_page+ to support
     #   pagination.
     # @param items_per_page [Integer] A limit on the number of results to be
@@ -107,11 +107,11 @@ module Mailosaur
     end
 
     #
-    # Permanently delete all messages within a server. This operation cannot be undone.
+    # Permanently delete all messages within an inbox (server). This operation cannot be undone.
     #
-    # @param server [String] The unique identifier of the server.
+    # @param server [String] The unique identifier of the inbox (server).
     #
-    # @return [nil] Once all messages within the server have been deleted.
+    # @return [nil] Once all messages within the inbox (server) have been deleted.
     #
     def delete_all(server)
       response = conn.delete "api/messages?server=#{server}"
@@ -124,7 +124,7 @@ module Mailosaur
     # form. The messages are returned sorted by received date, with the most
     # recently-received messages appearing first.
     #
-    # @param server [String] The unique identifier of the server to search.
+    # @param server [String] The unique identifier of the inbox (server) to search.
     # @param criteria [Mailosaur::Models::SearchCriteria] The criteria with which to find
     #   messages during a search.
     # @param page [Integer] Used in conjunction with +items_per_page+ to support
@@ -187,7 +187,7 @@ module Mailosaur
     # useful in scenarios where you want an email to trigger a workflow in your
     # product.
     #
-    # @param server [String] The unique identifier of the required server.
+    # @param server [String] The unique identifier of the required inbox (server).
     # @param message_create_options [Mailosaur::Models::MessageCreateOptions] Options to use
     #   when creating a new message.
     #

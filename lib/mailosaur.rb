@@ -100,7 +100,7 @@ module Mailosaur
       @messages ||= Messages.new(connection, method(:handle_http_error))
     end
 
-    # Operations for creating and managing your Mailosaur servers (virtual inboxes).
+    # Operations for creating and managing your Mailosaur inboxes (servers).
     # @return [Servers] the servers operations namespace.
     def servers
       @servers ||= Servers.new(connection, method(:handle_http_error))
